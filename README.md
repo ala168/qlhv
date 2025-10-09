@@ -1,4 +1,5 @@
 0|1|2|3|4|5|6|7|8|9|10
+</br>
 // Gán giá trị vào biến
 id = parts[0].trim();
 if (parts.length > 0) email = parts[1].trim();
