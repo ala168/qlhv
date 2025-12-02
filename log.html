@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Ghi Log Fun</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px; background-color: #f4f4f9; }
+        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: inline-block; }
+        input { padding: 10px; width: 300px; font-size: 16px; border: 1px solid #ddd; border-radius: 4px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; background: #2ea44f; color: white; border: none; border-radius: 5px; margin-top: 10px; }
+        button:hover { background: #2c974b; }
+        #status { margin-top: 15px; color: #666; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 id="title">Nhập nội dung hoặc dùng URL</h2>
+        <p>Format log: <code>Time : msg</code></p>
+        
+        <input type="text" id="funInput" placeholder="Nhập fun hoặc dùng ?msg=...">
+        <br>
+        <button onclick="saveLogFile()">Ghi & Tải Log</button>
+        
+        <p id="status"></p>
+    </div>
+
+    <script>
+        // 1. Tự động chạy khi trang web tải xong để check URL
+        window.onload = function() {
+            // Lấy toàn bộ tham số trên thanh địa chỉ
+            const urlParams = new URLSearchParams(window.location.search);
+            // Tìm tham số có tên là 'msg'
+            const msgData = urlParams.get('msg');
+
+            if (msgData) {
+                // Nếu có, điền tự động vào ô input
+                document.getElementById('funInput').value = msgData;
+                document.getElementById('title').innerText = "Đã nhận dữ liệu từ URL!";
+                document.getElementById('status').innerText = "Dữ liệu sẵn sàng: " + msgData;
+                
+                // Mẹo: Nếu bạn muốn nó TỰ ĐỘNG TẢI luôn mà không cần bấm nút,
+                // hãy bỏ dấu // ở dòng dưới (tuy nhiên trình duyệt thường chặn cái này):
+                saveLogFile(); 
+            }
+        };
+
+        function saveLogFile() {
+            // Lấy nội dung từ ô input (lúc này đã có thể được điền từ URL)
+            const fun = document.getElementById('funInput').value;
+            
+            if(!fun) { 
+                alert("Chưa có dữ liệu msg!"); 
+                return; 
+            }
+
+            // Lấy thời gian hiện tại
+            const time = new Date().toLocaleString();
+            
+            // Format đúng yêu cầu: logging time : fun
+            const content = `${time} : ${fun}`;
+
+            // Tạo file để tải
+            const blob = new Blob([content], { type: "text/plain" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            
+            // Đặt tên file log kèm timestamp để không bị trùng
+            link.download = `log_${Date.now()}.txt`; 
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
