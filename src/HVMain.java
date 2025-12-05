@@ -296,8 +296,8 @@ public class HVMain extends JFrame {
         add(bottomContainerPanel, BorderLayout.SOUTH); // Đặt bottomContainerPanel vào SOUTH của JFrame
         
         
-     // 1. Tạo JLabel cho footer với căn lề phải
-        JLabel footerLabel = new JLabel("v1.1 Designed by tiepvk   "); // Thêm khoảng trắng để đẹp hơn
+        // 1. Tạo JLabel cho footer với căn lề phải
+        JLabel footerLabel = new JLabel("v1.101 Designed by tiepvk   ");
         footerLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
         // 2. Tạo một panel chính mới cho toàn bộ khu vực SOUTH
