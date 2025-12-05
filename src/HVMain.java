@@ -2832,9 +2832,12 @@ public class HVMain extends JFrame {
             // Lấy tháng từ spinner
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
             int thang = Integer.parseInt(sdf.format((Date) monthSpinner.getValue()));
-
+            
+            File rootDir = new File("BAO CAO");
+            if (!rootDir.exists()) rootDir.mkdirs();
+            
             // Tạo thư mục theo tháng
-            File monthDir = new File(String.valueOf(thang));
+            File monthDir = new File(rootDir,String.valueOf(thang));
             if (!monthDir.exists()) monthDir.mkdirs();
 
             conn = DriverManager.getConnection(URL_DB);
