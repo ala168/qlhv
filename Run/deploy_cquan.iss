@@ -38,8 +38,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 6.1; Check: not IsAdminInstallMode
 
 [Files]
-Source: "E:\workspace\profile_workspace\QLHV\Run\QLHV\run.bat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\workspace\profile_workspace\QLHV\Run\QLHV\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "Q:\tiepvk\GitHub\qlhv\Run\QLHV\run.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Q:\tiepvk\GitHub\qlhv\Run\QLHV\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
