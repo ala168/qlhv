@@ -1,5 +1,4 @@
 -injars 'Q:\tiepvk\GitHub\qlhv\Jar\QLHV.jar'
--outjars 'Q:\tiepvk\GitHub\qlhv\Run\QLHV\lib\QLHV.jar'
 -outjars 'Q:\tiepvk\GitHub\qlhv\QLHV.jar'
 
 -libraryjars 'Q:\tiepvk\GitHub\qlhv\Run\QLHV\lib\rt.jar'
