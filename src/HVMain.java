@@ -297,7 +297,7 @@ public class HVMain extends JFrame {
         
         
         // 1. Tạo JLabel cho footer với căn lề phải
-        JLabel footerLabel = new JLabel("v1.101 Designed by tiepvk   ");
+        JLabel footerLabel = new JLabel("v1.102 Designed by tiepvk   ");
         footerLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
         // 2. Tạo một panel chính mới cho toàn bộ khu vực SOUTH
