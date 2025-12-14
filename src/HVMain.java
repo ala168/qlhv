@@ -1357,12 +1357,13 @@ public class HVMain extends JFrame {
                 String monAnh = rs.getString("monAnh");
                 String monLy = rs.getString("monLy");
                 String monHoa = rs.getString("monHoa");
+                String sTongSoNgay = rs.getString("tongsongay");
 
                 double dongia = rs.getDouble("dongia");
-                int tongsongay = rs.getInt("tongsongay");
+                double tongsongay = rs.getDouble("tongsongay");
                 double tongtien = dongia * tongsongay;
 
-                if (sotk.isEmpty()) throw new Exception("Thiếu số tài khoản NH hãy xem lại bước " + btnImportNHButton.getText());
+                if (sotk == null || sotk.isEmpty()) throw new Exception("Thiếu số tài khoản NH hãy xem lại bước " + btnImportNHButton.getText());
                 
                 String des = removeVietnameseAccents(tenhv + " " + mahv + " thang " + sOnlyMonth);
                 String encodedDes = URLEncoder.encode(des, java.nio.charset.StandardCharsets.UTF_8.name());
@@ -1393,7 +1394,7 @@ public class HVMain extends JFrame {
                 vars.put("phy", monLy != null ? monLy : "");
                 vars.put("chem", monHoa != null ? monHoa : "");
                 vars.put("price", formatCurrency(String.valueOf(dongia)));
-                vars.put("total", String.valueOf(tongsongay));
+                vars.put("total", sTongSoNgay != null ? sTongSoNgay : "");
                 vars.put("amt", formatCurrency(String.valueOf(tongtien)));
 
                 String outputPath = new File(hvDir, loptt + "_" + mahv + ".docx").getAbsolutePath();   
