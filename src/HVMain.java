@@ -53,17 +53,17 @@ public class HVMain extends JFrame {
     public static final String TEMPLATE_EXCEL_DETAL = ROOT_DIR+"/data/File chi iet tung lop.xlsx";
     public static final String TEMPLATE_EXCEL_BANK = "";
     
-	private JTextField folderPathField;
-    private JButton chooseButton, btnImportDataButton;
-    private JProgressBar progressBar;
-    private JTextArea logArea;
-    private JSpinner monthSpinner;
-    private JButton btnExportWordButton, btnExportExcelButton;
-    private JButton btnImportNHButton;
-	private JButton btnOpenFolderButton;
-	private JCheckBox proxyCheckBox;
-	private JButton btnExportGVButton;
-	private JButton btnImportSKButton;
+	public JTextField folderPathField;
+    public JButton chooseButton, btnImportDataButton;
+    public JProgressBar progressBar;
+    public JTextArea logArea;
+    public JSpinner monthSpinner;
+    public JButton btnExportWordButton, btnExportExcelButton;
+    public JButton btnImportNHButton;
+	public JButton btnOpenFolderButton;
+	public JCheckBox proxyCheckBox;
+	public JButton btnExportGVButton;
+	public JButton btnImportSKButton;
     
     public HVMain() {
         setTitle("QLHV");
@@ -325,7 +325,7 @@ public class HVMain extends JFrame {
     }
 
     
-    private void setComponentFontRecursively(Container container, Font font) {
+    public void setComponentFontRecursively(Container container, Font font) {
         for (Component comp : container.getComponents()) {
             if (comp instanceof JLabel || comp instanceof JButton) {
                 comp.setFont(font);
@@ -336,7 +336,7 @@ public class HVMain extends JFrame {
         }
     }
     
-    private void init(){
+    public void init(){
     	if (hasProxy) {
     		System.setProperty("https.proxyHost", "10.53.120.1");
             System.setProperty("https.proxyPort", "8080");
@@ -399,7 +399,7 @@ public class HVMain extends JFrame {
         makeMahvUniqueSimple();
     }
     
-    private void makeMahvUniqueSimple() {
+    public void makeMahvUniqueSimple() {
         Connection conn = null;
         Statement st = null;
 
@@ -420,7 +420,7 @@ public class HVMain extends JFrame {
         }
     }
     
-    private void logMessage(final String message) {
+    public void logMessage(final String message) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 logArea.append(message + "\n");
@@ -429,7 +429,7 @@ public class HVMain extends JFrame {
         });
     }
     
-    private void logMessage(final String message, final boolean reset) {
+    public void logMessage(final String message, final boolean reset) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	if (reset) logArea.setText("");
@@ -439,7 +439,7 @@ public class HVMain extends JFrame {
         });
     }
 
-    private void btn8ImportSaoke_Event() {
+    public void btn8ImportSaoke_Event() {
     	// Lấy tháng từ monthSpinner để tạo baseDir
     	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
     	int thangInt = Integer.parseInt(sdf.format((Date) monthSpinner.getValue()));
@@ -493,7 +493,7 @@ public class HVMain extends JFrame {
         if (!file.isEmpty()) DocxMerger.openDesktop(file);
     }
     
-    private void exportSaoKeMissingMaHV(String file) {
+    public void exportSaoKeMissingMaHV(String file) {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -1192,7 +1192,7 @@ public class HVMain extends JFrame {
 
 
 	    
-    private void btn2ChooseFolder_Event() {
+    public void btn2ChooseFolder_Event() {
         logArea.setText("");
 
         // Lấy tháng từ monthSpinner
@@ -1259,7 +1259,7 @@ public class HVMain extends JFrame {
     } 
     
     @SuppressWarnings("resource")
-	private void btn6ExportWordFiles_Event() {
+	public void btn6ExportWordFiles_Event() {
         // Thiết lập UI ban đầu
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -1604,7 +1604,7 @@ public class HVMain extends JFrame {
         
     }
     
-    private boolean deleteDirectory(File dir) {
+    public boolean deleteDirectory(File dir) {
         if (dir == null || !dir.exists()) {
             return false;
         }
@@ -1718,7 +1718,7 @@ public class HVMain extends JFrame {
 	    return withoutAccents;
 	}
     
-    private boolean isValidMonHoc(String monhoc) {
+    public boolean isValidMonHoc(String monhoc) {
         if (monhoc == null) return false;
         return monhoc.equals("Toán") ||
                monhoc.equals("Ngữ Văn") ||
@@ -1727,7 +1727,7 @@ public class HVMain extends JFrame {
                monhoc.equals("Hóa");
     }
     
-    private void btn3ImportData_Event() {
+    public void btn3ImportData_Event() {
     	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
         int thang = Integer.parseInt(sdf.format((Date) monthSpinner.getValue()));
         
@@ -1956,7 +1956,7 @@ public class HVMain extends JFrame {
     	return false;
 	}
     
-    private String btn5ExportToSumaryExcel_Event() {
+    public String btn5ExportToSumaryExcel_Event() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
         int thangInt = Integer.parseInt(sdf.format((Date) monthSpinner.getValue()));
 
@@ -2215,7 +2215,7 @@ public class HVMain extends JFrame {
         }
     }
     
-    private String exportClassExcelToEntryBank(Connection conn, int thang) throws Exception {
+    public String exportClassExcelToEntryBank(Connection conn, int thang) throws Exception {
     	 File rootDir = new File("BAO CAO");
          if (!rootDir.exists()) rootDir.mkdirs();
          
@@ -2275,7 +2275,7 @@ public class HVMain extends JFrame {
         return (outFile.getAbsolutePath());
     }
 
-    private String replaceMiddleCharWithX(String input) {
+    public String replaceMiddleCharWithX(String input) {
         if (input == null || input.length() < 3) {
             return input; // nếu quá ngắn thì giữ nguyên
         }
@@ -2293,7 +2293,7 @@ public class HVMain extends JFrame {
         return input;
     }
     
-    private void fixOnlyDuplicateMahv() {
+    public void fixOnlyDuplicateMahv() {
         Connection conn = null;
         PreparedStatement psFindDup = null;
         PreparedStatement psSelectGroup = null;
@@ -2371,7 +2371,7 @@ public class HVMain extends JFrame {
         }
     }
 
-    private static int getNextIndexForClass(String loptt) {
+    public static int getNextIndexForClass(String loptt) {
     	Connection conn = null;
     	int maxIndex = 0;
         try {
@@ -2415,7 +2415,7 @@ public class HVMain extends JFrame {
 
     
     
-    private void createHV() {
+    public void createHV() {
         Connection conn = null;
         PreparedStatement psInsert = null;
         PreparedStatement psCheck = null;
@@ -2500,7 +2500,7 @@ public class HVMain extends JFrame {
         }
     }
 
-    private void updateMahvToTonghop() {
+    public void updateMahvToTonghop() {
         Connection conn = null;
         PreparedStatement psSelect = null;
         PreparedStatement psUpdate = null;
@@ -2546,7 +2546,7 @@ public class HVMain extends JFrame {
     }
 
     
-    private void btn4ImportNganHang_Event() {
+    public void btn4ImportNganHang_Event() {
        
     	// Lấy tháng từ monthSpinner để tạo baseDir
     	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
@@ -2755,7 +2755,7 @@ public class HVMain extends JFrame {
         }
     }
 
-    private void buildTongHopThang() {
+    public void buildTongHopThang() {
         Connection conn = null;
         Statement st = null;
         try {
@@ -2823,7 +2823,7 @@ public class HVMain extends JFrame {
         }
     } 
     
-    private void btn7TongHopGV_Event() {
+    public void btn7TongHopGV_Event() {
         Connection conn = null;
         Statement st = null;
         PreparedStatement psInsert = null;
@@ -2939,7 +2939,7 @@ public class HVMain extends JFrame {
     /**
      * Hàm tính tỷ lệ hưởng theo bảng mức
      */
-    private double calculateTyleHuong(double socatt, double tongluot) {
+    public double calculateTyleHuong(double socatt, double tongluot) {
         if (tongluot >= 1440 && socatt <= 40) return 0.8;
         if ((tongluot >= 1080 && socatt <= 36) || (tongluot >= 1440 && socatt > 40)) return 0.78;
         if ((tongluot >= 760 && socatt <= 32) || (tongluot >= 1080 && socatt > 36)) return 0.76;
@@ -2950,7 +2950,7 @@ public class HVMain extends JFrame {
     }
     
     /** Hàm parse số an toàn (xóa dấu phẩy, khoảng trắng) */
-    private double parseDoubleSafe(String s) {
+    public double parseDoubleSafe(String s) {
         if (s == null || s.trim().isEmpty()) return 0;
         s = s.replace(",", "").trim();
         try {
@@ -2961,7 +2961,7 @@ public class HVMain extends JFrame {
     }
     
     
-    private String getCellValue(Cell cell) {
+    public String getCellValue(Cell cell) {
         if (cell == null) return "";
         if (cell.getCellType() == CellType.NUMERIC) {
             double d = cell.getNumericCellValue();
@@ -2974,7 +2974,7 @@ public class HVMain extends JFrame {
     }
     
     
-    private String getCellValue(Cell cell, FormulaEvaluator evaluator) {
+    public String getCellValue(Cell cell, FormulaEvaluator evaluator) {
     	if (cell == null) return "";
         if (cell.getCellType() == CellType.NUMERIC) {
             double d = cell.getNumericCellValue();
