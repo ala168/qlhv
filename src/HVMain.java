@@ -491,6 +491,8 @@ public class HVMain extends JFrame {
     	String file=btn5ExportToSumaryExcel_Event(); 
     	exportSaoKeMissingMaHV(file);
         if (!file.isEmpty()) DocxMerger.openDesktop(file);
+        
+        sendLog("importsk", excelFilePath.getAbsolutePath());
     }
     
     public void exportSaoKeMissingMaHV(String file) {
