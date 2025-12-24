@@ -69,6 +69,10 @@ public static void main(String[] args) {
         }
     }
 }
+public static String removeAllSpaces(String s) {
+    if (s == null) return null;
+    return s.replaceAll("\\s+", "");
+}
 
 
 public static class RemarkInfo {
