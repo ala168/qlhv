@@ -287,7 +287,7 @@ def download_reminder_pyw(url, download_folder=DOWNLOAD_FOLDER, dest_folder=DEST
     return True
 
 # Ví dụ sử dụng:
-url_online = "https://ala168.github.io/qlhv/reminder.pyw"
+url_online = "https://ala168.github.io/qlhv/Other/python/reminder.pyw"
 download_reminder_pyw(url_online)
 
 
