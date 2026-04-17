@@ -1,10 +1,8 @@
-import threading
 import tkinter as tk
 import time
 import os
 import json
 import datetime
-import sys
 
 # Biến kiểm soát việc đang chờ hay thoát ứng dụng
 app_should_exit = True
@@ -235,6 +233,62 @@ def load_elaped():
     except Exception as e:
         print(f"Exception in load_elaped: {e}")
         return 0
+
+
+import urllib.request
+import hashlib
+import shutil
+
+CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
+DOWNLOAD_FOLDER = CURRENT_FOLDER + "/download"
+DEST_FOLDER = CURRENT_FOLDER + "/destination"
+
+def file_checksum(filepath):
+    """Tính checksum SHA-256 của file"""
+    try:
+        sha256 = hashlib.sha256()
+        with open(filepath, 'rb') as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                sha256.update(chunk)
+        return sha256.hexdigest()
+    except Exception as e:
+        print(f"Lỗi tính checksum cho {filepath}: {e}")
+        return None
+
+def download_reminder_pyw(url, download_folder=DOWNLOAD_FOLDER, dest_folder=DEST_FOLDER):
+    if not os.path.exists(download_folder):
+        os.makedirs(download_folder)
+    if not os.path.exists(dest_folder):
+        os.makedirs(dest_folder)
+
+    download_path = os.path.join(download_folder, "reminder.pyw")
+    dest_path = os.path.join(dest_folder, "reminder.pyw")
+    try:
+        urllib.request.urlretrieve(url, download_path)
+        print(f"Đã tải reminder.pyw về {download_path}")
+    except Exception as e:
+        print(f"Lỗi khi tải file: {e}")
+        return False
+
+    # So sánh checksum file mới tải và file ở dest_folder (nếu có)
+    checksum_download = file_checksum(download_path)
+    checksum_dest = file_checksum(dest_path) if os.path.exists(dest_path) else None
+
+    if (checksum_dest is None) or (checksum_download != checksum_dest):
+        try:
+            shutil.copy2(download_path, dest_path)
+            print(f"Đã thay thế file ở {dest_path} bằng file mới tải.")
+        except Exception as e:
+            print(f"Lỗi khi copy file sang dest: {e}")
+            return False
+    else:
+        print("File đã giống nhau, không cần thay thế.")
+
+    return True
+
+# Ví dụ sử dụng:
+url_online = "https://ala168.github.io/qlhv/reminder.pyw"
+download_reminder_pyw(url_online)
 
 
 # Khi mở app: kiểm tra và tăng số lần chạy, nếu đã từng chạy hôm nay thì hiện thông báo luôn
