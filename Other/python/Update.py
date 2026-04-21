@@ -1,20 +1,25 @@
-import urllib.request
-import os
-
-PUBLIC_REMINDER_DEST_FOLDER = "Q:/tiepvk/python/download"
-
-def download_reminder_pyw(url, dest_folder=PUBLIC_REMINDER_DEST_FOLDER):
-    if not os.path.exists(dest_folder):
-        os.makedirs(dest_folder)
-    dest_path = os.path.join(dest_folder, "reminder.pyw")
+def sum_prefix_counts(filepath=r"Q:\Corebanking\FIS\Tool_Migrate\count hist\count_hist.log"):
+    """
+    Đọc file log, lấy 2 ký tự đầu mỗi dòng, tổng hợp số lượng của từng prefix 2 ký tự.
+    Trả về dict {prefix: count}
+    """
+    prefix_counts = {}
     try:
-        urllib.request.urlretrieve(url, dest_path)
-        print(f"Đã tải reminder.pyw về {dest_path}")
-        return True
+        with open(filepath, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.rstrip("\n")
+                if len(line) < 2:
+                    continue
+                prefix = line[:2]
+                prefix_counts[prefix] = prefix_counts.get(prefix, 0) + 1
     except Exception as e:
-        print(f"Lỗi khi tải file: {e}")
-        return False
+        print(f"Lỗi khi đọc file {filepath}: {e}")
+        return {}
+
+    return prefix_counts
 
 # Ví dụ sử dụng:
-url_online = "https://ala168.github.io/qlhv/reminder.pyw"
-download_reminder_pyw(url_online)
+if __name__ == "__main__":
+    result = sum_prefix_counts()
+    for prefix, count in result.items():
+        print(f"{prefix}: {count}")
