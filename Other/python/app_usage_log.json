@@ -1,0 +1,17 @@
+[
+    {
+        "date": "2026-04-28",
+        "app": "chrome.exe",
+        "seconds": 470
+    },
+    {
+        "date": "2026-04-28",
+        "app": "notepad++.exe",
+        "seconds": 686
+    },
+    {
+        "date": "2026-04-28",
+        "app": "CalculatorApp.exe",
+        "seconds": 13
+    }
+]

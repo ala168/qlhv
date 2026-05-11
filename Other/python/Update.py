@@ -1,4 +1,4 @@
-def sum_prefix_counts(filepath=r"Q:\Corebanking\FIS\Tool_Migrate\count hist\count_hist.log"):
+def sum_prefix_counts(filepath=r"C:\Users\Abc\Desktop\test.csv"):
     """
     Đọc file log, lấy 2 ký tự đầu mỗi dòng, tổng hợp số lượng của từng prefix 2 ký tự.
     Trả về dict {prefix: count}
@@ -10,7 +10,7 @@ def sum_prefix_counts(filepath=r"Q:\Corebanking\FIS\Tool_Migrate\count hist\coun
                 line = line.rstrip("\n")
                 if len(line) < 2:
                     continue
-                prefix = line[:2]
+                prefix = line
                 prefix_counts[prefix] = prefix_counts.get(prefix, 0) + 1
     except Exception as e:
         print(f"Lỗi khi đọc file {filepath}: {e}")
@@ -23,3 +23,5 @@ if __name__ == "__main__":
     result = sum_prefix_counts()
     for prefix, count in result.items():
         print(f"{prefix}: {count}")
+    print(f"Tổng số mã prefix khác nhau: {len(result)}")
+    print(f"Tổng số lượng mã prefix: {sum(result.values())}")
