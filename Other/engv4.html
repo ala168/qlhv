@@ -1,361 +1,916 @@
-
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Arcane Quiz – Tiếng Anh Lớp 6</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --myst-bg: #0d0a1a; --myst-surface: #1a1230; --myst-card: #211840;
-    --myst-border: #4a3a7a; --myst-gold: #c9a227; --myst-gold-light: #f0c84a;
-    --myst-purple: #9b59f7; --myst-purple-light: #c084fc;
-    --myst-text: #e8e0f8; --myst-muted: #9b8ec4;
-    --myst-correct: #22c55e; --myst-wrong: #ef4444;
-  }
-  #app { min-height: 100vh; padding: 0 0 2rem; background: var(--myst-bg); color: var(--myst-text); font-family: 'Segoe UI', sans-serif; }
-  .screen { display: none; }
-  .screen.active { display: block; }
+/* ── RESET & ROOT ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:        #080613;
+  --bg2:       #0f0b20;
+  --surface:   #13102a;
+  --card:      #1c1735;
+  --card2:     #231d42;
+  --border:    #3d2f6e;
+  --border-l:  #5a4494;
+  --gold:      #c8991f;
+  --gold-l:    #f0c84a;
+  --gold-d:    #8a6610;
+  --purple:    #8b46f5;
+  --purple-l:  #b87fff;
+  --purple-d:  #5c2db5;
+  --teal:      #2dd4bf;
+  --text:      #ede6ff;
+  --text-dim:  #a898cc;
+  --text-mute: #6b5c8e;
+  --ok:        #22c55e;
+  --ok-bg:     rgba(34,197,94,.12);
+  --bad:       #f43f5e;
+  --bad-bg:    rgba(244,63,94,.12);
+  --r:         14px;
+  --r-sm:      9px;
+  --shadow:    0 8px 32px rgba(0,0,0,.5);
+}
 
-  #home { text-align: center; padding: 2rem 1rem 3rem; }
-  .sigil { font-size: 3rem; margin-bottom: 1rem; filter: drop-shadow(0 0 12px #9b59f7); }
-  .title-main { font-size: 1.5rem; font-weight: 600; background: linear-gradient(135deg, var(--myst-gold), var(--myst-purple-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 2px; margin-bottom: 0.3rem; }
-  .title-sub { color: var(--myst-muted); font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 1.5rem; }
-  .rune-bar { text-align:center; color:rgba(155,89,247,0.3); font-size:1rem; letter-spacing:4px; margin:0.75rem 0 0.5rem; }
-  .tome-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; max-width: 640px; margin: 0 auto; }
-  .tome-btn { background: var(--myst-card); border: 1px solid var(--myst-border); border-radius: 12px; padding: 1.2rem 0.75rem; cursor: pointer; transition: all 0.2s; text-align: center; position: relative; overflow: hidden; }
-  .tome-btn::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 0%,rgba(155,89,247,0.12) 0%,transparent 70%); }
-  .tome-btn:hover { border-color: var(--myst-purple); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(155,89,247,0.2); }
-  .tome-btn.new-tome { border-color: rgba(201,162,39,0.4); }
-  .tome-btn.new-tome:hover { border-color: var(--myst-gold); box-shadow: 0 6px 20px rgba(201,162,39,0.2); }
-  .new-label { position:absolute; top:6px; right:8px; font-size:0.55rem; background:rgba(201,162,39,0.2); color:var(--myst-gold); border:1px solid rgba(201,162,39,0.4); border-radius:10px; padding:1px 6px; font-weight:600; letter-spacing:0.5px; }
-  .tome-icon { font-size: 1.8rem; margin-bottom: 0.4rem; }
-  .tome-name { font-size: 0.72rem; color: var(--myst-gold); letter-spacing: 1px; margin-bottom: 0.2rem; font-weight: 600; }
-  .tome-school { font-size: 0.65rem; color: var(--myst-muted); }
-  .tome-count { font-size: 0.62rem; color: var(--myst-muted); margin-top: 0.25rem; }
+html { height: 100%; scroll-behavior: smooth; }
+body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 17px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
 
-  #quiz { padding: 1rem; max-width: 720px; margin: 0 auto; }
-  .quiz-header { display:flex; align-items:center; gap:0.75rem; margin-bottom:1.25rem; flex-wrap:wrap; }
-  .back-btn { background:transparent; border:1px solid var(--myst-border); color:var(--myst-muted); border-radius:8px; padding:6px 12px; cursor:pointer; font-size:0.8rem; transition:all 0.15s; }
-  .back-btn:hover { border-color:var(--myst-purple); color:var(--myst-text); }
-  .quiz-title { font-size:0.88rem; color:var(--myst-gold); flex:1; font-weight:600; }
-  .progress-wrap { width:100%; height:4px; background:var(--myst-card); border-radius:2px; margin-bottom:1rem; }
-  .progress-bar { height:4px; background:linear-gradient(90deg,var(--myst-purple),var(--myst-gold)); border-radius:2px; transition:width 0.4s ease; }
-  .q-counter { font-size:0.75rem; color:var(--myst-muted); text-align:right; margin-bottom:0.75rem; }
-  .section-badge { display:inline-block; font-size:0.62rem; letter-spacing:1.5px; color:var(--myst-purple-light); border:1px solid rgba(155,89,247,0.35); border-radius:20px; padding:2px 10px; margin-bottom:0.75rem; font-weight:600; }
-  .passage-label { font-size:0.65rem; color:var(--myst-gold); letter-spacing:1px; margin-bottom:0.4rem; font-weight:600; }
-  .passage-box { background:rgba(26,18,48,0.8); border:1px solid rgba(155,89,247,0.35); border-left:3px solid var(--myst-purple); border-radius:10px; padding:0.9rem 1.1rem; margin-bottom:0.85rem; font-size:0.82rem; line-height:1.75; color:#cfc5ee; max-height:210px; overflow-y:auto; white-space:pre-wrap; }
-  .passage-box::-webkit-scrollbar { width:4px; }
-  .passage-box::-webkit-scrollbar-thumb { background:var(--myst-border); border-radius:2px; }
-  .q-text { font-size:0.93rem; line-height:1.65; color:var(--myst-text); background:var(--myst-card); border:1px solid var(--myst-border); border-radius:12px; padding:0.9rem 1.1rem; margin-bottom:1rem; white-space:pre-wrap; }
-  .choices { display:flex; flex-direction:column; gap:0.55rem; }
-  .choice-btn { background:var(--myst-surface); border:1px solid var(--myst-border); border-radius:10px; padding:0.65rem 1rem; cursor:pointer; transition:all 0.15s; display:flex; align-items:flex-start; gap:0.6rem; font-size:0.87rem; color:var(--myst-text); text-align:left; }
-  .choice-btn:hover:not(:disabled) { border-color:var(--myst-purple); background:rgba(155,89,247,0.08); }
-  .choice-btn .letter { font-size:0.73rem; color:var(--myst-gold); min-width:18px; font-weight:600; padding-top:1px; flex-shrink:0; }
-  .choice-btn.correct { border-color:var(--myst-correct); background:rgba(34,197,94,0.1); }
-  .choice-btn.wrong { border-color:var(--myst-wrong); background:rgba(239,68,68,0.1); }
-  .choice-btn:disabled { cursor:default; }
-  .feedback-msg { margin-top:0.75rem; padding:0.6rem 1rem; border-radius:8px; font-size:0.85rem; display:none; }
-  .feedback-msg.show { display:block; }
-  .feedback-msg.correct { background:rgba(34,197,94,0.12); color:#4ade80; border:1px solid rgba(34,197,94,0.3); }
-  .feedback-msg.wrong { background:rgba(239,68,68,0.12); color:#f87171; border:1px solid rgba(239,68,68,0.3); }
-  .nav-row { display:flex; justify-content:flex-end; margin-top:1rem; }
-  .next-btn { background:linear-gradient(135deg,#6d28d9,#9b59f7); border:none; border-radius:10px; padding:0.65rem 1.5rem; color:#fff; font-size:0.9rem; cursor:pointer; transition:opacity 0.15s; display:none; }
-  .next-btn.show { display:block; }
-  .next-btn:hover { opacity:0.85; }
+/* ── ANIMATED BG ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 20%, rgba(139,70,245,.13) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 80%, rgba(200,153,31,.09) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 50% 50%, rgba(45,212,191,.05) 0%, transparent 70%);
+}
 
-  #result { text-align:center; padding:2rem 1rem; max-width:600px; margin:0 auto; }
-  .result-orb { font-size:4rem; margin-bottom:1rem; filter:drop-shadow(0 0 16px gold); }
-  .result-title { font-size:1.05rem; color:var(--myst-gold); margin-bottom:0.5rem; font-weight:600; }
-  .stars-row { display:flex; justify-content:center; gap:6px; margin-bottom:1rem; font-size:1.5rem; }
-  .result-score { font-size:3rem; font-weight:600; color:var(--myst-purple-light); margin:1rem 0; }
-  .result-label { color:var(--myst-muted); font-size:0.85rem; margin-bottom:1.5rem; }
-  .rank-badge { display:inline-block; padding:0.4rem 1.2rem; border-radius:20px; font-size:0.85rem; margin-bottom:1.5rem; font-weight:600; }
-  .result-actions { display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap; }
-  .result-btn { padding:0.65rem 1.4rem; border-radius:10px; font-size:0.9rem; cursor:pointer; transition:opacity 0.15s; border:none; }
-  .result-btn:hover { opacity:0.85; }
-  .btn-retry { background:var(--myst-purple); color:#fff; }
-  .btn-home { background:var(--myst-card); color:var(--myst-text); border:1px solid var(--myst-border); }
+/* Stars */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 15% 25%, rgba(255,255,255,.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 72% 12%, rgba(255,255,255,.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 60%, rgba(255,255,255,.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 45%, rgba(255,255,255,.5) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 28% 82%, rgba(200,153,31,.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 35%, rgba(255,255,255,.35) 0%, transparent 100%),
+    radial-gradient(1px 1px at 5%  70%, rgba(255,255,255,.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 80% 90%, rgba(139,70,245,.6) 0%, transparent 100%);
+}
+
+/* ── SCREENS ── */
+#app { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
+.screen { display: none; flex: 1; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* ══════════════════════════════════════════
+   HOME SCREEN
+══════════════════════════════════════════ */
+#home {
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.5rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem) clamp(2rem, 6vw, 4rem);
+  text-align: center;
+  min-height: 100vh;
+}
+
+.home-sigil {
+  font-size: clamp(3rem, 10vw, 5rem);
+  margin-bottom: .75rem;
+  display: block;
+  filter: drop-shadow(0 0 20px var(--purple)) drop-shadow(0 0 40px var(--purple-d));
+  animation: float 4s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+.home-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.6rem, 6vw, 2.8rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--gold-l) 0%, var(--purple-l) 55%, var(--teal) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: .1em;
+  margin-bottom: .3rem;
+  line-height: 1.1;
+}
+
+.home-sub {
+  font-size: clamp(.8rem, 2.5vw, 1rem);
+  color: var(--text-dim);
+  letter-spacing: .08em;
+  margin-bottom: .5rem;
+  font-style: italic;
+}
+
+.rune-divider {
+  color: rgba(139,70,245,.4);
+  letter-spacing: .5em;
+  font-size: 1rem;
+  margin: .75rem 0;
+  user-select: none;
+}
+
+.home-hint {
+  font-size: clamp(.75rem, 2vw, .88rem);
+  color: var(--text-mute);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+.home-hint span { color: var(--gold); }
+
+/* TOME GRID */
+.tome-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: clamp(.6rem, 2vw, .9rem);
+  width: 100%;
+  max-width: 580px;
+}
+
+.tome-btn {
+  position: relative;
+  background: linear-gradient(160deg, var(--card2) 0%, var(--card) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: clamp(1rem, 3vw, 1.4rem) clamp(.75rem, 2vw, 1rem);
+  cursor: pointer;
+  transition: transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .22s, border-color .22s;
+  text-align: center;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+.tome-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(139,70,245,.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+.tome-btn:hover, .tome-btn:active {
+  border-color: var(--purple-l);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(139,70,245,.25), 0 0 0 1px var(--purple-d);
+}
+.tome-btn.gold-tome { border-color: var(--gold-d); }
+.tome-btn.gold-tome:hover, .tome-btn.gold-tome:active {
+  border-color: var(--gold);
+  box-shadow: 0 10px 30px rgba(200,153,31,.25), 0 0 0 1px var(--gold-d);
+}
+.new-badge {
+  position: absolute; top: 7px; right: 8px;
+  font-size: .55rem; font-weight: 700; letter-spacing: .06em;
+  background: rgba(200,153,31,.18);
+  color: var(--gold-l);
+  border: 1px solid rgba(200,153,31,.4);
+  border-radius: 20px;
+  padding: 2px 7px;
+  font-family: 'Cinzel', serif;
+}
+.tome-icon { font-size: clamp(1.6rem, 4vw, 2rem); margin-bottom: .4rem; display: block; }
+.tome-name {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(.65rem, 2vw, .78rem);
+  color: var(--gold-l);
+  letter-spacing: .1em;
+  font-weight: 600;
+  margin-bottom: .2rem;
+}
+.tome-school { font-size: clamp(.6rem, 1.8vw, .7rem); color: var(--text-dim); font-style: italic; }
+.tome-count  { font-size: clamp(.58rem, 1.6vw, .65rem); color: var(--text-mute); margin-top: .2rem; }
+
+/* ══════════════════════════════════════════
+   QUIZ SCREEN
+══════════════════════════════════════════ */
+#quiz { overflow-y: auto; }
+.quiz-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: clamp(.75rem, 3vw, 1.25rem) clamp(.85rem, 3.5vw, 1.5rem) clamp(2rem, 5vw, 3rem);
+  width: 100%;
+}
+
+/* Header bar */
+.quiz-header {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  margin-bottom: 1rem;
+}
+.back-btn {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  border-radius: var(--r-sm);
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: .82rem;
+  font-family: 'Crimson Pro', serif;
+  transition: all .15s;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+.back-btn:hover, .back-btn:active {
+  border-color: var(--purple-l);
+  color: var(--text);
+  background: rgba(139,70,245,.08);
+}
+.quiz-title-text {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(.65rem, 2.2vw, .82rem);
+  color: var(--gold);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  letter-spacing: .04em;
+}
+
+/* Progress */
+.prog-row {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  margin-bottom: 1rem;
+}
+.progress-track {
+  flex: 1;
+  height: 5px;
+  background: rgba(61,47,110,.6);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--purple), var(--gold-l));
+  border-radius: 3px;
+  transition: width .45s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 0 8px var(--purple-d);
+}
+.q-counter {
+  font-size: .75rem;
+  color: var(--text-mute);
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-family: 'Cinzel', serif;
+}
+
+/* Section badge */
+.section-badge {
+  display: inline-block;
+  font-size: clamp(.58rem, 1.8vw, .65rem);
+  letter-spacing: .12em;
+  color: var(--purple-l);
+  border: 1px solid rgba(139,70,245,.3);
+  border-radius: 20px;
+  padding: 3px 12px;
+  margin-bottom: .75rem;
+  font-family: 'Cinzel', serif;
+  background: rgba(139,70,245,.06);
+  text-transform: uppercase;
+}
+
+/* Passage */
+.passage-label {
+  font-size: .65rem;
+  color: var(--gold);
+  letter-spacing: .1em;
+  margin-bottom: .4rem;
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+}
+.passage-box {
+  background: rgba(15,11,32,.75);
+  border: 1px solid rgba(139,70,245,.25);
+  border-left: 3px solid var(--purple-d);
+  border-radius: var(--r-sm);
+  padding: clamp(.75rem, 3vw, 1rem) clamp(.85rem, 3vw, 1.1rem);
+  margin-bottom: .9rem;
+  font-size: clamp(.78rem, 2.3vw, .88rem);
+  line-height: 1.8;
+  color: #c8bcee;
+  max-height: 210px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.passage-box::-webkit-scrollbar { width: 4px; }
+.passage-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* Question */
+.q-text {
+  font-size: clamp(.9rem, 3vw, 1.05rem);
+  line-height: 1.65;
+  color: var(--text);
+  background: linear-gradient(150deg, var(--card2) 0%, var(--card) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: clamp(.85rem, 3vw, 1.1rem) clamp(.95rem, 3vw, 1.2rem);
+  margin-bottom: 1rem;
+  white-space: pre-wrap;
+  box-shadow: var(--shadow);
+}
+
+/* Choices */
+.choices { display: flex; flex-direction: column; gap: .55rem; }
+.choice-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: .65rem;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: clamp(.65rem, 2.5vw, .85rem) clamp(.85rem, 3vw, 1.05rem);
+  cursor: pointer;
+  transition: background .14s, border-color .14s, transform .12s;
+  font-size: clamp(.85rem, 2.8vw, .97rem);
+  color: var(--text);
+  text-align: left;
+  font-family: 'Crimson Pro', serif;
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1.45;
+}
+.choice-btn:hover:not(:disabled), .choice-btn:active:not(:disabled) {
+  border-color: var(--purple-l);
+  background: rgba(139,70,245,.1);
+  transform: translateX(3px);
+}
+.choice-label {
+  font-family: 'Cinzel', serif;
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--gold);
+  min-width: 22px;
+  padding-top: 2px;
+  flex-shrink: 0;
+}
+.choice-text { flex: 1; }
+.choice-btn.correct {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+  box-shadow: 0 0 12px rgba(34,197,94,.15);
+}
+.choice-btn.correct .choice-label { color: var(--ok); }
+.choice-btn.wrong {
+  border-color: var(--bad);
+  background: var(--bad-bg);
+}
+.choice-btn.wrong .choice-label { color: var(--bad); }
+.choice-btn:disabled { cursor: default; transform: none; }
+
+/* Feedback */
+.feedback-msg {
+  margin-top: .75rem;
+  padding: clamp(.6rem, 2vw, .75rem) clamp(.9rem, 3vw, 1.1rem);
+  border-radius: var(--r-sm);
+  font-size: clamp(.82rem, 2.5vw, .92rem);
+  display: none;
+  font-style: italic;
+}
+.feedback-msg.show { display: block; animation: fadein .2s ease; }
+@keyframes fadein { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+.feedback-msg.correct {
+  background: var(--ok-bg);
+  color: #4ade80;
+  border: 1px solid rgba(34,197,94,.3);
+}
+.feedback-msg.wrong {
+  background: var(--bad-bg);
+  color: #fb7185;
+  border: 1px solid rgba(244,63,94,.3);
+}
+
+/* Next button */
+.nav-row { display: flex; justify-content: flex-end; margin-top: 1rem; }
+.next-btn {
+  background: linear-gradient(135deg, var(--purple-d), var(--purple));
+  border: none;
+  border-radius: var(--r-sm);
+  padding: clamp(.7rem, 2.5vw, .85rem) clamp(1.4rem, 4vw, 1.8rem);
+  color: #fff;
+  font-size: clamp(.88rem, 2.8vw, 1rem);
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  letter-spacing: .05em;
+  cursor: pointer;
+  transition: opacity .15s, transform .12s, box-shadow .15s;
+  display: none;
+  box-shadow: 0 4px 16px rgba(139,70,245,.35);
+  -webkit-tap-highlight-color: transparent;
+}
+.next-btn.show { display: block; animation: fadein .2s ease; }
+.next-btn:hover, .next-btn:active { opacity: .9; transform: translateY(-1px); box-shadow: 0 6px 22px rgba(139,70,245,.45); }
+
+/* ══════════════════════════════════════════
+   RESULT SCREEN
+══════════════════════════════════════════ */
+#result {
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.5rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem);
+  text-align: center;
+  min-height: 100vh;
+}
+.result-inner { max-width: 440px; width: 100%; }
+.result-orb {
+  font-size: clamp(3rem, 10vw, 4.5rem);
+  margin-bottom: .75rem;
+  display: block;
+  filter: drop-shadow(0 0 20px gold);
+  animation: float 3s ease-in-out infinite;
+}
+.result-exam-name {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(.78rem, 2.5vw, .95rem);
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: .5rem;
+  letter-spacing: .05em;
+}
+.stars-row {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: .85rem;
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+}
+.result-score {
+  font-size: clamp(2.5rem, 9vw, 3.5rem);
+  font-weight: 700;
+  color: var(--purple-l);
+  margin: .5rem 0;
+  font-family: 'Cinzel', serif;
+}
+.result-pct {
+  font-size: clamp(.82rem, 2.5vw, .95rem);
+  color: var(--text-dim);
+  margin-bottom: 1.2rem;
+}
+.rank-badge {
+  display: inline-block;
+  padding: .45rem 1.4rem;
+  border-radius: 30px;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(.78rem, 2.5vw, .9rem);
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  letter-spacing: .06em;
+}
+.result-actions {
+  display: flex;
+  gap: .75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.result-btn {
+  padding: clamp(.65rem, 2.5vw, .8rem) clamp(1.2rem, 4vw, 1.6rem);
+  border-radius: var(--r-sm);
+  font-size: clamp(.85rem, 2.8vw, 1rem);
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  letter-spacing: .04em;
+  cursor: pointer;
+  transition: all .15s;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.result-btn:hover, .result-btn:active { opacity: .88; transform: translateY(-1px); }
+.btn-retry { background: var(--purple); color: #fff; box-shadow: 0 4px 14px rgba(139,70,245,.3); }
+.btn-home  { background: var(--card2); color: var(--text); border: 1px solid var(--border); }
+
+/* ── MOBILE TWEAKS ── */
+@media (max-width: 380px) {
+  .tome-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 320px) {
+  .tome-grid { grid-template-columns: 1fr 1fr; }
+  .quiz-inner { padding: .6rem .65rem 2rem; }
+}
 </style>
-
+</head>
+<body>
 <div id="app">
+
+  <!-- ══ HOME ══ -->
   <div id="home" class="screen active">
-    <div class="sigil">🔮</div>
-    <div class="title-main">Arcane Quiz</div>
-    <div class="title-sub">Luyện thi Tiếng Anh Lớp 6 · NGT & CVA</div>
-    <div class="rune-bar">✦ ᛟ ✦ ᚱ ✦ ᛗ ✦</div>
-    <p style="color:var(--myst-muted);font-size:0.8rem;margin-bottom:1.25rem;">Chọn một cuộn đề thi để bắt đầu thử thách</p>
+    <span class="home-sigil">🔮</span>
+    <h1 class="home-title">Arcane Quiz</h1>
+    <p class="home-sub">Luyện thi Tiếng Anh Lớp 6 · NGT &amp; CVA</p>
+    <div class="rune-divider">✦ ᛟ ✦ ᚱ ✦ ᛗ ✦</div>
+    <p class="home-hint">Đáp án được <span>xáo trộn ngẫu nhiên</span> mỗi lần thi</p>
     <div class="tome-grid">
-      <div class="tome-btn" onclick="startExam(0)"><div class="tome-icon">📜</div><div class="tome-name">Đề Số 01</div><div class="tome-school">Nguyễn Gia Thiều</div><div class="tome-count">25 câu · 30 phút</div></div>
-      <div class="tome-btn" onclick="startExam(1)"><div class="tome-icon">🗝️</div><div class="tome-name">Đề Số 02</div><div class="tome-school">Chu Văn An</div><div class="tome-count">30 câu · 45 phút</div></div>
-      <div class="tome-btn" onclick="startExam(2)"><div class="tome-icon">⚗️</div><div class="tome-name">Đề Số 03</div><div class="tome-school">Nguyễn Gia Thiều</div><div class="tome-count">25 câu · 30 phút</div></div>
-      <div class="tome-btn new-tome" onclick="startExam(3)"><div class="new-label">MỚI</div><div class="tome-icon">🏛️</div><div class="tome-name">Đề Số 04</div><div class="tome-school">Chu Văn An</div><div class="tome-count">35 câu · 45 phút</div></div>
-      <div class="tome-btn new-tome" onclick="startExam(4)"><div class="new-label">MỚI</div><div class="tome-icon">🌟</div><div class="tome-name">Đề Số 05</div><div class="tome-school">Nguyễn Gia Thiều</div><div class="tome-count">25 câu · 30 phút</div></div>
+      <button class="tome-btn" onclick="startExam(0)">
+        <span class="tome-icon">📜</span>
+        <div class="tome-name">Đề 01</div>
+        <div class="tome-school">Nguyễn Gia Thiều</div>
+        <div class="tome-count">25 câu · 30 phút</div>
+      </button>
+      <button class="tome-btn" onclick="startExam(1)">
+        <span class="tome-icon">🗝️</span>
+        <div class="tome-name">Đề 02</div>
+        <div class="tome-school">Chu Văn An</div>
+        <div class="tome-count">30 câu · 45 phút</div>
+      </button>
+      <button class="tome-btn" onclick="startExam(2)">
+        <span class="tome-icon">⚗️</span>
+        <div class="tome-name">Đề 03</div>
+        <div class="tome-school">Nguyễn Gia Thiều</div>
+        <div class="tome-count">25 câu · 30 phút</div>
+      </button>
+      <button class="tome-btn gold-tome" onclick="startExam(3)">
+        <span class="new-badge">MỚI</span>
+        <span class="tome-icon">🏛️</span>
+        <div class="tome-name">Đề 04</div>
+        <div class="tome-school">Chu Văn An 23-24</div>
+        <div class="tome-count">35 câu · 45 phút</div>
+      </button>
+      <button class="tome-btn gold-tome" onclick="startExam(4)">
+        <span class="new-badge">MỚI</span>
+        <span class="tome-icon">🌟</span>
+        <div class="tome-name">Đề 05</div>
+        <div class="tome-school">NGT 24-25</div>
+        <div class="tome-count">25 câu · 30 phút</div>
+      </button>
     </div>
   </div>
 
+  <!-- ══ QUIZ ══ -->
   <div id="quiz" class="screen">
-    <div class="quiz-header">
-      <button class="back-btn" onclick="goHome()">← Quay lại</button>
-      <div class="quiz-title" id="quiz-title"></div>
+    <div class="quiz-inner">
+      <div class="quiz-header">
+        <button class="back-btn" onclick="goHome()">← Về</button>
+        <div class="quiz-title-text" id="quiz-title"></div>
+      </div>
+      <div class="prog-row">
+        <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+        <div class="q-counter" id="q-counter"></div>
+      </div>
+      <div class="section-badge" id="section-badge"></div>
+      <div id="passage-wrap" style="display:none">
+        <div class="passage-label">📖 Bài đọc</div>
+        <div class="passage-box" id="passage-box"></div>
+      </div>
+      <div class="q-text" id="q-text"></div>
+      <div class="choices" id="choices"></div>
+      <div class="feedback-msg" id="feedback"></div>
+      <div class="nav-row"><button class="next-btn" id="next-btn" onclick="nextQ()">Tiếp theo ›</button></div>
     </div>
-    <div class="progress-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
-    <div class="q-counter" id="q-counter"></div>
-    <div class="section-badge" id="section-badge"></div>
-    <div id="passage-wrap" style="display:none">
-      <div class="passage-label">📖 BÀI ĐỌC</div>
-      <div class="passage-box" id="passage-box"></div>
-    </div>
-    <div class="q-text" id="q-text"></div>
-    <div class="choices" id="choices"></div>
-    <div class="feedback-msg" id="feedback"></div>
-    <div class="nav-row"><button class="next-btn" id="next-btn" onclick="nextQuestion()">Tiếp theo →</button></div>
   </div>
 
+  <!-- ══ RESULT ══ -->
   <div id="result" class="screen">
-    <div class="result-orb" id="result-orb">🏆</div>
-    <div class="result-title" id="result-title"></div>
-    <div class="stars-row" id="stars-row"></div>
-    <div class="result-score" id="result-score"></div>
-    <div class="result-label" id="result-label"></div>
-    <div class="rank-badge" id="rank-badge"></div>
-    <div class="result-actions">
-      <button class="result-btn btn-retry" onclick="retryExam()">🔄 Làm lại</button>
-      <button class="result-btn btn-home" onclick="goHome()">🏠 Trang chủ</button>
+    <div class="result-inner">
+      <span class="result-orb" id="r-orb">🏆</span>
+      <div class="result-exam-name" id="r-name"></div>
+      <div class="stars-row" id="r-stars"></div>
+      <div class="result-score" id="r-score"></div>
+      <div class="result-pct" id="r-pct"></div>
+      <div class="rank-badge" id="r-rank"></div>
+      <div class="result-actions">
+        <button class="result-btn btn-retry" onclick="retryExam()">🔄 Làm lại</button>
+        <button class="result-btn btn-home"  onclick="goHome()">🏠 Trang chủ</button>
+      </div>
     </div>
   </div>
-</div>
+
+</div><!-- #app -->
 
 <script>
-/* ── PASSAGES ─────────────────────────────────────────── */
-const P_JANE = `Hi Sammy,\n\nI'm here in the United States and having a great time! We arrived ___ Wednesday and visited the Lincoln Memorial and Georgetown. Georgetown is a historic area in Washington, D.C. The food here is great. I ate a hot dog. It's a ___ street food in America. I really liked it. Tomorrow, we're going to the White House with a tour guide and taking a boat trip along the Potomac River. We're going to the National Air and Space Museum on our last day in Washington, D.C. On Friday, we will go to the airport to get a ___ to New York City. I'm looking forward to going on the Staten Island Ferry to see the Statue of Liberty and going to Yankee Stadium. I wish you were here.\n\nJane`;
+/* ══════════════════════════════════════════════════════
+   PASSAGES
+══════════════════════════════════════════════════════ */
+const P_JANE = `Hi Sammy,
 
-const P_PETS = `The importance of pets\n\nWhen they were asked, six million people in Britain said they own a pet cat. That's strange, as only four million cats are known to be living in Britain! Perhaps some cats have more than one owner. What's clear, however, is that cats are popular with people in Britain.\n\nDoctors have known for some time that a link exists between animals and human health. In a special report, they express the importance of pets to people in Britain. They say that pet owners are less likely to have a heart attack than people who do not own a pet. Although the favourite pets in Britain are cats and dogs, doctors think that all pets are good for people's health, even pet goldfish! What is the reason for this? Doctors believe that people need to have someone or something to care for and take care of. Then they don't think about themselves so much. They forget their own problems and thus feel better.`;
+I'm here in the United States and having a great time! We arrived ___ Wednesday and visited the Lincoln Memorial and Georgetown. Georgetown is a historic area in Washington, D.C. The food here is great. I ate a hot dog. It's a ___ street food in America. I really liked it. Tomorrow, we're going to the White House with a tour guide and taking a boat trip along the Potomac River. We're going to the National Air and Space Museum on our last day in Washington, D.C. On Friday, we will go to the airport to get a ___ to New York City. I'm looking forward to going on the Staten Island Ferry to see the Statue of Liberty and going to Yankee Stadium. I wish you were here.
+
+Jane`;
+
+const P_PETS = `The importance of pets
+
+When they were asked, six million people in Britain said they own a pet cat. That's strange, as only four million cats are known to be living in Britain! Perhaps some cats have more than one owner. What's clear, however, is that cats are popular with people in Britain.
+
+Doctors have known for some time that a link exists between animals and human health. In a special report, they express the importance of pets to people in Britain. They say that pet owners are less likely to have a heart attack than people who do not own a pet. Although the favourite pets in Britain are cats and dogs, doctors think that all pets are good for people's health, even pet goldfish! What is the reason for this? Doctors believe that people need to have someone or something to care for and take care of. Then they don't think about themselves so much. They forget their own problems and thus feel better.`;
 
 const P_EXAM = `Tests and exams are part of our school life. They play ___ important role in students' learning and education. Preparing ___ exams is a skill and not every student knows how to do it. Many students think that the ___ way is to learn everything by heart, but this isn't always the case. Knowledge is something more than remembering facts – it also involves understanding the information you learn. ___ you study for an exam, try to understand everything. Also, ___ attention to details. Another mistake that students make is listening to music and chatting on Facebook while they're learning. This does not help concentration!`;
 
 const P_GLOBAL = `Being a global citizen doesn't mean you need to travel around the world. It means you understand and care about ___ is happening in other countries, and you try to make a ___ where you live. Global citizens respect diversity, promote peace, and take action to solve global issues like poverty, pollution, or education. One way to become a global citizen is by learning a foreign language. This helps you ___ with people from different cultures and understand their way of life. Watching international news or joining student exchange programs are also great ways to stay informed and open-minded.`;
 
-const P_ENGLISH = `Why We Should Learn English\n\nEnglish is one of the most widely spoken languages in the world. It is the official language in many countries and is used as a global language for business, education, and travel. Learning English can help people communicate with others from different countries and cultures. English also gives people more opportunities. Many top universities and companies require good English skills. Students who are fluent in English can read international books, watch movies, and study materials that are not available in their native language. To improve English, learners should practice regularly, listen to English songs or podcasts, and try to speak with native speakers whenever possible.`;
+const P_ENGLISH = `Why We Should Learn English
 
-/* ── EXAM DATA ────────────────────────────────────────── */
-const EXAMS = [
-/* ══ ĐỀ 01 – NGT ══════════════════════════════════════ */
-{ name:"Đề 01 – Nguyễn Gia Thiều (25 câu)", questions:[
-  {s:"PHONETICS",q:"Câu 1: Chọn từ có phần gạch chân phát âm KHÁC:\nstay__ed__ / enjoy__ed__ / stopp__ed__ / join__ed__",c:["A. stayed","B. enjoyed","C. stopped","D. joined"],a:2},
-  {s:"PHONETICS",q:"Câu 2: Chọn từ có phần gạch chân phát âm KHÁC:\nl__i__ke / __i__nk / n__i__ght / k__i__te",c:["A. like","B. ink","C. night","D. kite"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 3: My brother's birthday is ___ December 20th, 2016.",c:["A. in","B. on","C. at","D. from"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 4: The opposite meaning of the word 'modern' is ___.",c:["A. young","B. ancient","C. new","D. far"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 5: The word 'flat' is closest meaning to ___.",c:["A. street","B. road","C. apartment","D. market"],a:2},
-  {s:"USE OF LANGUAGE",q:"Câu 6: We ___ a lot of fun on the trip to Ha Long last summer.",c:["A. having","B. has","C. had","D. have"],a:2},
-  {s:"USE OF LANGUAGE",q:"Câu 7: Which of these countries ALL belong to Europe?",c:["A. Russia, Germany, Italy, England, Mexico","B. Italy, England, France, Germany, Holland","C. France, America, Italy, Malaysia, Germany","D. Austria, France, England, Singapore, Russia"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 8: The birds in the garden are singing ___.",c:["A. beauty","B. beautifully","C. beautiful","D. beautify"],a:1},
-  {s:"USE OF LANGUAGE",q:'Câu 9: Peter: "You\'ve passed the exam. Congratulations!"\nMark: "___"',c:["A. You're welcome.","B. Thank you!","C. That's a good idea.","D. Not at all."],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 10: My sister would like to be a nurse because she'd like to ___ patients.",c:["A. look after","B. look for","C. look up","D. look through"],a:0},
-  {s:"READING – Thư của Jane",q:"Câu 11: We arrived (11) ___ Wednesday and visited the Lincoln Memorial...",c:["A. on","B. in","C. at","D. to"],a:0,p:P_JANE},
-  {s:"READING – Thư của Jane",q:"Câu 12: It's a (12) ___ street food in America.",c:["A. tradition","B. traditions","C. traditional","D. traditionally"],a:2,p:P_JANE},
-  {s:"READING – Thư của Jane",q:"Câu 13: We will go to the airport to get a (13) ___ to New York City.",c:["A. flight","B. ferry","C. car","D. bus"],a:0,p:P_JANE},
-  {s:"READING – The importance of pets",q:"Câu 14: The number of people in Britain owning a pet cat is ___.",c:["A. six million","B. four million","C. six thousand","D. four thousand"],a:0,p:P_PETS},
-  {s:"READING – The importance of pets",q:"Câu 15: Why are pets good for people's health?",c:["A. Pets take care of their owners.","B. People with pets take better care of themselves.","C. People with pets do not think about themselves or their own problems so much.","D. Pet owners think only of their pets and the pets' problems."],a:2,p:P_PETS},
-  {s:"READING – The importance of pets",q:'Câu 16: What does "they" refer to in "they express the importance of pets"?',c:["A. animal","B. pets","C. human health","D. doctors"],a:3,p:P_PETS},
-  {s:"READING – The importance of pets",q:"Câu 17: Which statement is NOT TRUE?",c:["A. Cats are so popular with people in Britain.","B. There are fewer cats than cat owners in Britain.","C. There is a link that exists between animals and human health.","D. Pet owners are more likely to do not own a pet."],a:3,p:P_PETS},
-  {s:"WRITING",q:"Câu 18: How far / it / your house / nearest post office?",c:["A. How far it is from your house to nearest post office?","B. How far is it from your house to the nearest post office?","C. How far it from your house to the nearest post office?","D. How far is it between your house and the nearest post office?"],a:1},
-  {s:"WRITING",q:"Câu 19: stadium / in front / pharmacy.",c:["A. The stadium is in front the pharmacy.","B. The stadium are in front to the pharmacy.","C. The stadium are in front of the pharmacy.","D. The stadium is in front of the pharmacy."],a:3},
-  {s:"WRITING",q:"Câu 20: Sắp xếp:\noften / to / how / English / do / club / you / speaking / the / go / ?",c:["A. How often do you go to the speaking English club?","B. How do you often go to the English speaking club?","C. How often do you go to the English speaking club?","D. How often do you go to the club English speaking?"],a:2},
-  {s:"WRITING",q:"Câu 21: Sắp xếp:\nyou / If / watch / much / too / TV / , / will / get / you / sore eyes / .",c:["A. If you will watch TV too much, you get sore eyes.","B. If you watch TV, you will get sore eyes too much.","C. If you watch TV too much, you will get sore eyes.","D. If you will get sore eyes, you watch TV too much."],a:2},
-  {s:"WRITING",q:"Câu 22: We don't have any milk left in the bottle.\n→ Câu gần nghĩa nhất:",c:["A. There is any milk in the bottle.","B. There isn't some milk in the bottle.","C. There are some milk in the bottle.","D. There is no milk in the bottle."],a:3},
-  {s:"WRITING",q:"Câu 23: Anna: 6 stickers · Alice: 9 stickers · Jane: 8 stickers\nCâu nào ĐÚNG?",c:["A. Alice got the most stickers.","B. Anna and Alice had more stickers than Jane and Alice.","C. Anna and Alice had fewer stickers than Jane and Alice.","D. Alice and Jane had fewer stickers than Jane and Anna."],a:0},
-  {s:"BONUS",q:"Câu 24: The word 'innovative' is closest in meaning to ___.",c:["A. traditional","B. creative","C. boring","D. fixed"],a:1},
-  {s:"BONUS",q:"Câu 25: Which is a renewable source of energy?",c:["A. Coal","B. Solar energy","C. Oil","D. Gas"],a:1},
-]},
+English is one of the most widely spoken languages in the world. It is the official language in many countries and is used as a global language for business, education, and travel. Learning English can help people communicate with others from different countries and cultures. English also gives people more opportunities. Many top universities and companies require good English skills. Students who are fluent in English can read international books, watch movies, and study materials that are not available in their native language. To improve English, learners should practice regularly, listen to English songs or podcasts, and try to speak with native speakers whenever possible.`;
 
-/* ══ ĐỀ 02 – CVA ══════════════════════════════════════ */
-{ name:"Đề 02 – Chu Văn An (30 câu)", questions:[
-  {s:"PHONETICS",q:"Câu 1: learn__ed__ / mov__ed__ / turn__ed__ / brush__ed__",c:["A. learned","B. moved","C. turned","D. brushed"],a:3},
-  {s:"PHONETICS",q:"Câu 2: __i__dea / __i__ntelligent / __i__nside / fl__i__ght",c:["A. idea","B. intelligent","C. inside","D. flight"],a:3},
-  {s:"PHONETICS",q:"Câu 3: __h__ole / __h__onest / __h__appiness / __h__owever",c:["A. hole","B. honest","C. happiness","D. however"],a:1},
-  {s:"PHONETICS",q:"Câu 4: __ch__emist / __ch__ristmas / arm__ch__air / sto__m__ach",c:["A. chemist","B. christmas","C. armchair","D. stomach"],a:2},
-  {s:"USE OF LANGUAGE",q:"Câu 5: My sister was born ___ July 3rd, 2005.",c:["A. in","B. on","C. at","D. from"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 6: The opposite meaning of 'different' is ___.",c:["A. similar","B. difficult","C. important","D. interesting"],a:0},
-  {s:"USE OF LANGUAGE",q:"Câu 7: The word 'biscuit' is closest meaning to ___.",c:["A. cupcake","B. donut","C. jelly","D. cookie"],a:3},
-  {s:"USE OF LANGUAGE",q:"Câu 8: My dad ___ us to the book fair last Sunday.",c:["A. taked","B. took","C. taking","D. takes"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 9: Which countries ALL belong to Southeast Asia?",c:["A. Vietnam, Thailand, India, Cambodia, Singapore","B. Laos, Thailand, Cambodia, Vietnam, Malaysia","C. Thailand, China, Laos, Malaysia, Indonesia","D. Cambodia, Singapore, Malaysia, Australia, Korea"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 10: Nam is working ___ for his entrance exam.",c:["A. hard","B. hardly","C. good","D. clever"],a:0},
-  {s:"USE OF LANGUAGE",q:'Câu 11: Peter: "Would you like to go for a picnic next Sunday?"\nMark: "___"',c:["A. I'd love to.","B. You're welcome.","C. I'm sorry, you can't.","D. No, it isn't."],a:0},
-  {s:"USE OF LANGUAGE",q:'Câu 12: Linda: "Congratulate you on winning the first prize!"\nMatt: "___"',c:["A. What a pity!","B. What can I do for you?","C. You're right.","D. Thank you so much."],a:3},
-  {s:"USE OF LANGUAGE",q:"Câu 13: How about ___ to Phu Quoc Island next week?",c:["A. go","B. going","C. went","D. to go"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 14: Do you prefer watching TV to ___ to music?",c:["A. listen","B. listening","C. listens","D. listened"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 15: My classmates usually ___ school activities.",c:["A. take part in","B. take care of","C. look after","D. look up"],a:0},
-  {s:"USE OF LANGUAGE",q:"Câu 16: Train ticket: HCM City → Ha Noi · August 18th · 16.20\nCâu nào ĐÚNG?",c:["A. The train to HCM City leaves at 4.20 p.m.","B. The train to Ha Noi leaves at 16.20.","C. The train to HCM City leaves on August 8th.","D. The train to HCM City leaves on July 18th."],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 17: ___ are non-renewable sources of energy.",c:["A. Solar energy – hydro power – wind power","B. Wind power – coal – natural gas","C. Solar energy – coal – wind power","D. Natural gas – coal – crude oil"],a:3},
-  {s:"READING – Tests & Exams",q:"Câu 18: They play (18) ___ important role in students' learning and education.",c:["A. a","B. an","C. the","D. ∅"],a:0,p:P_EXAM},
-  {s:"READING – Tests & Exams",q:"Câu 19: Preparing (19) ___ exams is a skill.",c:["A. for","B. of","C. with","D. on"],a:0,p:P_EXAM},
-  {s:"READING – Tests & Exams",q:"Câu 20: Many students think the (20) ___ way is to learn everything by heart.",c:["A. easy","B. easier","C. easiest","D. most easy"],a:2,p:P_EXAM},
-  {s:"READING – Tests & Exams",q:"Câu 21: (21) ___ you study for an exam, try to understand everything.",c:["A. But","B. When","C. So","D. However"],a:1,p:P_EXAM},
-  {s:"READING – Tests & Exams",q:"Câu 22: Also, (22) ___ attention to details.",c:["A. get","B. make","C. receive","D. pay"],a:3,p:P_EXAM},
-  {s:"READING – The importance of pets",q:"Câu 23: The number of people in Britain owning a pet cat is ___.",c:["A. six million","B. four million","C. six thousand","D. four thousand"],a:0,p:P_PETS},
-  {s:"READING – The importance of pets",q:"Câu 24: Why are pets good for people's health?",c:["A. Pets take care of their owners.","B. People with pets take better care of themselves.","C. People with pets do not think about themselves or their own problems so much.","D. Pet owners think only of their pets."],a:2,p:P_PETS},
-  {s:"READING – The importance of pets",q:'Câu 25: What does "they" refer to in "they express the importance of pets"?',c:["A. animal","B. pets","C. human health","D. doctors"],a:3,p:P_PETS},
-  {s:"READING – The importance of pets",q:"Câu 26: What is the opposite word of 'good'?",c:["A. wonderful","B. beautiful","C. bad","D. ugly"],a:2,p:P_PETS},
-  {s:"READING – The importance of pets",q:"Câu 27: Which statement is NOT TRUE?",c:["A. Cats are so popular with people in Britain.","B. There are fewer cats than cat owners in Britain.","C. There is a link that exists between animals and human health.","D. Pet owners are more likely to have a heart attack than people who do not own a pet."],a:3,p:P_PETS},
-  {s:"WRITING",q:"Câu 28: How far / it / your house / school?",c:["A. How far it is from your house to school?","B. How far is it from your house to your school?","C. How far it from your house to your school?","D. How far from your house to your school is it?"],a:1},
-  {s:"WRITING",q:"Câu 29: cinema / next / bus stop.",c:["A. The cinema are next to the bus stop.","B. The cinema are next the bus stop.","C. The cinema is next the bus stop.","D. The cinema is next to the bus stop."],a:3},
-  {s:"WRITING",q:"Câu 30: Sắp xếp:\nare / rush / hour / There / traffic / often / jams / during / the / .",c:["A. There are often rush hour during the traffic jams.","B. There are often traffic jams during the rush hour.","C. Traffic jams often there are during the rush hour.","D. During the rush hour often traffic jams there are."],a:1},
-]},
-
-/* ══ ĐỀ 03 – NGT ══════════════════════════════════════ */
-{ name:"Đề 03 – Nguyễn Gia Thiều (25 câu)", questions:[
-  {s:"PHONETICS",q:"Câu 1: walk__ed__ / laugh__ed__ / play__ed__ / watch__ed__",c:["A. walked","B. laughed","C. played","D. watched"],a:2},
-  {s:"PHONETICS",q:"Câu 2: __ch__emistry / __ch__ildren / __ch__eck / __ch__urch",c:["A. chemistry","B. children","C. check","D. church"],a:0},
-  {s:"USE OF LANGUAGE",q:"Câu 3: She has lived in this city ___ she was a child.",c:["A. for","B. since","C. during","D. from"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 4: The opposite of 'polluted' is ___.",c:["A. noisy","B. modern","C. fresh","D. dirty"],a:2},
-  {s:"USE OF LANGUAGE",q:"Câu 5: 'Innovative' is closest in meaning to ___.",c:["A. traditional","B. creative","C. boring","D. fixed"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 6: By the time we got to the station, the train ___.",c:["A. had left","B. left","C. leaves","D. has left"],a:0},
-  {s:"USE OF LANGUAGE",q:"Câu 7: You ___ talk during the exam, it's forbidden.",c:["A. should","B. shouldn't","C. must","D. mustn't"],a:3},
-  {s:"USE OF LANGUAGE",q:"Câu 8: The children ran ___ out of the classroom.",c:["A. excitement","B. excite","C. excited","D. excitedly"],a:3},
-  {s:"USE OF LANGUAGE",q:"Câu 9: What does the no-littering sign say?",c:["A. You don't need to litter in this place.","B. Littering is not good for the environment.","C. Waste is not available in this place.","D. You mustn't throw trash on the ground."],a:3},
-  {s:"USE OF LANGUAGE",q:'Câu 10: Nam: "Thank you so much for helping me!"\nLan: "___"',c:["A. Don't mention it.","B. That's right.","C. No, thanks.","D. Good idea."],a:0},
-  {s:"USE OF LANGUAGE",q:"Câu 11: The doctor advised him to ___ smoking.",c:["A. give away","B. take off","C. give up","D. put on"],a:2},
-  {s:"USE OF LANGUAGE",q:"Câu 12: ___ is a renewable source of energy.",c:["A. Coal","B. Solar energy","C. Oil","D. Gas"],a:1},
-  {s:"READING – Global Citizen",q:"Câu 13: ...you understand and care about (13) ___ is happening in other countries...",c:["A. which","B. what","C. where","D. who"],a:1,p:P_GLOBAL},
-  {s:"READING – Global Citizen",q:"Câu 14: ...you try to make a (14) ___ where you live.",c:["A. difference","B. progress","C. solution","D. reason"],a:0,p:P_GLOBAL},
-  {s:"READING – Global Citizen",q:"Câu 15: This helps you (15) ___ with people from different cultures.",c:["A. talk","B. speak","C. connect","D. share"],a:2,p:P_GLOBAL},
-  {s:"READING – Why We Should Learn English",q:"Câu 16: What is the main idea of the passage?",c:["A. English is the oldest language in the world.","B. English helps people find better jobs.","C. English is useful and important to learn.","D. English is only spoken in English-speaking countries."],a:2,p:P_ENGLISH},
-  {s:"READING – Why We Should Learn English",q:"Câu 17: How can people improve their English?",c:["A. By watching cartoons in their own language","B. By practicing and talking with native speakers","C. By learning many other languages","D. By reading only local newspapers"],a:1,p:P_ENGLISH},
-  {s:"READING – Why We Should Learn English",q:'Câu 18: The word "opportunities" means:',c:["A. exams","B. problems","C. chances","D. jobs only"],a:2,p:P_ENGLISH},
-  {s:"READING – Why We Should Learn English",q:"Câu 19: Which is NOT mentioned as a benefit of learning English?",c:["A. Traveling to new places","B. Entering good universities","C. Communicating with foreigners","D. Watching international movies"],a:0,p:P_ENGLISH},
-  {s:"WRITING",q:"Câu 20: how long / it / take / you / walk / school / every day / ?",c:["A. How long does it take you to walk school every day?","B. How long does it take for you to walk to school every day?","C. How long does it take you to walk to school every day?","D. How long do it take you to walk to school every day?"],a:2},
-  {s:"WRITING",q:"Câu 21: the airport / opposite / hotel / located / is.",c:["A. The airport is located opposite the hotel.","B. The hotel is located opposite the airport.","C. Opposite the hotel located is the airport.","D. The airport located opposite is the hotel."],a:0},
-  {s:"WRITING",q:"Câu 22: Sắp xếp:\ntired / too / I / go / am / cinema / the / to / to / tonight / .",c:["A. I am too tired to go to the cinema tonight.","B. Too I am tired to go to the cinema tonight.","C. I too tired am to go to the cinema tonight.","D. I am to tired to go the cinema tonight."],a:0},
-  {s:"WRITING",q:"Câu 23: Sắp xếp:\nbroken / is / If / your / laptop / , / you / fix / it / should / soon / .",c:["A. If your laptop is broken, you should fix it soon.","B. You should fix soon your laptop if it is broken.","C. If is your laptop broken, should you fix it soon.","D. If your laptop broken is, you should soon fix it."],a:0},
-  {s:"WRITING",q:"Câu 24: They have no books to read at home. → Câu gần nghĩa:",c:["A. There isn't any books to read at home.","B. They don't have some books at home.","C. There are no books for them to read at home.","D. They doesn't have books at home to read."],a:2},
-  {s:"WRITING",q:"Câu 25: Anna: 6 stickers · Alice: 9 stickers · Jane: 8 stickers\nCâu nào ĐÚNG?",c:["A. Alice got the most stickers.","B. Anna and Alice had more stickers than Jane and Alice.","C. Anna and Alice had fewer stickers than Jane and Alice.","D. Alice and Jane had fewer stickers than Jane and Anna."],a:0},
-]},
-
-/* ══ ĐỀ 04 – CVA 23-24 (ĐỀ THẬT) ═══════════════════════ */
-{ name:"Đề 04 – Chu Văn An 23-24 (35 câu)", questions:[
-  {s:"PHONETICS",q:"Câu 1: Chọn từ có phần gạch chân phát âm KHÁC:\nlearn__ed__ / mov__ed__ / turn__ed__ / brush__ed__",c:["A. learned","B. moved","C. turned","D. brushed"],a:3},
-  {s:"PHONETICS",q:"Câu 2: Chọn từ có phần gạch chân phát âm KHÁC:\n__i__dea / __i__ntelligent / ins__i__de / fl__i__ght",c:["A. idea","B. intelligent","C. inside","D. flight"],a:3},
-  {s:"PHONETICS",q:"Câu 3: Chọn từ có phần gạch chân phát âm KHÁC:\n__h__ole / __h__onest / __h__appiness / __h__owever",c:["A. hole","B. honest","C. happiness","D. however"],a:1},
-  {s:"PHONETICS",q:"Câu 4: Chọn từ có phần gạch chân phát âm KHÁC:\n__ch__emist / __ch__ristmas / arm__ch__air / sto__m__ach",c:["A. chemist","B. christmas","C. armchair","D. stomach"],a:2},
-  {s:"USE OF LANGUAGE",q:"Câu 5: My sister was born ___ July 3rd, 2005.",c:["A. in","B. on","C. at","D. from"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 6: The opposite meaning of 'different' is ___.",c:["A. similar","B. difficult","C. important","D. interesting"],a:0},
-  {s:"USE OF LANGUAGE",q:"Câu 7: The word 'biscuit' is closest meaning to ___.",c:["A. cupcake","B. donut","C. jelly","D. cookie"],a:3},
-  {s:"USE OF LANGUAGE",q:"Câu 8: My dad ___ us to the book fair last Sunday.",c:["A. taked","B. took","C. taking","D. takes"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 9: Which countries ALL belong to Southeast Asia?",c:["A. Vietnam, Thailand, India, Cambodia, Singapore","B. Laos, Thailand, Cambodia, Vietnam, Malaysia","C. Thailand, China, Laos, Malaysia, Indonesia","D. Cambodia, Singapore, Malaysia, Australia, Korea"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 10: Nam is working ___ for his entrance exam.",c:["A. hard","B. hardly","C. good","D. clever"],a:0},
-  {s:"USE OF LANGUAGE",q:'Câu 11: Peter: "Would you like to go for a picnic next Sunday?"\nMark: "___"',c:["A. I'd love to.","B. You're welcome.","C. I'm sorry, you can't.","D. No, it isn't."],a:0},
-  {s:"USE OF LANGUAGE",q:'Câu 12: Linda: "Congratulate you on winning the first prize!"\nMatt: "___"',c:["A. What a pity!","B. What can I do for you?","C. You're right.","D. Thank you so much."],a:3},
-  {s:"USE OF LANGUAGE",q:"Câu 13: How about ___ to Phu Quoc Island next week?",c:["A. go","B. going","C. went","D. to go"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 14: Do you prefer watching TV to ___ to music?",c:["A. listen","B. listening","C. listens","D. listened"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 15: My classmates usually ___ school activities.",c:["A. take part in","B. take care of","C. look after","D. look up"],a:0},
-  {s:"USE OF LANGUAGE",q:"Câu 16: Train ticket: Departure HCM City → Ha Noi · Date: August 18th · Time: 16.20\nCâu nào ĐÚNG?",c:["A. The train to HCM City leaves at 4.20 p.m.","B. The train to Ha Noi leaves at 16.20.","C. The train to HCM City leaves on August 8th.","D. The train to HCM City leaves on July 18th."],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 17: ___ are non-renewable sources of energy.",c:["A. Solar energy – hydro power – wind power","B. Wind power – coal – natural gas","C. Solar energy – coal – wind power","D. Natural gas – coal – crude oil"],a:3},
-  {s:"READING – Tests & Exams",q:"Câu 18: They play (18) ___ important role in students' learning and education.",c:["A. a","B. an","C. the","D. ∅"],a:0,p:P_EXAM},
-  {s:"READING – Tests & Exams",q:"Câu 19: Preparing (19) ___ exams is a skill.",c:["A. for","B. of","C. with","D. on"],a:0,p:P_EXAM},
-  {s:"READING – Tests & Exams",q:"Câu 20: Many students think the (20) ___ way is to learn everything by heart.",c:["A. easy","B. easier","C. easiest","D. most easy"],a:2,p:P_EXAM},
-  {s:"READING – Tests & Exams",q:"Câu 21: (21) ___ you study for an exam, try to understand everything.",c:["A. But","B. When","C. So","D. However"],a:1,p:P_EXAM},
-  {s:"READING – Tests & Exams",q:"Câu 22: Also, (22) ___ attention to details.",c:["A. get","B. make","C. receive","D. pay"],a:3,p:P_EXAM},
-  {s:"READING – The importance of pets",q:"Câu 23: The number of people in Britain owning a pet cat is ___.",c:["A. six million","B. four million","C. six thousand","D. four thousand"],a:0,p:P_PETS},
-  {s:"READING – The importance of pets",q:"Câu 24: Why are pets good for people's health?",c:["A. Pets take care of their owners.","B. People with pets take better care of themselves.","C. People with pets do not think about themselves or their own problems so much.","D. Pet owners think only of their pets and the pets' problems."],a:2,p:P_PETS},
-  {s:"READING – The importance of pets",q:'Câu 25: What does "they" refer to in "they express the importance of pets"?',c:["A. animal","B. pets","C. human health","D. doctors"],a:3,p:P_PETS},
-  {s:"READING – The importance of pets",q:"Câu 26: What is the opposite word of 'good'?",c:["A. wonderful","B. beautiful","C. bad","D. ugly"],a:2,p:P_PETS},
-  {s:"READING – The importance of pets",q:"Câu 27: Which statement is NOT TRUE?",c:["A. Cats are so popular with people in Britain.","B. There are fewer cats than cat owners in Britain.","C. There is a link that exists between animals and human health.","D. Pet owners are more likely to have a heart attack than people who do not own a pet."],a:3,p:P_PETS},
-  {s:"WRITING",q:"Câu 28: How far / it / your house / school?",c:["A. How far it is from your house to school?","B. How far is it from your house to your school?","C. How far it from your house to your school?","D. How far from your house to your school is it?"],a:1},
-  {s:"WRITING",q:"Câu 29: cinema / next / bus stop.",c:["A. The cinema are next to the bus stop.","B. The cinema are next the bus stop.","C. The cinema is next the bus stop.","D. The cinema is next to the bus stop."],a:3},
-  {s:"WRITING",q:"Câu 30: Sắp xếp:\nare / rush / hour / There / traffic / often / jams / during / the / .",c:["A. There are often rush hour during the traffic jams.","B. There are often traffic jams during the rush hour.","C. Traffic jams often there are during the rush hour.","D. During the rush hour often traffic jams there are."],a:1},
-  {s:"WRITING",q:"Câu 31: Sắp xếp:\nyou / don't / If / eat / much / too / food / fast / won't / put on / you / weight / .",c:["A. If you don't eat fast food, you won't put on too much weight.","B. If you won't eat fast food too much, you don't put on weight.","C. If you don't eat too much fast food, you won't put on weight.","D. If you don't put on weight, you won't eat too much fast food."],a:2},
-  {s:"WRITING",q:"Câu 32: We don't have any rice left in the jar.\n→ Câu gần nghĩa nhất:",c:["A. There is any rice in the jar.","B. There isn't some rice in the jar.","C. There are some rice in the jar.","D. There is no rice in the jar."],a:3},
-  {s:"WRITING",q:"Câu 33: Lan is more careful than Mai.\n→ Câu gần nghĩa nhất:",c:["A. Mai is more careless than Lan.","B. Mai is as careless as Lan.","C. Mai is much careless than Lan.","D. Mai is so careless as Lan."],a:0},
-  {s:"WRITING",q:"Câu 34: How heavy is she?\n→ Câu gần nghĩa nhất:",c:["A. What is her weigh?","B. How much is she weigh?","C. What is her weight?","D. How much does she weight?"],a:2},
-  {s:"WRITING",q:"Câu 35: Mary: 5 stickers · Alex: 8 stickers · Jim: 7 stickers\nCâu nào ĐÚNG?",c:["A. Jim got the most stickers.","B. Mary and Alex had more stickers than Jim and Alex.","C. Mary and Alex had fewer stickers than Jim and Alex.","D. Alex and Jim had fewer stickers than Jim and Mary."],a:1},
-]},
-
-/* ══ ĐỀ 05 – NGT 24-25 (ĐỀ THẬT) ═══════════════════════ */
-{ name:"Đề 05 – Nguyễn Gia Thiều 24-25 (25 câu)", questions:[
-  {s:"PHONETICS",q:"Câu 1: Chọn từ có phần gạch chân phát âm KHÁC:\nwalk__ed__ / laugh__ed__ / play__ed__ / watch__ed__",c:["A. walked","B. laughed","C. played","D. watched"],a:2},
-  {s:"PHONETICS",q:"Câu 2: Chọn từ có phần gạch chân phát âm KHÁC:\n__ch__emistry / __ch__ildren / __ch__eck / __ch__urch",c:["A. chemistry","B. children","C. check","D. church"],a:0},
-  {s:"USE OF LANGUAGE",q:"Câu 3: She has lived in this city ___ she was a child.",c:["A. for","B. since","C. during","D. from"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 4: The opposite of 'polluted' is ___.",c:["A. noisy","B. modern","C. fresh","D. dirty"],a:2},
-  {s:"USE OF LANGUAGE",q:"Câu 5: 'Innovative' is closest in meaning to ___.",c:["A. traditional","B. creative","C. boring","D. fixed"],a:1},
-  {s:"USE OF LANGUAGE",q:"Câu 6: By the time we got to the station, the train ___.",c:["A. had left","B. left","C. leaves","D. has left"],a:0},
-  {s:"USE OF LANGUAGE",q:"Câu 7: You ___ talk during the exam, it's forbidden.",c:["A. should","B. shouldn't","C. must","D. mustn't"],a:3},
-  {s:"USE OF LANGUAGE",q:"Câu 8: The children ran ___ out of the classroom.",c:["A. excitement","B. excite","C. excited","D. excitedly"],a:3},
-  {s:"USE OF LANGUAGE",q:"Câu 9: What does the no-littering sign say?",c:["A. You don't need to litter in this place.","B. Littering is not good for the environment.","C. Waste is not available in this place.","D. You mustn't throw trash on the ground."],a:3},
-  {s:"USE OF LANGUAGE",q:'Câu 10: Nam: "Thank you so much for helping me!"\nLan: "___"',c:["A. Don't mention it.","B. That's right.","C. No, thanks.","D. Good idea."],a:0},
-  {s:"USE OF LANGUAGE",q:"Câu 11: The doctor advised him to ___ smoking.",c:["A. give away","B. take off","C. give up","D. put on"],a:2},
-  {s:"USE OF LANGUAGE",q:"Câu 12: ___ is a renewable source of energy.",c:["A. Coal","B. Solar energy","C. Oil","D. Gas"],a:1},
-  {s:"READING – Global Citizen",q:"Câu 13: ...you understand and care about (13) ___ is happening in other countries...",c:["A. which","B. what","C. where","D. who"],a:1,p:P_GLOBAL},
-  {s:"READING – Global Citizen",q:"Câu 14: ...you try to make a (14) ___ where you live.",c:["A. difference","B. progress","C. solution","D. reason"],a:0,p:P_GLOBAL},
-  {s:"READING – Global Citizen",q:"Câu 15: This helps you (15) ___ with people from different cultures.",c:["A. talk","B. speak","C. connect","D. share"],a:2,p:P_GLOBAL},
-  {s:"READING – Why We Should Learn English",q:"Câu 16: What is the main idea of the passage?",c:["A. English is the oldest language in the world.","B. English helps people find better jobs.","C. English is useful and important to learn.","D. English is only spoken in English-speaking countries."],a:2,p:P_ENGLISH},
-  {s:"READING – Why We Should Learn English",q:"Câu 17: How can people improve their English?",c:["A. By watching cartoons in their own language","B. By practicing and talking with native speakers","C. By learning many other languages","D. By reading only local newspapers"],a:1,p:P_ENGLISH},
-  {s:"READING – Why We Should Learn English",q:'Câu 18: The word "opportunities" means:',c:["A. exams","B. problems","C. chances","D. jobs only"],a:2,p:P_ENGLISH},
-  {s:"READING – Why We Should Learn English",q:"Câu 19: Which is NOT mentioned as a benefit of learning English?",c:["A. Traveling to new places","B. Entering good universities","C. Communicating with foreigners","D. Watching international movies"],a:0,p:P_ENGLISH},
-  {s:"WRITING",q:"Câu 20: how long / it / take / you / walk / school / every day / ?",c:["A. How long does it take you to walk school every day?","B. How long does it take for you to walk to school every day?","C. How long does it take you to walk to school every day?","D. How long do it take you to walk to school every day?"],a:2},
-  {s:"WRITING",q:"Câu 21: the airport / opposite / hotel / located / is.",c:["A. The airport is located opposite the hotel.","B. The hotel is located opposite the airport.","C. Opposite the hotel located is the airport.","D. The airport located opposite is the hotel."],a:0},
-  {s:"WRITING",q:"Câu 22: Sắp xếp:\ntired / too / I / go / am / cinema / the / to / to / tonight / .",c:["A. I am too tired to go to the cinema tonight.","B. Too I am tired to go the cinema to tonight.","C. I too tired am to go to the cinema tonight.","D. I am to tired to go the cinema tonight to."],a:0},
-  {s:"WRITING",q:"Câu 23: Sắp xếp:\nbroken / is / If / your / laptop / , / you / fix / it / should / soon / .",c:["A. If your laptop is broken, you should fix it soon.","B. You should fix soon your laptop if it is broken.","C. If is your laptop broken, should you fix it soon.","D. If your laptop broken is, you should soon fix it."],a:0},
-  {s:"WRITING",q:"Câu 24: They have no books to read at home.\n→ Câu gần nghĩa nhất:",c:["A. There isn't any books to read at home.","B. They don't have some books at home.","C. There are no books for them to read at home.","D. They doesn't have books at home to read."],a:2},
-  {s:"WRITING",q:"Câu 25: Ben scored 90, Susan got 85, Tom had 95 in the test.\nCâu nào ĐÚNG?",c:["A. Tom had the highest score in the test.","B. Ben scored lower than both Susan and Tom.","C. Susan got more points than Tom.","D. Ben and Susan had the same score."],a:0},
-]},
+/* ══════════════════════════════════════════════════════
+   RAW QUESTION DATA  {s, q, c:[4 strings], a (0-based), p?}
+══════════════════════════════════════════════════════ */
+const RAW = [
+/* ── ĐỀ 01 ── */
+[
+{s:"PHONETICS",q:"Câu 1: Chọn từ có phần gạch chân phát âm KHÁC:\nstay__ed__ / enjoy__ed__ / stopp__ed__ / join__ed__",c:["stayed","enjoyed","stopped","joined"],a:2},
+{s:"PHONETICS",q:"Câu 2: Chọn từ có phần gạch chân phát âm KHÁC:\nl__i__ke / __i__nk / n__i__ght / k__i__te",c:["like","ink","night","kite"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 3: My brother's birthday is ___ December 20th, 2016.",c:["in","on","at","from"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 4: The opposite meaning of 'modern' is ___.",c:["young","ancient","new","far"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 5: The word 'flat' is closest meaning to ___.",c:["street","road","apartment","market"],a:2},
+{s:"USE OF LANGUAGE",q:"Câu 6: We ___ a lot of fun on the trip to Ha Long last summer.",c:["having","has","had","have"],a:2},
+{s:"USE OF LANGUAGE",q:"Câu 7: Which of these countries ALL belong to Europe?",c:["Russia, Germany, Italy, England, Mexico","Italy, England, France, Germany, Holland","France, America, Italy, Malaysia, Germany","Austria, France, England, Singapore, Russia"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 8: The birds in the garden are singing ___.",c:["beauty","beautifully","beautiful","beautify"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 9: Peter: \"You've passed the exam. Congratulations!\"\nMark: \"___\"",c:["You're welcome.","Thank you!","That's a good idea.","Not at all."],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 10: My sister would like to be a nurse because she'd like to ___ patients.",c:["look after","look for","look up","look through"],a:0},
+{s:"READING – Thư của Jane",q:"Câu 11: We arrived (11) ___ Wednesday...",c:["on","in","at","to"],a:0,p:P_JANE},
+{s:"READING – Thư của Jane",q:"Câu 12: It's a (12) ___ street food in America.",c:["tradition","traditions","traditional","traditionally"],a:2,p:P_JANE},
+{s:"READING – Thư của Jane",q:"Câu 13: We will go to the airport to get a (13) ___ to New York City.",c:["flight","ferry","car","bus"],a:0,p:P_JANE},
+{s:"READING – The importance of pets",q:"Câu 14: The number of people in Britain owning a pet cat is ___.",c:["six million","four million","six thousand","four thousand"],a:0,p:P_PETS},
+{s:"READING – The importance of pets",q:"Câu 15: Why are pets good for people's health?",c:["Pets take care of their owners.","People with pets take better care of themselves.","People with pets do not think about themselves or their own problems so much.","Pet owners think only of their pets and the pets' problems."],a:2,p:P_PETS},
+{s:"READING – The importance of pets",q:"Câu 16: What does \"they\" refer to in \"they express the importance of pets\"?",c:["animal","pets","human health","doctors"],a:3,p:P_PETS},
+{s:"READING – The importance of pets",q:"Câu 17: Which statement is NOT TRUE?",c:["Cats are so popular with people in Britain.","There are fewer cats than cat owners in Britain.","There is a link that exists between animals and human health.","Pet owners are more likely to do not own a pet."],a:3,p:P_PETS},
+{s:"WRITING",q:"Câu 18: How far / it / your house / nearest post office?",c:["How far it is from your house to nearest post office?","How far is it from your house to the nearest post office?","How far it from your house to the nearest post office?","How far is it between your house and the nearest post office?"],a:1},
+{s:"WRITING",q:"Câu 19: stadium / in front / pharmacy.",c:["The stadium is in front the pharmacy.","The stadium are in front to the pharmacy.","The stadium are in front of the pharmacy.","The stadium is in front of the pharmacy."],a:3},
+{s:"WRITING",q:"Câu 20: Sắp xếp:\noften / to / how / English / do / club / you / speaking / the / go / ?",c:["How often do you go to the speaking English club?","How do you often go to the English speaking club?","How often do you go to the English speaking club?","How often do you go to the club English speaking?"],a:2},
+{s:"WRITING",q:"Câu 21: Sắp xếp:\nyou / If / watch / much / too / TV / , / will / get / you / sore eyes / .",c:["If you will watch TV too much, you get sore eyes.","If you watch TV, you will get sore eyes too much.","If you watch TV too much, you will get sore eyes.","If you will get sore eyes, you watch TV too much."],a:2},
+{s:"WRITING",q:"Câu 22: We don't have any milk left in the bottle. → Câu gần nghĩa nhất:",c:["There is any milk in the bottle.","There isn't some milk in the bottle.","There are some milk in the bottle.","There is no milk in the bottle."],a:3},
+{s:"WRITING",q:"Câu 23: Anna: 6 stickers · Alice: 9 stickers · Jane: 8 stickers. Câu nào ĐÚNG?",c:["Alice got the most stickers.","Anna and Alice had more stickers than Jane and Alice.","Anna and Alice had fewer stickers than Jane and Alice.","Alice and Jane had fewer stickers than Jane and Anna."],a:0},
+{s:"BONUS",q:"Câu 24: 'Innovative' is closest in meaning to ___.",c:["traditional","creative","boring","fixed"],a:1},
+{s:"BONUS",q:"Câu 25: Which is a renewable source of energy?",c:["Coal","Solar energy","Oil","Gas"],a:1},
+],
+/* ── ĐỀ 02 ── */
+[
+{s:"PHONETICS",q:"Câu 1: learn__ed__ / mov__ed__ / turn__ed__ / brush__ed__",c:["learned","moved","turned","brushed"],a:3},
+{s:"PHONETICS",q:"Câu 2: __i__dea / __i__ntelligent / __i__nside / fl__i__ght",c:["idea","intelligent","inside","flight"],a:3},
+{s:"PHONETICS",q:"Câu 3: __h__ole / __h__onest / __h__appiness / __h__owever",c:["hole","honest","happiness","however"],a:1},
+{s:"PHONETICS",q:"Câu 4: __ch__emist / __ch__ristmas / arm__ch__air / sto__m__ach",c:["chemist","christmas","armchair","stomach"],a:2},
+{s:"USE OF LANGUAGE",q:"Câu 5: My sister was born ___ July 3rd, 2005.",c:["in","on","at","from"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 6: The opposite meaning of 'different' is ___.",c:["similar","difficult","important","interesting"],a:0},
+{s:"USE OF LANGUAGE",q:"Câu 7: The word 'biscuit' is closest meaning to ___.",c:["cupcake","donut","jelly","cookie"],a:3},
+{s:"USE OF LANGUAGE",q:"Câu 8: My dad ___ us to the book fair last Sunday.",c:["taked","took","taking","takes"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 9: Which countries ALL belong to Southeast Asia?",c:["Vietnam, Thailand, India, Cambodia, Singapore","Laos, Thailand, Cambodia, Vietnam, Malaysia","Thailand, China, Laos, Malaysia, Indonesia","Cambodia, Singapore, Malaysia, Australia, Korea"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 10: Nam is working ___ for his entrance exam.",c:["hard","hardly","good","clever"],a:0},
+{s:"USE OF LANGUAGE",q:"Câu 11: Peter: \"Would you like to go for a picnic next Sunday?\"\nMark: \"___\"",c:["I'd love to.","You're welcome.","I'm sorry, you can't.","No, it isn't."],a:0},
+{s:"USE OF LANGUAGE",q:"Câu 12: Linda: \"Congratulate you on winning the first prize!\"\nMatt: \"___\"",c:["What a pity!","What can I do for you?","You're right.","Thank you so much."],a:3},
+{s:"USE OF LANGUAGE",q:"Câu 13: How about ___ to Phu Quoc Island next week?",c:["go","going","went","to go"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 14: Do you prefer watching TV to ___ to music?",c:["listen","listening","listens","listened"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 15: My classmates usually ___ school activities.",c:["take part in","take care of","look after","look up"],a:0},
+{s:"USE OF LANGUAGE",q:"Câu 16: Train ticket: HCM City → Ha Noi · August 18th · 16.20. Câu nào ĐÚNG?",c:["The train to HCM City leaves at 4.20 p.m.","The train to Ha Noi leaves at 16.20.","The train to HCM City leaves on August 8th.","The train to HCM City leaves on July 18th."],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 17: ___ are non-renewable sources of energy.",c:["Solar energy – hydro power – wind power","Wind power – coal – natural gas","Solar energy – coal – wind power","Natural gas – coal – crude oil"],a:3},
+{s:"READING – Tests & Exams",q:"Câu 18: They play (18) ___ important role in students' learning.",c:["a","an","the","∅"],a:0,p:P_EXAM},
+{s:"READING – Tests & Exams",q:"Câu 19: Preparing (19) ___ exams is a skill.",c:["for","of","with","on"],a:0,p:P_EXAM},
+{s:"READING – Tests & Exams",q:"Câu 20: Many students think the (20) ___ way is to learn everything by heart.",c:["easy","easier","easiest","most easy"],a:2,p:P_EXAM},
+{s:"READING – Tests & Exams",q:"Câu 21: (21) ___ you study for an exam, try to understand everything.",c:["But","When","So","However"],a:1,p:P_EXAM},
+{s:"READING – Tests & Exams",q:"Câu 22: Also, (22) ___ attention to details.",c:["get","make","receive","pay"],a:3,p:P_EXAM},
+{s:"READING – The importance of pets",q:"Câu 23: The number of people in Britain owning a pet cat is ___.",c:["six million","four million","six thousand","four thousand"],a:0,p:P_PETS},
+{s:"READING – The importance of pets",q:"Câu 24: Why are pets good for people's health?",c:["Pets take care of their owners.","People with pets take better care of themselves.","People with pets do not think about themselves or their own problems so much.","Pet owners think only of their pets."],a:2,p:P_PETS},
+{s:"READING – The importance of pets",q:"Câu 25: What does \"they\" refer to in \"they express the importance of pets\"?",c:["animal","pets","human health","doctors"],a:3,p:P_PETS},
+{s:"READING – The importance of pets",q:"Câu 26: What is the opposite word of 'good'?",c:["wonderful","beautiful","bad","ugly"],a:2,p:P_PETS},
+{s:"READING – The importance of pets",q:"Câu 27: Which statement is NOT TRUE?",c:["Cats are so popular with people in Britain.","There are fewer cats than cat owners in Britain.","There is a link that exists between animals and human health.","Pet owners are more likely to have a heart attack than people who do not own a pet."],a:3,p:P_PETS},
+{s:"WRITING",q:"Câu 28: How far / it / your house / school?",c:["How far it is from your house to school?","How far is it from your house to your school?","How far it from your house to your school?","How far from your house to your school is it?"],a:1},
+{s:"WRITING",q:"Câu 29: cinema / next / bus stop.",c:["The cinema are next to the bus stop.","The cinema are next the bus stop.","The cinema is next the bus stop.","The cinema is next to the bus stop."],a:3},
+{s:"WRITING",q:"Câu 30: Sắp xếp:\nare / rush / hour / There / traffic / often / jams / during / the / .",c:["There are often rush hour during the traffic jams.","There are often traffic jams during the rush hour.","Traffic jams often there are during the rush hour.","During the rush hour often traffic jams there are."],a:1},
+],
+/* ── ĐỀ 03 ── */
+[
+{s:"PHONETICS",q:"Câu 1: walk__ed__ / laugh__ed__ / play__ed__ / watch__ed__",c:["walked","laughed","played","watched"],a:2},
+{s:"PHONETICS",q:"Câu 2: __ch__emistry / __ch__ildren / __ch__eck / __ch__urch",c:["chemistry","children","check","church"],a:0},
+{s:"USE OF LANGUAGE",q:"Câu 3: She has lived in this city ___ she was a child.",c:["for","since","during","from"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 4: The opposite of 'polluted' is ___.",c:["noisy","modern","fresh","dirty"],a:2},
+{s:"USE OF LANGUAGE",q:"Câu 5: 'Innovative' is closest in meaning to ___.",c:["traditional","creative","boring","fixed"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 6: By the time we got to the station, the train ___.",c:["had left","left","leaves","has left"],a:0},
+{s:"USE OF LANGUAGE",q:"Câu 7: You ___ talk during the exam, it's forbidden.",c:["should","shouldn't","must","mustn't"],a:3},
+{s:"USE OF LANGUAGE",q:"Câu 8: The children ran ___ out of the classroom.",c:["excitement","excite","excited","excitedly"],a:3},
+{s:"USE OF LANGUAGE",q:"Câu 9: What does the no-littering sign say?",c:["You don't need to litter in this place.","Littering is not good for the environment.","Waste is not available in this place.","You mustn't throw trash on the ground."],a:3},
+{s:"USE OF LANGUAGE",q:"Câu 10: Nam: \"Thank you so much for helping me!\"\nLan: \"___\"",c:["Don't mention it.","That's right.","No, thanks.","Good idea."],a:0},
+{s:"USE OF LANGUAGE",q:"Câu 11: The doctor advised him to ___ smoking.",c:["give away","take off","give up","put on"],a:2},
+{s:"USE OF LANGUAGE",q:"Câu 12: ___ is a renewable source of energy.",c:["Coal","Solar energy","Oil","Gas"],a:1},
+{s:"READING – Global Citizen",q:"Câu 13: ...you understand and care about (13) ___ is happening in other countries...",c:["which","what","where","who"],a:1,p:P_GLOBAL},
+{s:"READING – Global Citizen",q:"Câu 14: ...you try to make a (14) ___ where you live.",c:["difference","progress","solution","reason"],a:0,p:P_GLOBAL},
+{s:"READING – Global Citizen",q:"Câu 15: This helps you (15) ___ with people from different cultures.",c:["talk","speak","connect","share"],a:2,p:P_GLOBAL},
+{s:"READING – Why We Should Learn English",q:"Câu 16: What is the main idea of the passage?",c:["English is the oldest language in the world.","English helps people find better jobs.","English is useful and important to learn.","English is only spoken in English-speaking countries."],a:2,p:P_ENGLISH},
+{s:"READING – Why We Should Learn English",q:"Câu 17: How can people improve their English?",c:["By watching cartoons in their own language","By practicing and talking with native speakers","By learning many other languages","By reading only local newspapers"],a:1,p:P_ENGLISH},
+{s:"READING – Why We Should Learn English",q:"Câu 18: The word \"opportunities\" means:",c:["exams","problems","chances","jobs only"],a:2,p:P_ENGLISH},
+{s:"READING – Why We Should Learn English",q:"Câu 19: Which is NOT mentioned as a benefit of learning English?",c:["Traveling to new places","Entering good universities","Communicating with foreigners","Watching international movies"],a:0,p:P_ENGLISH},
+{s:"WRITING",q:"Câu 20: how long / it / take / you / walk / school / every day / ?",c:["How long does it take you to walk school every day?","How long does it take for you to walk to school every day?","How long does it take you to walk to school every day?","How long do it take you to walk to school every day?"],a:2},
+{s:"WRITING",q:"Câu 21: the airport / opposite / hotel / located / is.",c:["The airport is located opposite the hotel.","The hotel is located opposite the airport.","Opposite the hotel located is the airport.","The airport located opposite is the hotel."],a:0},
+{s:"WRITING",q:"Câu 22: Sắp xếp:\ntired / too / I / go / am / cinema / the / to / to / tonight / .",c:["I am too tired to go to the cinema tonight.","Too I am tired to go to the cinema tonight.","I too tired am to go to the cinema tonight.","I am to tired to go the cinema tonight."],a:0},
+{s:"WRITING",q:"Câu 23: Sắp xếp:\nbroken / is / If / your / laptop / , / you / fix / it / should / soon / .",c:["If your laptop is broken, you should fix it soon.","You should fix soon your laptop if it is broken.","If is your laptop broken, should you fix it soon.","If your laptop broken is, you should soon fix it."],a:0},
+{s:"WRITING",q:"Câu 24: They have no books to read at home. → Câu gần nghĩa:",c:["There isn't any books to read at home.","They don't have some books at home.","There are no books for them to read at home.","They doesn't have books at home to read."],a:2},
+{s:"WRITING",q:"Câu 25: Anna: 6 stickers · Alice: 9 stickers · Jane: 8 stickers. Câu nào ĐÚNG?",c:["Alice got the most stickers.","Anna and Alice had more stickers than Jane and Alice.","Anna and Alice had fewer stickers than Jane and Alice.","Alice and Jane had fewer stickers than Jane and Anna."],a:0},
+],
+/* ── ĐỀ 04 – CVA 23-24 ── */
+[
+{s:"PHONETICS",q:"Câu 1: learn__ed__ / mov__ed__ / turn__ed__ / brush__ed__",c:["learned","moved","turned","brushed"],a:3},
+{s:"PHONETICS",q:"Câu 2: __i__dea / __i__ntelligent / ins__i__de / fl__i__ght",c:["idea","intelligent","inside","flight"],a:3},
+{s:"PHONETICS",q:"Câu 3: __h__ole / __h__onest / __h__appiness / __h__owever",c:["hole","honest","happiness","however"],a:1},
+{s:"PHONETICS",q:"Câu 4: __ch__emist / __ch__ristmas / arm__ch__air / sto__m__ach",c:["chemist","christmas","armchair","stomach"],a:2},
+{s:"USE OF LANGUAGE",q:"Câu 5: My sister was born ___ July 3rd, 2005.",c:["in","on","at","from"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 6: The opposite meaning of 'different' is ___.",c:["similar","difficult","important","interesting"],a:0},
+{s:"USE OF LANGUAGE",q:"Câu 7: The word 'biscuit' is closest meaning to ___.",c:["cupcake","donut","jelly","cookie"],a:3},
+{s:"USE OF LANGUAGE",q:"Câu 8: My dad ___ us to the book fair last Sunday.",c:["taked","took","taking","takes"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 9: Which countries ALL belong to Southeast Asia?",c:["Vietnam, Thailand, India, Cambodia, Singapore","Laos, Thailand, Cambodia, Vietnam, Malaysia","Thailand, China, Laos, Malaysia, Indonesia","Cambodia, Singapore, Malaysia, Australia, Korea"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 10: Nam is working ___ for his entrance exam.",c:["hard","hardly","good","clever"],a:0},
+{s:"USE OF LANGUAGE",q:"Câu 11: Peter: \"Would you like to go for a picnic next Sunday?\"\nMark: \"___\"",c:["I'd love to.","You're welcome.","I'm sorry, you can't.","No, it isn't."],a:0},
+{s:"USE OF LANGUAGE",q:"Câu 12: Linda: \"Congratulate you on winning the first prize!\"\nMatt: \"___\"",c:["What a pity!","What can I do for you?","You're right.","Thank you so much."],a:3},
+{s:"USE OF LANGUAGE",q:"Câu 13: How about ___ to Phu Quoc Island next week?",c:["go","going","went","to go"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 14: Do you prefer watching TV to ___ to music?",c:["listen","listening","listens","listened"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 15: My classmates usually ___ school activities.",c:["take part in","take care of","look after","look up"],a:0},
+{s:"USE OF LANGUAGE",q:"Câu 16: Train ticket: HCM City → Ha Noi · August 18th · 16.20. Câu nào ĐÚNG?",c:["The train to HCM City leaves at 4.20 p.m.","The train to Ha Noi leaves at 16.20.","The train to HCM City leaves on August 8th.","The train to HCM City leaves on July 18th."],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 17: ___ are non-renewable sources of energy.",c:["Solar energy – hydro power – wind power","Wind power – coal – natural gas","Solar energy – coal – wind power","Natural gas – coal – crude oil"],a:3},
+{s:"READING – Tests & Exams",q:"Câu 18: They play (18) ___ important role in students' learning.",c:["a","an","the","∅"],a:0,p:P_EXAM},
+{s:"READING – Tests & Exams",q:"Câu 19: Preparing (19) ___ exams is a skill.",c:["for","of","with","on"],a:0,p:P_EXAM},
+{s:"READING – Tests & Exams",q:"Câu 20: Many students think the (20) ___ way is to learn everything by heart.",c:["easy","easier","easiest","most easy"],a:2,p:P_EXAM},
+{s:"READING – Tests & Exams",q:"Câu 21: (21) ___ you study for an exam, try to understand everything.",c:["But","When","So","However"],a:1,p:P_EXAM},
+{s:"READING – Tests & Exams",q:"Câu 22: Also, (22) ___ attention to details.",c:["get","make","receive","pay"],a:3,p:P_EXAM},
+{s:"READING – The importance of pets",q:"Câu 23: The number of people in Britain owning a pet cat is ___.",c:["six million","four million","six thousand","four thousand"],a:0,p:P_PETS},
+{s:"READING – The importance of pets",q:"Câu 24: Why are pets good for people's health?",c:["Pets take care of their owners.","People with pets take better care of themselves.","People with pets do not think about themselves or their own problems so much.","Pet owners think only of their pets and the pets' problems."],a:2,p:P_PETS},
+{s:"READING – The importance of pets",q:"Câu 25: What does \"they\" refer to in \"they express the importance of pets\"?",c:["animal","pets","human health","doctors"],a:3,p:P_PETS},
+{s:"READING – The importance of pets",q:"Câu 26: What is the opposite word of 'good'?",c:["wonderful","beautiful","bad","ugly"],a:2,p:P_PETS},
+{s:"READING – The importance of pets",q:"Câu 27: Which statement is NOT TRUE?",c:["Cats are so popular with people in Britain.","There are fewer cats than cat owners in Britain.","There is a link that exists between animals and human health.","Pet owners are more likely to have a heart attack than people who do not own a pet."],a:3,p:P_PETS},
+{s:"WRITING",q:"Câu 28: How far / it / your house / school?",c:["How far it is from your house to school?","How far is it from your house to your school?","How far it from your house to your school?","How far from your house to your school is it?"],a:1},
+{s:"WRITING",q:"Câu 29: cinema / next / bus stop.",c:["The cinema are next to the bus stop.","The cinema are next the bus stop.","The cinema is next the bus stop.","The cinema is next to the bus stop."],a:3},
+{s:"WRITING",q:"Câu 30: Sắp xếp:\nare / rush / hour / There / traffic / often / jams / during / the / .",c:["There are often rush hour during the traffic jams.","There are often traffic jams during the rush hour.","Traffic jams often there are during the rush hour.","During the rush hour often traffic jams there are."],a:1},
+{s:"WRITING",q:"Câu 31: Sắp xếp:\nyou / don't / If / eat / much / too / food / fast / won't / put on / you / weight / .",c:["If you don't eat fast food, you won't put on too much weight.","If you won't eat fast food too much, you don't put on weight.","If you don't eat too much fast food, you won't put on weight.","If you don't put on weight, you won't eat too much fast food."],a:2},
+{s:"WRITING",q:"Câu 32: We don't have any rice left in the jar. → Câu gần nghĩa:",c:["There is any rice in the jar.","There isn't some rice in the jar.","There are some rice in the jar.","There is no rice in the jar."],a:3},
+{s:"WRITING",q:"Câu 33: Lan is more careful than Mai. → Câu gần nghĩa:",c:["Mai is more careless than Lan.","Mai is as careless as Lan.","Mai is much careless than Lan.","Mai is so careless as Lan."],a:0},
+{s:"WRITING",q:"Câu 34: How heavy is she? → Câu gần nghĩa:",c:["What is her weigh?","How much is she weigh?","What is her weight?","How much does she weight?"],a:2},
+{s:"WRITING",q:"Câu 35: Mary: 5 stickers · Alex: 8 stickers · Jim: 7 stickers. Câu nào ĐÚNG?",c:["Jim got the most stickers.","Mary and Alex had more stickers than Jim and Alex.","Mary and Alex had fewer stickers than Jim and Alex.","Alex and Jim had fewer stickers than Jim and Mary."],a:1},
+],
+/* ── ĐỀ 05 – NGT 24-25 ── */
+[
+{s:"PHONETICS",q:"Câu 1: walk__ed__ / laugh__ed__ / play__ed__ / watch__ed__",c:["walked","laughed","played","watched"],a:2},
+{s:"PHONETICS",q:"Câu 2: __ch__emistry / __ch__ildren / __ch__eck / __ch__urch",c:["chemistry","children","check","church"],a:0},
+{s:"USE OF LANGUAGE",q:"Câu 3: She has lived in this city ___ she was a child.",c:["for","since","during","from"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 4: The opposite of 'polluted' is ___.",c:["noisy","modern","fresh","dirty"],a:2},
+{s:"USE OF LANGUAGE",q:"Câu 5: 'Innovative' is closest in meaning to ___.",c:["traditional","creative","boring","fixed"],a:1},
+{s:"USE OF LANGUAGE",q:"Câu 6: By the time we got to the station, the train ___.",c:["had left","left","leaves","has left"],a:0},
+{s:"USE OF LANGUAGE",q:"Câu 7: You ___ talk during the exam, it's forbidden.",c:["should","shouldn't","must","mustn't"],a:3},
+{s:"USE OF LANGUAGE",q:"Câu 8: The children ran ___ out of the classroom.",c:["excitement","excite","excited","excitedly"],a:3},
+{s:"USE OF LANGUAGE",q:"Câu 9: What does the no-littering sign say?",c:["You don't need to litter in this place.","Littering is not good for the environment.","Waste is not available in this place.","You mustn't throw trash on the ground."],a:3},
+{s:"USE OF LANGUAGE",q:"Câu 10: Nam: \"Thank you so much for helping me!\"\nLan: \"___\"",c:["Don't mention it.","That's right.","No, thanks.","Good idea."],a:0},
+{s:"USE OF LANGUAGE",q:"Câu 11: The doctor advised him to ___ smoking.",c:["give away","take off","give up","put on"],a:2},
+{s:"USE OF LANGUAGE",q:"Câu 12: ___ is a renewable source of energy.",c:["Coal","Solar energy","Oil","Gas"],a:1},
+{s:"READING – Global Citizen",q:"Câu 13: ...you understand and care about (13) ___ is happening in other countries...",c:["which","what","where","who"],a:1,p:P_GLOBAL},
+{s:"READING – Global Citizen",q:"Câu 14: ...you try to make a (14) ___ where you live.",c:["difference","progress","solution","reason"],a:0,p:P_GLOBAL},
+{s:"READING – Global Citizen",q:"Câu 15: This helps you (15) ___ with people from different cultures.",c:["talk","speak","connect","share"],a:2,p:P_GLOBAL},
+{s:"READING – Why We Should Learn English",q:"Câu 16: What is the main idea of the passage?",c:["English is the oldest language in the world.","English helps people find better jobs.","English is useful and important to learn.","English is only spoken in English-speaking countries."],a:2,p:P_ENGLISH},
+{s:"READING – Why We Should Learn English",q:"Câu 17: How can people improve their English?",c:["By watching cartoons in their own language","By practicing and talking with native speakers","By learning many other languages","By reading only local newspapers"],a:1,p:P_ENGLISH},
+{s:"READING – Why We Should Learn English",q:"Câu 18: The word \"opportunities\" means:",c:["exams","problems","chances","jobs only"],a:2,p:P_ENGLISH},
+{s:"READING – Why We Should Learn English",q:"Câu 19: Which is NOT mentioned as a benefit of learning English?",c:["Traveling to new places","Entering good universities","Communicating with foreigners","Watching international movies"],a:0,p:P_ENGLISH},
+{s:"WRITING",q:"Câu 20: how long / it / take / you / walk / school / every day / ?",c:["How long does it take you to walk school every day?","How long does it take for you to walk to school every day?","How long does it take you to walk to school every day?","How long do it take you to walk to school every day?"],a:2},
+{s:"WRITING",q:"Câu 21: the airport / opposite / hotel / located / is.",c:["The airport is located opposite the hotel.","The hotel is located opposite the airport.","Opposite the hotel located is the airport.","The airport located opposite is the hotel."],a:0},
+{s:"WRITING",q:"Câu 22: Sắp xếp:\ntired / too / I / go / am / cinema / the / to / to / tonight / .",c:["I am too tired to go to the cinema tonight.","Too I am tired to go the cinema to tonight.","I too tired am to go to the cinema tonight.","I am to tired to go the cinema tonight to."],a:0},
+{s:"WRITING",q:"Câu 23: Sắp xếp:\nbroken / is / If / your / laptop / , / you / fix / it / should / soon / .",c:["If your laptop is broken, you should fix it soon.","You should fix soon your laptop if it is broken.","If is your laptop broken, should you fix it soon.","If your laptop broken is, you should soon fix it."],a:0},
+{s:"WRITING",q:"Câu 24: They have no books to read at home. → Câu gần nghĩa:",c:["There isn't any books to read at home.","They don't have some books at home.","There are no books for them to read at home.","They doesn't have books at home to read."],a:2},
+{s:"WRITING",q:"Câu 25: Ben scored 90, Susan got 85, Tom had 95. Câu nào ĐÚNG?",c:["Tom had the highest score in the test.","Ben scored lower than both Susan and Tom.","Susan got more points than Tom.","Ben and Susan had the same score."],a:0},
+],
 ];
 
-/* ── ENGINE ──────────────────────────────────────────── */
-let curExam=0,curQ=0,score=0,answered=false;
+const NAMES = [
+  "Đề 01 – Nguyễn Gia Thiều (25 câu)",
+  "Đề 02 – Chu Văn An (30 câu)",
+  "Đề 03 – Nguyễn Gia Thiều (25 câu)",
+  "Đề 04 – Chu Văn An 23-24 (35 câu)",
+  "Đề 05 – Nguyễn Gia Thiều 24-25 (25 câu)",
+];
 
-function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
-function startExam(idx){curExam=idx;curQ=0;score=0;show('quiz');document.getElementById('quiz-title').textContent=EXAMS[idx].name;renderQ();}
+/* ── Fisher-Yates shuffle ── */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
-function renderQ(){
-  const exam=EXAMS[curExam],q=exam.questions[curQ],total=exam.questions.length;
-  document.getElementById('progress-bar').style.width=((curQ/total)*100)+'%';
-  document.getElementById('q-counter').textContent='Câu '+(curQ+1)+' / '+total;
-  document.getElementById('section-badge').textContent=q.s;
-  const pw=document.getElementById('passage-wrap'),pb=document.getElementById('passage-box');
-  if(q.p){pw.style.display='block';pb.textContent=q.p;pb.scrollTop=0;}else{pw.style.display='none';}
-  document.getElementById('q-text').textContent=q.q;
-  const el=document.getElementById('choices');el.innerHTML='';
-  ['A','B','C','D'].forEach((L,i)=>{
-    const b=document.createElement('button');b.className='choice-btn';
-    b.innerHTML='<span class="letter">'+L+'</span><span>'+q.c[i].replace(/^[ABCD]\.\s?/,'')+'</span>';
-    b.onclick=()=>pick(i);el.appendChild(b);
+/* Build shuffled exam: randomise choice order, track new correct index */
+function buildExam(idx) {
+  return RAW[idx].map(q => {
+    const pairs = q.c.map((txt, i) => ({ txt, orig: i }));
+    const sh    = shuffle(pairs);
+    return { s: q.s, q: q.q, c: sh.map(p => p.txt), a: sh.findIndex(p => p.orig === q.a), p: q.p || null };
   });
-  document.getElementById('feedback').className='feedback-msg';
-  document.getElementById('next-btn').className='next-btn';
-  answered=false;
 }
 
-function pick(idx){
-  if(answered)return;answered=true;
-  const q=EXAMS[curExam].questions[curQ];
-  const btns=document.querySelectorAll('.choice-btn');
-  btns.forEach(b=>b.disabled=true);
-  const fb=document.getElementById('feedback');
-  if(idx===q.a){btns[idx].classList.add('correct');score++;fb.textContent='✨ Chính xác! Phép thuật thành công!';fb.className='feedback-msg correct show';}
-  else{btns[idx].classList.add('wrong');btns[q.a].classList.add('correct');fb.textContent='🌑 Chưa đúng. Đáp án là '+['A','B','C','D'][q.a]+'.';fb.className='feedback-msg wrong show';}
-  document.getElementById('next-btn').className='next-btn show';
+/* ── State ── */
+let curExam = 0, questions = [], curQ = 0, score = 0, answered = false;
+
+/* ── Helpers ── */
+function $id(id) { return document.getElementById(id); }
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  $id(id).classList.add('active');
 }
 
-function nextQuestion(){
-  const total=EXAMS[curExam].questions.length;curQ++;
-  if(curQ>=total)showResult();else renderQ();
+/* ── Start ── */
+function startExam(idx) {
+  curExam = idx;
+  questions = buildExam(idx);
+  curQ = 0; score = 0;
+  $id('quiz-title').textContent = NAMES[idx];
+  showScreen('quiz');
+  renderQ();
 }
 
-function showResult(){
-  const total=EXAMS[curExam].questions.length,pct=Math.round((score/total)*100);
-  show('result');
-  document.getElementById('result-title').textContent=EXAMS[curExam].name;
-  document.getElementById('result-score').textContent=score+' / '+total;
-  document.getElementById('result-label').textContent='Tỉ lệ đúng: '+pct+'%';
-  const stars=pct>=90?5:pct>=75?4:pct>=60?3:pct>=40?2:1;
-  document.getElementById('stars-row').innerHTML=Array.from({length:5},(_,i)=>i<stars?'⭐':'☆').join('');
-  let orb,rank,rs;
-  if(pct>=90){orb='🏆';rank='Đại Pháp Sư';rs='background:rgba(201,162,39,0.15);color:#f0c84a;border:1px solid rgba(201,162,39,0.4)';}
-  else if(pct>=75){orb='🔮';rank='Pháp Sư Cao Cấp';rs='background:rgba(155,89,247,0.15);color:#c084fc;border:1px solid rgba(155,89,247,0.4)';}
-  else if(pct>=60){orb='⚗️';rank='Luyện Khí Sĩ';rs='background:rgba(34,197,94,0.1);color:#4ade80;border:1px solid rgba(34,197,94,0.3)';}
-  else if(pct>=40){orb='📜';rank='Học Đồ';rs='background:rgba(59,130,246,0.1);color:#60a5fa;border:1px solid rgba(59,130,246,0.3)';}
-  else{orb='🌑';rank='Tập Sự Mới';rs='background:rgba(239,68,68,0.1);color:#f87171;border:1px solid rgba(239,68,68,0.3)';}
-  document.getElementById('result-orb').textContent=orb;
-  const rb=document.getElementById('rank-badge');rb.textContent='⚔ '+rank+' ⚔';
-  rb.style.cssText=rs+';padding:0.4rem 1.2rem;border-radius:20px;font-size:0.85rem;';
+function renderQ() {
+  const q = questions[curQ], total = questions.length;
+
+  $id('progress-fill').style.width = ((curQ / total) * 100) + '%';
+  $id('q-counter').textContent = (curQ + 1) + ' / ' + total;
+  $id('section-badge').textContent = q.s;
+
+  /* passage */
+  const pw = $id('passage-wrap'), pb = $id('passage-box');
+  if (q.p) { pw.style.display = 'block'; pb.textContent = q.p; pb.scrollTop = 0; }
+  else      { pw.style.display = 'none'; }
+
+  $id('q-text').textContent = q.q;
+
+  /* choices */
+  const el = $id('choices'); el.innerHTML = '';
+  ['A','B','C','D'].forEach((L, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `<span class="choice-label">${L}</span><span class="choice-text">${q.c[i]}</span>`;
+    btn.onclick = () => pick(i);
+    el.appendChild(btn);
+  });
+
+  $id('feedback').className = 'feedback-msg';
+  $id('next-btn').className  = 'next-btn';
+  answered = false;
+
+  /* scroll quiz pane to top */
+  $id('quiz').scrollTop = 0;
 }
 
-function retryExam(){startExam(curExam);}
-function goHome(){show('home');}
+function pick(idx) {
+  if (answered) return;
+  answered = true;
+  const q    = questions[curQ];
+  const btns = document.querySelectorAll('.choice-btn');
+  btns.forEach(b => b.disabled = true);
+  const fb = $id('feedback');
+  if (idx === q.a) {
+    btns[idx].classList.add('correct');
+    score++;
+    fb.textContent = '✨ Chính xác! Phép thuật thành công!';
+    fb.className = 'feedback-msg correct show';
+  } else {
+    btns[idx].classList.add('wrong');
+    btns[q.a].classList.add('correct');
+    fb.textContent = '🌑 Chưa đúng. Đáp án đúng là ' + ['A','B','C','D'][q.a] + '.';
+    fb.className = 'feedback-msg wrong show';
+  }
+  $id('next-btn').className = 'next-btn show';
+}
+
+function nextQ() {
+  curQ++;
+  if (curQ >= questions.length) showResult(); else renderQ();
+}
+
+function showResult() {
+  const total = questions.length, pct = Math.round((score / total) * 100);
+  showScreen('result');
+  $id('r-name').textContent  = NAMES[curExam];
+  $id('r-score').textContent = score + ' / ' + total;
+  $id('r-pct').textContent   = 'Tỉ lệ đúng: ' + pct + '%';
+
+  const stars = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : pct >= 40 ? 2 : 1;
+  $id('r-stars').innerHTML = Array.from({length:5}, (_,i) => i < stars ? '⭐' : '☆').join('');
+
+  let orb, rank, rs;
+  if      (pct >= 90) { orb='🏆'; rank='Đại Pháp Sư';      rs='background:rgba(200,153,31,.15);color:#f0c84a;border:1px solid rgba(200,153,31,.4)'; }
+  else if (pct >= 75) { orb='🔮'; rank='Pháp Sư Cao Cấp';   rs='background:rgba(139,70,245,.15);color:#c084fc;border:1px solid rgba(139,70,245,.4)'; }
+  else if (pct >= 60) { orb='⚗️'; rank='Luyện Khí Sĩ';      rs='background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.3)'; }
+  else if (pct >= 40) { orb='📜'; rank='Học Đồ';             rs='background:rgba(59,130,246,.1);color:#60a5fa;border:1px solid rgba(59,130,246,.3)'; }
+  else                { orb='🌑'; rank='Tập Sự Mới';          rs='background:rgba(244,63,94,.1);color:#f87171;border:1px solid rgba(244,63,94,.3)'; }
+
+  $id('r-orb').textContent = orb;
+  const rb = $id('r-rank');
+  rb.textContent = '⚔ ' + rank + ' ⚔';
+  rb.style.cssText = rs + ';padding:.45rem 1.4rem;border-radius:30px;font-family:Cinzel,serif;font-size:.88rem;font-weight:700;';
+}
+
+function retryExam() { startExam(curExam); }
+function goHome()    { showScreen('home'); }
 </script>
+</body>
+</html>
