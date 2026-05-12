@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đề Toán Lớp 5 - Đề số 01</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f6fa; color: #222; min-height: 100vh; }
+  .page { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
+  .header { text-align: center; background: #fff; border-radius: 12px; border: 0.5px solid #ddd; padding: 20px; margin-bottom: 20px; }
+  .header h1 { font-size: 20px; font-weight: 700; color: #1a237e; }
+  .header p { font-size: 14px; color: #555; margin-top: 4px; }
+  .student-info { background: #fff; border-radius: 12px; border: 0.5px solid #ddd; padding: 16px 20px; margin-bottom: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .info-field label { display: block; font-size: 12px; color: #666; margin-bottom: 4px; }
+  .info-field input { width: 100%; border: 0.5px solid #ccc; border-radius: 8px; padding: 7px 10px; font-size: 14px; outline: none; transition: border-color 0.2s; }
+  .info-field input:focus { border-color: #3f51b5; }
+  .question-card { background: #fff; border-radius: 12px; border: 0.5px solid #ddd; padding: 20px; margin-bottom: 16px; }
+  .question-title { font-size: 15px; font-weight: 700; color: #1a237e; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .points-badge { background: #e8eaf6; color: #3f51b5; font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 20px; }
+  .sub-label { font-size: 14px; color: #333; margin: 10px 0 6px; font-weight: 500; }
+  .math-expr { font-family: 'Times New Roman', serif; font-size: 15px; background: #f8f9ff; border-left: 3px solid #7986cb; padding: 8px 12px; border-radius: 0 8px 8px 0; margin: 6px 0 10px; }
+  .answer-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+  .answer-row label { font-size: 13px; color: #555; white-space: nowrap; }
+  .answer-input { border: 0.5px solid #bbb; border-radius: 8px; padding: 7px 12px; font-size: 14px; outline: none; transition: border-color 0.2s; flex: 1; max-width: 260px; }
+  .answer-input:focus { border-color: #3f51b5; }
+  .answer-input.correct { border-color: #43a047; background: #f1f8f1; }
+  .answer-input.wrong { border-color: #e53935; background: #fff3f3; }
+  .feedback { font-size: 12px; margin-top: 4px; margin-left: 4px; }
+  .feedback.correct { color: #2e7d32; }
+  .feedback.wrong { color: #c62828; }
+  textarea.long-answer { width: 100%; border: 0.5px solid #bbb; border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; resize: vertical; min-height: 80px; transition: border-color 0.2s; font-family: inherit; }
+  textarea.long-answer:focus { border-color: #3f51b5; }
+  .fill-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 8px 0; font-size: 14px; }
+  .fill-input { border: none; border-bottom: 1.5px solid #888; width: 60px; padding: 4px 6px; font-size: 14px; outline: none; text-align: center; background: transparent; transition: border-color 0.2s; }
+  .fill-input:focus { border-color: #3f51b5; }
+  .fill-input.correct { border-color: #43a047; color: #2e7d32; }
+  .fill-input.wrong { border-color: #e53935; color: #c62828; }
+  .section-divider { border-top: 0.5px solid #eee; margin: 14px 0; }
+  .grade-btn { display: block; width: 100%; padding: 14px; background: #3f51b5; color: #fff; font-size: 16px; font-weight: 600; border: none; border-radius: 10px; cursor: pointer; margin-top: 24px; transition: background 0.2s; }
+  .grade-btn:hover { background: #303f9f; }
+  .result-panel { background: #fff; border-radius: 12px; border: 2px solid #3f51b5; padding: 24px; margin-top: 20px; display: none; }
+  .result-panel h2 { font-size: 20px; color: #1a237e; text-align: center; margin-bottom: 16px; }
+  .score-big { font-size: 48px; font-weight: 700; text-align: center; color: #3f51b5; }
+  .score-sub { text-align: center; color: #666; font-size: 14px; margin-top: 4px; margin-bottom: 20px; }
+  .breakdown { font-size: 14px; }
+  .breakdown-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 0.5px solid #eee; }
+  .breakdown-row:last-child { border-bottom: none; }
+  .note { font-size: 12px; color: #888; margin-top: 8px; font-style: italic; }
+  sup { font-size: 10px; vertical-align: super; }
+  .correct-answer { font-size: 12px; color: #2e7d32; margin-top: 2px; display: none; font-style: italic; }
+  .correct-answer.show { display: block; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <h1>📐 Đề Toán Lớp 5</h1>
+    <p>Thời gian làm bài: 45 phút &nbsp;|&nbsp; Đề số: 01</p>
+  </div>
+
+  <div class="student-info">
+    <div class="info-field">
+      <label>Họ và tên học sinh</label>
+      <input type="text" id="student-name" placeholder="Nhập họ tên...">
+    </div>
+    <div class="info-field">
+      <label>Lớp</label>
+      <input type="text" id="student-class" placeholder="Ví dụ: 5A">
+    </div>
+  </div>
+
+  <!-- CÂU 1 -->
+  <div class="question-card">
+    <div class="question-title">
+      Câu 1 <span class="points-badge">2,5 điểm</span>
+    </div>
+
+    <div class="sub-label">1. Tính:</div>
+
+    <div class="sub-label">a) 4,25 × 57 + 43 × 4,25 − 325</div>
+    <div class="math-expr">4,25 × 57 + 43 × 4,25 − 325</div>
+    <div class="answer-row">
+      <label>Kết quả:</label>
+      <input class="answer-input" type="text" id="c1a" placeholder="Nhập đáp án...">
+    </div>
+    <div class="feedback" id="c1a-fb"></div>
+    <div class="correct-answer" id="c1a-ca">Đáp án đúng: 100</div>
+
+    <div class="section-divider"></div>
+
+    <div class="sub-label">b) 21 ÷ 11/2 + 5 × 2/11</div>
+    <div class="math-expr">21 ÷ <sup>11</sup>&frasl;<sub>2</sub> + 5<sup>2</sup>&frasl;<sub>11</sub></div>
+    <div class="answer-row">
+      <label>Kết quả:</label>
+      <input class="answer-input" type="text" id="c1b" placeholder="Nhập đáp án...">
+    </div>
+    <div class="feedback" id="c1b-fb"></div>
+    <div class="correct-answer" id="c1b-ca">Đáp án đúng: 42/11 + 57/11 = 99/11 = 9 (hoặc: 3 6/11 + 5 2/11 = ...)</div>
+
+    <div class="section-divider"></div>
+
+    <div class="sub-label">2. Tìm y, biết: y ÷ 2,5 − 1,3 = 2,7</div>
+    <div class="math-expr">y ÷ 2,5 − 1,3 = 2,7</div>
+    <div class="answer-row">
+      <label>y =</label>
+      <input class="answer-input" type="text" id="c1c" placeholder="y = ?">
+    </div>
+    <div class="feedback" id="c1c-fb"></div>
+    <div class="correct-answer" id="c1c-ca">Đáp án đúng: y = 10</div>
+  </div>
+
+  <!-- CÂU 2 -->
+  <div class="question-card">
+    <div class="question-title">
+      Câu 2 <span class="points-badge">2,0 điểm</span>
+    </div>
+
+    <div class="sub-label">1. Viết số thích hợp vào chỗ chấm:</div>
+
+    <div style="margin: 8px 0;">
+      a) 4,25 giờ =
+      <span class="fill-row" style="display:inline-flex">
+        <input class="fill-input" type="text" id="c2a1" placeholder="..."> giờ
+        <input class="fill-input" type="text" id="c2a2" placeholder="..."> phút
+      </span>
+      <div class="feedback" id="c2a-fb"></div>
+      <div class="correct-answer" id="c2a-ca">Đáp án đúng: 4 giờ 15 phút</div>
+    </div>
+
+    <div style="margin: 12px 0;">
+      b) 425 m² =
+      <span class="fill-row" style="display:inline-flex">
+        <input class="fill-input" type="text" id="c2b" placeholder="..." style="width:80px"> ha
+      </span>
+      <div class="feedback" id="c2b-fb"></div>
+      <div class="correct-answer" id="c2b-ca">Đáp án đúng: 0,0425 ha</div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="sub-label">2. Một bể cá hình lập phương có thể tích là 8 lít. Độ dài cạnh của bể cá đó là bao nhiêu đề-xi-mét?</div>
+    <div class="answer-row">
+      <label>Đáp án (dm):</label>
+      <input class="answer-input" type="text" id="c2c" placeholder="... dm">
+    </div>
+    <div class="feedback" id="c2c-fb"></div>
+    <div class="correct-answer" id="c2c-ca">Đáp án đúng: 2 dm</div>
+  </div>
+
+  <!-- CÂU 3 -->
+  <div class="question-card">
+    <div class="question-title">
+      Câu 3 <span class="points-badge">2,0 điểm</span>
+    </div>
+    <p style="font-size:14px; line-height:1.7; color:#333;">
+      Một ô tô con và một ô tô tải xuất phát cùng một lúc từ A đến B. Quãng đường AB dài 100 km. Hỏi ô tô con đến B trước ô tô tải bao lâu, biết thời gian ô tô con đi là 1,25 giờ và vận tốc ô tô con gấp 2 lần vận tốc ô tô tải?
+    </p>
+    <div class="section-divider"></div>
+    <div class="sub-label">Bài giải (trình bày ngắn gọn các bước):</div>
+    <textarea class="long-answer" id="c3-work" placeholder="Ghi các bước tính tại đây...
+Ví dụ:
+- Vận tốc ô tô con = ...
+- Vận tốc ô tô tải = ...
+- Thời gian ô tô tải = ...
+- Ô tô con đến trước = ..."></textarea>
+    <div class="answer-row" style="margin-top:10px">
+      <label>Ô tô con đến trước (giờ):</label>
+      <input class="answer-input" type="text" id="c3" placeholder="... giờ">
+    </div>
+    <div class="feedback" id="c3-fb"></div>
+    <div class="correct-answer" id="c3-ca">Đáp án đúng: 1,25 giờ (ô tô con đến trước 1,25 giờ)</div>
+  </div>
+
+  <!-- CÂU 4 -->
+  <div class="question-card">
+    <div class="question-title">
+      Câu 4 <span class="points-badge">3,0 điểm</span>
+    </div>
+    <p style="font-size:14px; line-height:1.6; color:#333; margin-bottom:10px;">
+      Cho hình vẽ dưới đây. Tam giác ABC vuông tại A, ADEH là hình chữ nhật.<br>
+      <em style="color:#888; font-size:12px;">(Cho biết: BC = 10 cm, AB = 6 cm, AC = 8 cm, AD = 3 cm)</em>
+    </p>
+
+    <svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:300px;display:block;margin:0 auto 12px;border:0.5px solid #eee;border-radius:8px;padding:8px;background:#fafbff">
+      <polygon points="30,180 30,60 180,180" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.5"/>
+      <rect x="30" y="60" width="60" height="120" fill="none" stroke="#7986cb" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <text x="22" y="195" font-size="13" fill="#1a237e" font-family="serif">A</text>
+      <text x="175" y="195" font-size="13" fill="#1a237e" font-family="serif">C</text>
+      <text x="22" y="55" font-size="13" fill="#1a237e" font-family="serif">B</text>
+      <text x="88" y="55" font-size="13" fill="#7986cb" font-family="serif">E</text>
+      <text x="88" y="195" font-size="13" fill="#7986cb" font-family="serif">H</text>
+      <text x="22" y="115" font-size="11" fill="#7986cb" font-family="serif">D</text>
+      <rect x="30" y="180" width="10" height="-10" fill="none" stroke="#3f51b5" stroke-width="1"/>
+      <text x="50" y="132" font-size="11" fill="#555">3cm</text>
+      <text x="90" y="173" font-size="11" fill="#555">5cm</text>
+      <text x="90" y="120" font-size="11" fill="#555">BC=10</text>
+    </svg>
+
+    <div class="sub-label">1. Tính diện tích tam giác ABC và diện tích tam giác AEC:</div>
+    <div class="answer-row">
+      <label>S<sub>ABC</sub> (cm²):</label>
+      <input class="answer-input" type="text" id="c4a1" placeholder="...">
+    </div>
+    <div class="feedback" id="c4a1-fb"></div>
+    <div class="correct-answer" id="c4a1-ca">Đáp án đúng: 24 cm²</div>
+    <div class="answer-row" style="margin-top:8px">
+      <label>S<sub>AEC</sub> (cm²):</label>
+      <input class="answer-input" type="text" id="c4a2" placeholder="...">
+    </div>
+    <div class="feedback" id="c4a2-fb"></div>
+    <div class="correct-answer" id="c4a2-ca">Đáp án đúng: 12 cm²</div>
+
+    <div class="section-divider"></div>
+
+    <div class="sub-label">2. Tính độ dài đoạn thẳng DE:</div>
+    <div class="answer-row">
+      <label>DE (cm):</label>
+      <input class="answer-input" type="text" id="c4b" placeholder="...">
+    </div>
+    <div class="feedback" id="c4b-fb"></div>
+    <div class="correct-answer" id="c4b-ca">Đáp án đúng: 4 cm</div>
+  </div>
+
+  <!-- CÂU 5 -->
+  <div class="question-card">
+    <div class="question-title">
+      Câu 5 <span class="points-badge">0,5 điểm</span>
+    </div>
+    <div class="math-expr" style="font-family:'Times New Roman',serif; font-size:16px; line-height:2">
+      A = <sup>1</sup>&frasl;<sub>12</sub> + <sup>7</sup>&frasl;<sub>44</sub> + <sup>6</sup>&frasl;<sub>187</sub> + <sup>6</sup>&frasl;<sub>391</sub> &nbsp;và&nbsp; B = <sup>2</sup>&frasl;<sub>7</sub>
+    </div>
+    <div class="sub-label">Hãy so sánh giá trị biểu thức A và B:</div>
+    <div class="answer-row">
+      <label>A và B:</label>
+      <select class="answer-input" id="c5" style="max-width:200px">
+        <option value="">-- Chọn đáp án --</option>
+        <option value="lt">A &lt; B</option>
+        <option value="eq">A = B</option>
+        <option value="gt">A &gt; B</option>
+      </select>
+    </div>
+    <div class="feedback" id="c5-fb"></div>
+    <div class="correct-answer" id="c5-ca">Đáp án đúng: A = B = 2/7</div>
+  </div>
+
+  <button class="grade-btn" onclick="gradeAll()">✅ Nộp bài & Chấm điểm</button>
+
+  <div class="result-panel" id="result-panel">
+    <h2>🎉 Kết quả bài làm</h2>
+    <div class="score-big" id="total-score">0</div>
+    <div class="score-sub" id="score-sub">/ 10 điểm</div>
+    <div class="breakdown" id="breakdown"></div>
+    <p class="note">* Câu 3 và Câu 4 được chấm dựa trên đáp án số. Xem lại bài giải ở trên để kiểm tra trình bày.</p>
+  </div>
+
+</div>
+
+<script>
+const answers = {
+  c1a: { correct: ['100'], points: 0.5, label: 'Câu 1a' },
+  c1b: { correct: ['9', '9.0'], points: 0.5, label: 'Câu 1b' },
+  c1c: { correct: ['10', '10.0'], points: 0.5, label: 'Câu 1c (tìm y)' },
+  c2a1: { correct: ['4'], points: 0, label: '' },
+  c2a2: { correct: ['15'], points: 0, label: '' },
+  c2b: { correct: ['0.0425', '0,0425'], points: 0, label: '' },
+  c2c: { correct: ['2'], points: 0.5, label: 'Câu 2c (bể cá)' },
+  c3: { correct: ['1.25', '1,25'], points: 1.0, label: 'Câu 3' },
+  c4a1: { correct: ['24'], points: 0.75, label: 'Câu 4 - S(ABC)' },
+  c4a2: { correct: ['12'], points: 0.75, label: 'Câu 4 - S(AEC)' },
+  c4b: { correct: ['4'], points: 0.5, label: 'Câu 4 - DE' },
+  c5: { correct: ['eq'], points: 0.5, label: 'Câu 5' },
+};
+
+function normalize(v) {
+  return v.trim().replace(',', '.').toLowerCase();
+}
+
+function gradeAll() {
+  let total = 0;
+  let breakdown = '';
+
+  // Grade câu 2a separately (two fields, one score)
+  const c2a1v = normalize(document.getElementById('c2a1').value);
+  const c2a2v = normalize(document.getElementById('c2a2').value);
+  const c2aOk = (c2a1v === '4') && (c2a2v === '15');
+  const c2bv = normalize(document.getElementById('c2b').value);
+  const c2bOk = (c2bv === '0.0425');
+  const c2Score = (c2aOk ? 0.5 : 0) + (c2bOk ? 0.5 : 0);
+  total += c2Score;
+  breakdown += `<div class="breakdown-row"><span>Câu 2 (điền số)</span><span>${c2Score.toFixed(1)} / 1.0</span></div>`;
+
+  // Mark c2a fields
+  ['c2a1', 'c2a2'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    const ok = (i === 0) ? (c2a1v === '4') : (c2a2v === '15');
+    el.classList.toggle('correct', ok);
+    el.classList.toggle('wrong', !ok && el.value.trim() !== '');
+  });
+  document.getElementById('c2b').classList.toggle('correct', c2bOk);
+  document.getElementById('c2b').classList.toggle('wrong', !c2bOk && document.getElementById('c2b').value.trim() !== '');
+  document.getElementById('c2a-fb').textContent = c2aOk ? '✓ Đúng' : (document.getElementById('c2a1').value || document.getElementById('c2a2').value ? '✗ Sai' : '');
+  document.getElementById('c2a-fb').className = 'feedback ' + (c2aOk ? 'correct' : 'wrong');
+  document.getElementById('c2b-fb').textContent = c2bOk ? '✓ Đúng' : (document.getElementById('c2b').value ? '✗ Sai' : '');
+  document.getElementById('c2b-fb').className = 'feedback ' + (c2bOk ? 'correct' : 'wrong');
+  if (!c2aOk) document.getElementById('c2a-ca').classList.add('show');
+  if (!c2bOk) document.getElementById('c2b-ca').classList.add('show');
+
+  // Grade other fields
+  const fields = ['c1a','c1b','c1c','c2c','c3','c4a1','c4a2','c4b','c5'];
+  const groupScores = {};
+
+  for (const id of fields) {
+    const cfg = answers[id];
+    const el = document.getElementById(id);
+    const val = el.tagName === 'SELECT' ? el.value : normalize(el.value);
+    const ok = cfg.correct.map(c => normalize(c)).includes(val) && val !== '';
+    el.classList.toggle('correct', ok);
+    el.classList.toggle('wrong', !ok && val !== '' && val !== undefined);
+    const fb = document.getElementById(id + '-fb');
+    if (fb) {
+      fb.textContent = val === '' || val === undefined ? '' : ok ? '✓ Đúng' : '✗ Sai';
+      fb.className = 'feedback ' + (ok ? 'correct' : 'wrong');
+    }
+    const ca = document.getElementById(id + '-ca');
+    if (!ok && ca) ca.classList.add('show');
+    if (ok) total += cfg.points;
+    if (cfg.label) breakdown += `<div class="breakdown-row"><span>${cfg.label}</span><span>${ok ? cfg.points.toFixed(2) : '0.00'} / ${cfg.points.toFixed(2)}</span></div>`;
+  }
+
+  // Câu 1 group header
+  const c1score = (normalize(document.getElementById('c1a').value) === '100' ? 0.5 : 0)
+                + (['9','9.0'].includes(normalize(document.getElementById('c1b').value)) ? 0.5 : 0)
+                + (['10','10.0'].includes(normalize(document.getElementById('c1c').value)) ? 0.5 : 0);
+
+  // Build full breakdown (reorder manually)
+  const c1rows = [
+    buildRow('Câu 1a', document.getElementById('c1a'), ['100'], 0.5),
+    buildRow('Câu 1b', document.getElementById('c1b'), ['9','9.0'], 0.5),
+    buildRow('Câu 1c (tìm y)', document.getElementById('c1c'), ['10','10.0'], 0.5),
+  ];
+  const c2rows = `<div class="breakdown-row"><span>Câu 2 (điền số)</span><span>${c2Score.toFixed(1)} / 1.0</span></div>`;
+  const c2cRow = buildRow('Câu 2c (bể cá)', document.getElementById('c2c'), ['2'], 0.5);
+  const c3row = buildRow('Câu 3', document.getElementById('c3'), ['1.25','1,25'], 1.0);
+  const c4rows = [
+    buildRow('Câu 4 - S(ABC)', document.getElementById('c4a1'), ['24'], 0.75),
+    buildRow('Câu 4 - S(AEC)', document.getElementById('c4a2'), ['12'], 0.75),
+    buildRow('Câu 4 - DE', document.getElementById('c4b'), ['4'], 0.5),
+  ];
+  const c5row = buildRow('Câu 5', document.getElementById('c5'), ['eq'], 0.5);
+
+  document.getElementById('breakdown').innerHTML =
+    c1rows.join('') + c2rows + c2cRow + c3row + c4rows.join('') + c5row;
+
+  const panel = document.getElementById('result-panel');
+  panel.style.display = 'block';
+  document.getElementById('total-score').textContent = total.toFixed(1);
+  document.getElementById('score-sub').textContent = '/ 10 điểm';
+  const msg = total >= 9 ? '🏆 Xuất sắc!' : total >= 7 ? '😊 Giỏi!' : total >= 5 ? '📚 Cần ôn thêm' : '💪 Cố gắng hơn nhé!';
+  document.getElementById('score-sub').textContent = `/ 10 điểm — ${msg}`;
+  panel.scrollIntoView({ behavior: 'smooth' });
+}
+
+function buildRow(label, el, correct, points) {
+  const val = el.tagName === 'SELECT' ? el.value : normalize(el.value);
+  const ok = correct.map(c => normalize(c)).includes(val) && val !== '';
+  return `<div class="breakdown-row"><span>${label}</span><span>${ok ? points.toFixed(2) : '0.00'} / ${points.toFixed(2)}</span></div>`;
+}
+</script>
+</body>
+</html>
