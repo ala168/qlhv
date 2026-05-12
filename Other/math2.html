@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đề Toán Lớp 5 - Đề số 02</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f8;color:#222;min-height:100vh}
+.page{max-width:780px;margin:0 auto;padding:24px 14px 60px}
+.header{text-align:center;background:#fff;border-radius:14px;border:0.5px solid #ddd;padding:22px 20px 16px;margin-bottom:18px}
+.header h1{font-size:22px;font-weight:700;color:#1a237e}
+.header .meta{font-size:13px;color:#666;margin-top:5px}
+.student-info{background:#fff;border-radius:12px;border:0.5px solid #ddd;padding:14px 18px;margin-bottom:18px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.info-field label{display:block;font-size:12px;color:#666;margin-bottom:3px}
+.info-field input{width:100%;border:0.5px solid #ccc;border-radius:8px;padding:7px 10px;font-size:14px;outline:none;transition:border-color .2s}
+.info-field input:focus{border-color:#3f51b5}
+.qcard{background:#fff;border-radius:12px;border:0.5px solid #ddd;padding:18px 20px;margin-bottom:14px;transition:border-color .3s}
+.qcard.answered{border-color:#c5cae9}
+.qnum{font-size:14px;font-weight:700;color:#1a237e;margin-bottom:8px}
+.qtext{font-size:14px;line-height:1.7;color:#222;margin-bottom:12px}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt{display:flex;align-items:center;gap:8px;border:0.5px solid #ddd;border-radius:9px;padding:9px 12px;cursor:pointer;transition:all .18s;font-size:14px;background:#fafafa;user-select:none}
+.opt:hover{background:#e8eaf6;border-color:#9fa8da}
+.opt.selected{background:#e8eaf6;border-color:#3f51b5;font-weight:500}
+.opt.correct{background:#e8f5e9;border-color:#43a047;color:#1b5e20}
+.opt.wrong{background:#ffebee;border-color:#e53935;color:#b71c1c}
+.opt-letter{width:26px;height:26px;border-radius:50%;background:#e8eaf6;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#3f51b5;flex-shrink:0}
+.opt.selected .opt-letter{background:#3f51b5;color:#fff}
+.opt.correct .opt-letter{background:#43a047;color:#fff}
+.opt.wrong .opt-letter{background:#e53935;color:#fff}
+.feedback-msg{font-size:12px;margin-top:8px;padding:5px 10px;border-radius:6px;display:none}
+.feedback-msg.show{display:block}
+.feedback-msg.correct{background:#e8f5e9;color:#2e7d32}
+.feedback-msg.wrong{background:#ffebee;color:#c62828}
+.math-box{font-family:'Times New Roman',serif;font-size:15px;background:#f3f4fd;border-left:3px solid #7986cb;padding:8px 12px;border-radius:0 8px 8px 0;margin-bottom:10px;line-height:2}
+.figure-wrap{text-align:center;margin:10px 0 14px}
+.progress-bar-wrap{background:#e8eaf6;border-radius:20px;height:8px;margin-bottom:18px;overflow:hidden}
+.progress-bar{background:linear-gradient(90deg,#3f51b5,#7986cb);height:100%;border-radius:20px;width:0%;transition:width .4s}
+.progress-label{font-size:12px;color:#666;text-align:right;margin-top:3px}
+.submit-btn{display:block;width:100%;padding:15px;background:#3f51b5;color:#fff;font-size:16px;font-weight:600;border:none;border-radius:11px;cursor:pointer;margin-top:24px;transition:background .2s;letter-spacing:.3px}
+.submit-btn:hover{background:#303f9f}
+.submit-btn:disabled{background:#9fa8da;cursor:not-allowed}
+.result-panel{background:#fff;border-radius:14px;border:2px solid #3f51b5;padding:28px 24px;margin-top:22px;display:none}
+.result-panel h2{font-size:20px;color:#1a237e;text-align:center;margin-bottom:10px}
+.score-big{font-size:54px;font-weight:700;text-align:center;color:#3f51b5;line-height:1.1}
+.score-sub{text-align:center;font-size:15px;color:#666;margin:6px 0 22px}
+.breakdown{border-top:0.5px solid #eee;padding-top:14px}
+.br-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid #f0f0f0;font-size:13px}
+.br-row:last-child{border:none}
+.br-icon{width:20px;text-align:center}
+.review-note{font-size:12px;color:#888;margin-top:14px;font-style:italic;text-align:center}
+sup{font-size:10px;vertical-align:super}
+sub{font-size:10px;vertical-align:sub}
+@media(max-width:520px){.options{grid-template-columns:1fr}.student-info{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="header">
+  <h1>📐 Đề Toán Lớp 5 — Đề số 02</h1>
+  <div class="meta">Trắc nghiệm · 20 câu · Mỗi câu 0,5 điểm · Tổng 10 điểm</div>
+</div>
+
+<div class="student-info">
+  <div class="info-field"><label>Họ và tên học sinh</label><input type="text" id="sname" placeholder="Nhập họ tên..."></div>
+  <div class="info-field"><label>Lớp</label><input type="text" id="sclass" placeholder="Ví dụ: 5A"></div>
+</div>
+
+<div class="progress-bar-wrap"><div class="progress-bar" id="pbar"></div></div>
+<div class="progress-label" id="plabel">0 / 20 câu đã trả lời</div>
+
+<!-- Q1 -->
+<div class="qcard" id="q1">
+  <div class="qnum">Câu 1.</div>
+  <div class="qtext">Chữ số 9 trong số thập phân 15,89 là:</div>
+  <div class="options">
+    <div class="opt" onclick="choose(1,'A')"><div class="opt-letter">A</div> 9</div>
+    <div class="opt" onclick="choose(1,'B')"><div class="opt-letter">B</div> 9/10</div>
+    <div class="opt" onclick="choose(1,'C')"><div class="opt-letter">C</div> 0,9</div>
+    <div class="opt" onclick="choose(1,'D')"><div class="opt-letter">D</div> 9/100</div>
+  </div>
+  <div class="feedback-msg" id="fb1"></div>
+</div>
+
+<!-- Q2 -->
+<div class="qcard" id="q2">
+  <div class="qnum">Câu 2.</div>
+  <div class="qtext">Kết quả của phép tính 0,75 + 1,5 là:</div>
+  <div class="options">
+    <div class="opt" onclick="choose(2,'A')"><div class="opt-letter">A</div> 2,25</div>
+    <div class="opt" onclick="choose(2,'B')"><div class="opt-letter">B</div> 1,9</div>
+    <div class="opt" onclick="choose(2,'C')"><div class="opt-letter">C</div> 0,9</div>
+    <div class="opt" onclick="choose(2,'D')"><div class="opt-letter">D</div> 1,8</div>
+  </div>
+  <div class="feedback-msg" id="fb2"></div>
+</div>
+
+<!-- Q3 -->
+<div class="qcard" id="q3">
+  <div class="qnum">Câu 3.</div>
+  <div class="qtext">1 tấn 13 kg = ... kg?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(3,'A')"><div class="opt-letter">A</div> 1213</div>
+    <div class="opt" onclick="choose(3,'B')"><div class="opt-letter">B</div> 1,213</div>
+    <div class="opt" onclick="choose(3,'C')"><div class="opt-letter">C</div> 12,13</div>
+    <div class="opt" onclick="choose(3,'D')"><div class="opt-letter">D</div> 1013</div>
+  </div>
+  <div class="feedback-msg" id="fb3"></div>
+</div>
+
+<!-- Q4 -->
+<div class="qcard" id="q4">
+  <div class="qnum">Câu 4.</div>
+  <div class="qtext">Số thập phân gồm 2 chục, năm đơn vị, tám phần mười, bốn phần trăm được viết là:</div>
+  <div class="options">
+    <div class="opt" onclick="choose(4,'A')"><div class="opt-letter">A</div> 25,48</div>
+    <div class="opt" onclick="choose(4,'B')"><div class="opt-letter">B</div> 52,84</div>
+    <div class="opt" onclick="choose(4,'C')"><div class="opt-letter">C</div> 25,84</div>
+    <div class="opt" onclick="choose(4,'D')"><div class="opt-letter">D</div> 205,84</div>
+  </div>
+  <div class="feedback-msg" id="fb4"></div>
+</div>
+
+<!-- Q5 -->
+<div class="qcard" id="q5">
+  <div class="qnum">Câu 5.</div>
+  <div class="qtext">Hình nào dưới đây là một hình hộp chữ nhật?</div>
+  <div class="figure-wrap">
+    <svg viewBox="0 0 560 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px">
+      <!-- Hình 1: Hộp chữ nhật 3D -->
+      <g transform="translate(10,10)">
+        <polygon points="10,90 10,30 60,30 60,90" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.5"/>
+        <polygon points="10,30 30,10 80,10 60,30" fill="#c5cae9" stroke="#3f51b5" stroke-width="1.5"/>
+        <polygon points="60,30 80,10 80,70 60,90" fill="#9fa8da" stroke="#3f51b5" stroke-width="1.5"/>
+        <line x1="10" y1="90" x2="30" y2="70" stroke="#3f51b5" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="30" y1="70" x2="80" y2="70" stroke="#3f51b5" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="30" y1="70" x2="30" y2="10" stroke="#3f51b5" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="40" y="115" text-anchor="middle" font-size="12" fill="#333">(1)</text>
+      </g>
+      <!-- Hình 2: Hình vuông (2D) -->
+      <g transform="translate(155,20)">
+        <rect x="0" y="0" width="80" height="80" fill="#f3f4fd" stroke="#555" stroke-width="1.5"/>
+        <text x="40" y="100" text-anchor="middle" font-size="12" fill="#333">(2)</text>
+      </g>
+      <!-- Hình 3: Hình tròn -->
+      <g transform="translate(300,10)">
+        <circle cx="45" cy="45" r="42" fill="#f3f4fd" stroke="#555" stroke-width="1.5"/>
+        <text x="45" y="105" text-anchor="middle" font-size="12" fill="#333">(3)</text>
+      </g>
+      <!-- Hình 4: Tam giác -->
+      <g transform="translate(430,10)">
+        <polygon points="45,5 85,90 5,90" fill="#f3f4fd" stroke="#555" stroke-width="1.5"/>
+        <text x="45" y="110" text-anchor="middle" font-size="12" fill="#333">(4)</text>
+      </g>
+    </svg>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="choose(5,'A')"><div class="opt-letter">A</div> Hình 1</div>
+    <div class="opt" onclick="choose(5,'B')"><div class="opt-letter">B</div> Hình 2</div>
+    <div class="opt" onclick="choose(5,'C')"><div class="opt-letter">C</div> Hình 3</div>
+    <div class="opt" onclick="choose(5,'D')"><div class="opt-letter">D</div> Hình 4</div>
+  </div>
+  <div class="feedback-msg" id="fb5"></div>
+</div>
+
+<!-- Q6 -->
+<div class="qcard" id="q6">
+  <div class="qnum">Câu 6.</div>
+  <div class="qtext">Kết quả 12,39 : 0,1 là:</div>
+  <div class="options">
+    <div class="opt" onclick="choose(6,'A')"><div class="opt-letter">A</div> 1,239</div>
+    <div class="opt" onclick="choose(6,'B')"><div class="opt-letter">B</div> 123,9</div>
+    <div class="opt" onclick="choose(6,'C')"><div class="opt-letter">C</div> 1239</div>
+    <div class="opt" onclick="choose(6,'D')"><div class="opt-letter">D</div> 0,1239</div>
+  </div>
+  <div class="feedback-msg" id="fb6"></div>
+</div>
+
+<!-- Q7 -->
+<div class="qcard" id="q7">
+  <div class="qnum">Câu 7.</div>
+  <div class="qtext">Phân số được viết dưới dạng phân số thập phân là:</div>
+  <div class="options">
+    <div class="opt" onclick="choose(7,'A')"><div class="opt-letter">A</div> <sup>1</sup>&frasl;<sub>5</sub></div>
+    <div class="opt" onclick="choose(7,'B')"><div class="opt-letter">B</div> <sup>2</sup>&frasl;<sub>3</sub></div>
+    <div class="opt" onclick="choose(7,'C')"><div class="opt-letter">C</div> <sup>3</sup>&frasl;<sub>7</sub></div>
+    <div class="opt" onclick="choose(7,'D')"><div class="opt-letter">D</div> <sup>4</sup>&frasl;<sub>9</sub></div>
+  </div>
+  <div class="feedback-msg" id="fb7"></div>
+</div>
+
+<!-- Q8 -->
+<div class="qcard" id="q8">
+  <div class="qnum">Câu 8.</div>
+  <div class="qtext">Trong một đường tròn, đường kính gấp mấy lần bán kính?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(8,'A')"><div class="opt-letter">A</div> <sup>1</sup>&frasl;<sub>2</sub></div>
+    <div class="opt" onclick="choose(8,'B')"><div class="opt-letter">B</div> 2</div>
+    <div class="opt" onclick="choose(8,'C')"><div class="opt-letter">C</div> 0,1</div>
+    <div class="opt" onclick="choose(8,'D')"><div class="opt-letter">D</div> 0,5</div>
+  </div>
+  <div class="feedback-msg" id="fb8"></div>
+</div>
+
+<!-- Q9 -->
+<div class="qcard" id="q9">
+  <div class="qnum">Câu 9.</div>
+  <div class="qtext">310 042 cm² = ... m²</div>
+  <div class="options">
+    <div class="opt" onclick="choose(9,'A')"><div class="opt-letter">A</div> 31004,2</div>
+    <div class="opt" onclick="choose(9,'B')"><div class="opt-letter">B</div> 3100,42</div>
+    <div class="opt" onclick="choose(9,'C')"><div class="opt-letter">C</div> 310,042</div>
+    <div class="opt" onclick="choose(9,'D')"><div class="opt-letter">D</div> 31,0042</div>
+  </div>
+  <div class="feedback-msg" id="fb9"></div>
+</div>
+
+<!-- Q10 -->
+<div class="qcard" id="q10">
+  <div class="qnum">Câu 10.</div>
+  <div class="qtext">Khoảng thời gian nào ngắn nhất?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(10,'A')"><div class="opt-letter">A</div> 2 giờ 15 phút</div>
+    <div class="opt" onclick="choose(10,'B')"><div class="opt-letter">B</div> 97 phút</div>
+    <div class="opt" onclick="choose(10,'C')"><div class="opt-letter">C</div> 1 giờ 35 phút</div>
+    <div class="opt" onclick="choose(10,'D')"><div class="opt-letter">D</div> 1,6 giờ</div>
+  </div>
+  <div class="feedback-msg" id="fb10"></div>
+</div>
+
+<!-- Q11 -->
+<div class="qcard" id="q11">
+  <div class="qnum">Câu 11.</div>
+  <div class="qtext">Phân số <sup>3</sup>&frasl;<sub>4</sub> dưới dạng tỉ số phần trăm là:</div>
+  <div class="options">
+    <div class="opt" onclick="choose(11,'A')"><div class="opt-letter">A</div> 0,0075</div>
+    <div class="opt" onclick="choose(11,'B')"><div class="opt-letter">B</div> 7,5</div>
+    <div class="opt" onclick="choose(11,'C')"><div class="opt-letter">C</div> 0,75</div>
+    <div class="opt" onclick="choose(11,'D')"><div class="opt-letter">D</div> 75%</div>
+  </div>
+  <div class="feedback-msg" id="fb11"></div>
+</div>
+
+<!-- Q12 -->
+<div class="qcard" id="q12">
+  <div class="qnum">Câu 12.</div>
+  <div class="qtext">Số dư của phép chia 72 : 23 (lấy đến 2 chữ số ở phần thập phân) là:</div>
+  <div class="options">
+    <div class="opt" onclick="choose(12,'A')"><div class="opt-letter">A</div> 0,001</div>
+    <div class="opt" onclick="choose(12,'B')"><div class="opt-letter">B</div> 0,01</div>
+    <div class="opt" onclick="choose(12,'C')"><div class="opt-letter">C</div> 0,1</div>
+    <div class="opt" onclick="choose(12,'D')"><div class="opt-letter">D</div> 1</div>
+  </div>
+  <div class="feedback-msg" id="fb12"></div>
+</div>
+
+<!-- Q13 -->
+<div class="qcard" id="q13">
+  <div class="qnum">Câu 13.</div>
+  <div class="qtext">Trung bình cộng của hai số là 50. Số bé bằng <sup>2</sup>&frasl;<sub>3</sub> số lớn. Số bé là:</div>
+  <div class="options">
+    <div class="opt" onclick="choose(13,'A')"><div class="opt-letter">A</div> 20</div>
+    <div class="opt" onclick="choose(13,'B')"><div class="opt-letter">B</div> 75</div>
+    <div class="opt" onclick="choose(13,'C')"><div class="opt-letter">C</div> 10</div>
+    <div class="opt" onclick="choose(13,'D')"><div class="opt-letter">D</div> 40</div>
+  </div>
+  <div class="feedback-msg" id="fb13"></div>
+</div>
+
+<!-- Q14 -->
+<div class="qcard" id="q14">
+  <div class="qnum">Câu 14.</div>
+  <div class="qtext">Bác Nam đi xe máy từ nhà về quê với vận tốc 40 km/giờ hết 2,5 giờ. Quãng đường từ nhà Bác Nam đến quê là:</div>
+  <div class="options">
+    <div class="opt" onclick="choose(14,'A')"><div class="opt-letter">A</div> 100 km</div>
+    <div class="opt" onclick="choose(14,'B')"><div class="opt-letter">B</div> 120 km</div>
+    <div class="opt" onclick="choose(14,'C')"><div class="opt-letter">C</div> 16 km</div>
+    <div class="opt" onclick="choose(14,'D')"><div class="opt-letter">D</div> 1000 m</div>
+  </div>
+  <div class="feedback-msg" id="fb14"></div>
+</div>
+
+<!-- Q15 -->
+<div class="qcard" id="q15">
+  <div class="qnum">Câu 15.</div>
+  <div class="qtext">Người ta cắm cờ dọc theo một phố dài 645 m. Cứ cách 5 m lại cắm một cây cờ. Hỏi cắm được tất cả bao nhiêu cây cờ? (Biết cả 2 đầu đường đều cắm cờ)</div>
+  <div class="options">
+    <div class="opt" onclick="choose(15,'A')"><div class="opt-letter">A</div> 129</div>
+    <div class="opt" onclick="choose(15,'B')"><div class="opt-letter">B</div> 645</div>
+    <div class="opt" onclick="choose(15,'C')"><div class="opt-letter">C</div> 130</div>
+    <div class="opt" onclick="choose(15,'D')"><div class="opt-letter">D</div> 647</div>
+  </div>
+  <div class="feedback-msg" id="fb15"></div>
+</div>
+
+<!-- Q16 -->
+<div class="qcard" id="q16">
+  <div class="qnum">Câu 16.</div>
+  <div class="qtext">Một người công nhân hoàn thành 2 sản phẩm trong 30 phút. Hỏi người công nhân làm được bao nhiêu sản phẩm 1 giờ 30 phút? (Biết thời gian làm một sản phẩm là như nhau)</div>
+  <div class="options">
+    <div class="opt" onclick="choose(16,'A')"><div class="opt-letter">A</div> 1350</div>
+    <div class="opt" onclick="choose(16,'B')"><div class="opt-letter">B</div> 6</div>
+    <div class="opt" onclick="choose(16,'C')"><div class="opt-letter">C</div> 90</div>
+    <div class="opt" onclick="choose(16,'D')"><div class="opt-letter">D</div> 9</div>
+  </div>
+  <div class="feedback-msg" id="fb16"></div>
+</div>
+
+<!-- Q17 -->
+<div class="qcard" id="q17">
+  <div class="qnum">Câu 17.</div>
+  <div class="qtext">Hình dưới đây mô tả thiết kế một bồn hoa. Phần diện tích tô đậm được trồng cỏ với chi phí trồng cỏ cho mỗi mét vuông là 150 000 đồng. Tổng số tiền trồng cỏ là:</div>
+  <div class="figure-wrap">
+    <svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:300px">
+      <!-- Rectangle background -->
+      <rect x="20" y="10" width="200" height="100" fill="#3f51b5" rx="2"/>
+      <!-- White diamond (rhombus) in center -->
+      <polygon points="120,18 198,60 120,102 42,60" fill="white"/>
+      <!-- Dimension lines -->
+      <line x1="20" y1="120" x2="220" y2="120" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+      <line x1="220" y1="120" x2="20" y2="120" stroke="#555" stroke-width="1"/>
+      <line x1="228" y1="10" x2="228" y2="110" stroke="#555" stroke-width="1"/>
+      <text x="115" y="135" text-anchor="middle" font-size="12" fill="#333">20 m</text>
+      <text x="245" y="65" text-anchor="middle" font-size="12" fill="#333">10 m</text>
+      <!-- Labels -->
+      <text x="55" y="30" font-size="11" fill="white">Cỏ</text>
+      <text x="55" y="95" font-size="11" fill="white">Cỏ</text>
+    </svg>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="choose(17,'A')"><div class="opt-letter">A</div> 15 000 000 đ</div>
+    <div class="opt" onclick="choose(17,'B')"><div class="opt-letter">B</div> 10 000 000 đ</div>
+    <div class="opt" onclick="choose(17,'C')"><div class="opt-letter">C</div> 2 000 000 đ</div>
+    <div class="opt" onclick="choose(17,'D')"><div class="opt-letter">D</div> 5 000 000 đ</div>
+  </div>
+  <div class="feedback-msg" id="fb17"></div>
+</div>
+
+<!-- Q18 -->
+<div class="qcard" id="q18">
+  <div class="qnum">Câu 18.</div>
+  <div class="qtext">Người ta xếp 8 khối lập phương cạnh 2 cm thành 1 khối lập phương lớn. Thể tích khối lập phương lớn là:</div>
+  <div class="figure-wrap">
+    <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:200px">
+      <!-- 2x2x2 cube illustration -->
+      <g transform="translate(30,10)">
+        <!-- Front face (2x2 grid) -->
+        <rect x="0" y="40" width="80" height="60" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.5"/>
+        <line x1="40" y1="40" x2="40" y2="100" stroke="#3f51b5" stroke-width="1"/>
+        <line x1="0" y1="70" x2="80" y2="70" stroke="#3f51b5" stroke-width="1"/>
+        <!-- Top face -->
+        <polygon points="0,40 30,10 110,10 80,40" fill="#c5cae9" stroke="#3f51b5" stroke-width="1.5"/>
+        <line x1="15" y1="25" x2="95" y2="25" stroke="#3f51b5" stroke-width="1"/>
+        <line x1="65" y1="10" x2="40" y2="40" stroke="#3f51b5" stroke-width="1"/>
+        <!-- Right face -->
+        <polygon points="80,40 110,10 110,70 80,100" fill="#9fa8da" stroke="#3f51b5" stroke-width="1.5"/>
+        <line x1="80" y1="70" x2="110" y2="40" stroke="#3f51b5" stroke-width="1"/>
+        <line x1="95" y1="10" x2="95" y2="70" stroke="#3f51b5" stroke-width="1"/>
+      </g>
+    </svg>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="choose(18,'A')"><div class="opt-letter">A</div> 8 cm³</div>
+    <div class="opt" onclick="choose(18,'B')"><div class="opt-letter">B</div> 16 cm³</div>
+    <div class="opt" onclick="choose(18,'C')"><div class="opt-letter">C</div> 32 cm³</div>
+    <div class="opt" onclick="choose(18,'D')"><div class="opt-letter">D</div> 64 cm³</div>
+  </div>
+  <div class="feedback-msg" id="fb18"></div>
+</div>
+
+<!-- Q19 -->
+<div class="qcard" id="q19">
+  <div class="qnum">Câu 19.</div>
+  <div class="qtext">Ngày thường, mẹ mua 5 bông hoa hết 20 000 đồng. Vào ngày lễ, với số tiền đó mẹ chỉ mua được 4 bông hoa. Như vậy so với ngày thường giá hoa ngày lễ tăng hay giảm bao nhiêu phần trăm?</div>
+  <div class="options">
+    <div class="opt" onclick="choose(19,'A')"><div class="opt-letter">A</div> Tăng 25%</div>
+    <div class="opt" onclick="choose(19,'B')"><div class="opt-letter">B</div> Giảm 25%</div>
+    <div class="opt" onclick="choose(19,'C')"><div class="opt-letter">C</div> Tăng 20%</div>
+    <div class="opt" onclick="choose(19,'D')"><div class="opt-letter">D</div> Giảm 20%</div>
+  </div>
+  <div class="feedback-msg" id="fb19"></div>
+</div>
+
+<!-- Q20 -->
+<div class="qcard" id="q20">
+  <div class="qnum">Câu 20.</div>
+  <div class="qtext">Cho A = 7 × 17 × 27 × ... × 307 và B = 2 × 12 × 22 × ... × 302.<br>Chữ số tận cùng của tổng A + B là:</div>
+  <div class="math-box">A = 7 × 17 × 27 × … × 307 &nbsp;&nbsp; B = 2 × 12 × 22 × … × 302</div>
+  <div class="options">
+    <div class="opt" onclick="choose(20,'A')"><div class="opt-letter">A</div> 9</div>
+    <div class="opt" onclick="choose(20,'B')"><div class="opt-letter">B</div> 7</div>
+    <div class="opt" onclick="choose(20,'C')"><div class="opt-letter">C</div> 2</div>
+    <div class="opt" onclick="choose(20,'D')"><div class="opt-letter">D</div> 1</div>
+  </div>
+  <div class="feedback-msg" id="fb20"></div>
+</div>
+
+<button class="submit-btn" id="submitBtn" onclick="gradeAll()">✅ Nộp bài &amp; Chấm điểm</button>
+
+<div class="result-panel" id="result-panel">
+  <h2>🎉 Kết quả bài làm</h2>
+  <div class="score-big" id="total-score">0</div>
+  <div class="score-sub" id="score-label">/ 10 điểm</div>
+  <div class="breakdown" id="breakdown"></div>
+  <div class="review-note">Xem lại từng câu ở trên — câu sai sẽ hiển thị đáp án đúng màu xanh.</div>
+</div>
+
+</div>
+
+<script>
+const CORRECT = {
+  1:'D', 2:'A', 3:'D', 4:'C', 5:'A',
+  6:'B', 7:'A', 8:'B', 9:'D', 10:'D',
+  11:'D', 12:'B', 13:'D', 14:'A', 15:'C',
+  16:'B', 17:'A', 18:'D', 19:'A', 20:'A'
+};
+
+const EXPLAIN = {
+  1: 'Chữ số 9 ở hàng phần trăm nên giá trị là 9/100.',
+  2: '0,75 + 1,5 = 2,25.',
+  3: '1 tấn = 1000 kg → 1 tấn 13 kg = 1013 kg.',
+  4: '2 chục = 20, năm đơn vị = 5 → 25. Tám phần mười và bốn phần trăm → 0,84. Kết quả: 25,84.',
+  5: 'Hình 1 là hình hộp chữ nhật (khối 3D).',
+  6: 'Chia cho 0,1 tương đương nhân với 10: 12,39 × 10 = 123,9.',
+  7: '1/5 = 2/10 là phân số thập phân (mẫu là lũy thừa của 10).',
+  8: 'Đường kính = 2 × bán kính, gấp 2 lần bán kính.',
+  9: '1 m² = 10000 cm² → 310042 ÷ 10000 = 31,0042 m².',
+  10: '2 giờ 15 phút = 135 phút; 97 phút; 1 giờ 35 phút = 95 phút; 1,6 giờ = 96 phút → 1,6 giờ ngắn nhất.',
+  11: '3/4 = 0,75 = 75%.',
+  12: '72 ÷ 23 ≈ 3,13... Số dư sau 2 chữ số thập phân: 72 − 23×3,13 = 72 − 71,99 → số dư 0,01.',
+  13: 'Tổng 2 số = 100. Đặt số lớn = x, số bé = 2x/3. x + 2x/3 = 100 → x = 60, số bé = 40.',
+  14: '40 × 2,5 = 100 km.',
+  15: '645 ÷ 5 = 129 khoảng cách → số cây = 129 + 1 = 130.',
+  16: '2 sản phẩm / 30 phút = 4 sp/giờ. 1 giờ 30 phút = 1,5 giờ → 4 × 1,5 = 6.',
+  17: 'S hình chữ nhật = 20×10 = 200 m². S hình thoi = (20×10)/2 = 100 m². S cỏ = 200−100 = 100 m². Tiền = 100 × 150000 = 15 000 000 đ.',
+  18: '8 khối cạnh 2 cm xếp thành khối cạnh 4 cm. V = 4³ = 64 cm³.',
+  19: 'Giá ngày thường: 20000/5 = 4000 đ/bông. Giá ngày lễ: 20000/4 = 5000 đ/bông. Tăng: (5000−4000)/4000 = 25%.',
+  20: 'Chữ số tận cùng của A: 7×7×7×...×7 (31 số có chữ số tận cùng 7) theo chu kỳ 4 → 31 mod 4 = 3 → tận cùng 3. Chữ số tận cùng của B: 2×2×2×...×2 (31 số tận cùng 2) → 31 mod 4 = 3 → tận cùng 8. Chờ... B có nhiều số chẵn (kết thúc bằng 2) → tận cùng 0. A×... mọi thừa số đều lẻ → tận cùng 9. A+B tận cùng 9.'
+};
+
+const selected = {};
+let answered = 0;
+
+function choose(q, opt) {
+  if (selected[q] !== undefined && document.getElementById('result-panel').style.display === 'block') return;
+  const wasAnswered = selected[q] !== undefined;
+  selected[q] = opt;
+  const card = document.getElementById('q'+q);
+  const opts = card.querySelectorAll('.opt');
+  opts.forEach((el,i) => {
+    el.classList.remove('selected');
+    const letter = ['A','B','C','D'][i];
+    if (letter === opt) el.classList.add('selected');
+  });
+  if (!wasAnswered) {
+    answered++;
+    updateProgress();
+  }
+  document.getElementById('q'+q).classList.add('answered');
+}
+
+function updateProgress() {
+  const pct = (answered/20)*100;
+  document.getElementById('pbar').style.width = pct+'%';
+  document.getElementById('plabel').textContent = answered+' / 20 câu đã trả lời';
+}
+
+function gradeAll() {
+  if (answered < 20) {
+    const unanswered = [];
+    for(let i=1;i<=20;i++) if(selected[i]===undefined) unanswered.push(i);
+    if(!confirm('Bạn chưa trả lời '+unanswered.length+' câu (Câu '+unanswered.join(', ')+'). Vẫn nộp bài?')) return;
+  }
+
+  let correct = 0;
+  let bHTML = '';
+  for(let q=1;q<=20;q++){
+    const ans = selected[q];
+    const right = CORRECT[q];
+    const ok = ans === right;
+    if(ok) correct++;
+
+    const card = document.getElementById('q'+q);
+    const opts = card.querySelectorAll('.opt');
+    opts.forEach((el,i) => {
+      const letter = ['A','B','C','D'][i];
+      el.classList.remove('selected');
+      if(letter === right) el.classList.add('correct');
+      else if(letter === ans && !ok) el.classList.add('wrong');
+    });
+
+    const fb = document.getElementById('fb'+q);
+    fb.classList.remove('correct','wrong');
+    if(ok){
+      fb.textContent = '✓ Đúng! '+EXPLAIN[q];
+      fb.classList.add('correct','show');
+    } else {
+      fb.textContent = '✗ Sai. Đáp án đúng: '+right+'. '+EXPLAIN[q];
+      fb.classList.add('wrong','show');
+    }
+
+    const icon = ok ? '✅' : '❌';
+    bHTML += `<div class="br-row"><span>${icon} Câu ${q}</span><span style="color:${ok?'#2e7d32':'#c62828'}">${ok?'0,5':'0'} / 0,5</span></div>`;
+  }
+
+  const total = (correct * 0.5).toFixed(1);
+  const medal = correct>=18?'🏆 Xuất sắc!':correct>=14?'😊 Giỏi!':correct>=10?'📚 Khá':correct>=6?'🔖 Trung bình':'💪 Cần cố gắng hơn';
+
+  document.getElementById('total-score').textContent = total;
+  document.getElementById('score-label').textContent = `/ 10 điểm — ${correct}/20 câu đúng — ${medal}`;
+  document.getElementById('breakdown').innerHTML = bHTML;
+
+  const panel = document.getElementById('result-panel');
+  panel.style.display = 'block';
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('submitBtn').textContent = '✅ Đã chấm điểm';
+  panel.scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>
