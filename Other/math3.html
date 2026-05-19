@@ -477,33 +477,7 @@ const CORRECT = {
 };
 
 const EXPLAIN = {
-  1:'Tổng thu nhập = 4×2.000.000 = 8.000.000đ. Bình quân mới = 8.000.000÷5 = 1.600.000đ. Giảm = 2.000.000 − 1.600.000 = 400.000đ.',
-  2:'Tổng gạo = 120×30. Số CN mới = 120×30÷24 = 150. Tuyển thêm = 150−120 = 30 công nhân.',
-  3:'Vế phải dùng kỹ thuật 2/(n×(n+5)) = 2/5×(1/n − 1/(n+5)). Tổng = 2/5×(1/3 − 1/168) = 2/5×(55/504) = 11/252. Vậy 13/20 ÷ y = 11/252 → y = 13/20 × 252/11 = 30/351×... ≈ 30/351.',
-  4:'Khối lượng khô ban đầu = 1000×78% = 780 kg. Sau phơi: nước chiếm 4% nên khô chiếm 96% → khối lượng mới = 780÷96% = 812,5 kg. Nước bay hơi = 1000 − 812,5 = 187,5 kg.',
-  5:'Trục số chia đều theo 1/3. Điểm B ≈ 2/3, C = 1. D nằm sau C khoảng 3/4 đơn vị → D ≈ 1 + 3/4 = 1¾.',
-  6:'2,3×2,4 = 5,52 và 2,6×3,7 = 9,62. Cần 5,52 < y×2 < 9,62 → 2,76 < y < 4,81. y tự nhiên: y = 3 hoặc 4.',
-  7:'D là trung điểm AB, E là trung điểm BC. S(AEC) = S(ABC)/2 = 150. S(ABE) = 150. S(DBE) = S(ABE)/2 = 75. S(DBC) = S(ABC)/2 = 150. S(DCE) = S(DBC)/2 = 75... Qua phân tích tỉ lệ: S(CEH) = S(ABC)/15 = 20 cm².',
-  8:'Giả sử a=4,b=3,c=2,d=1 → số ab,cd = 43,21, số dc,ba = 12,34. Hiệu = 43,21−12,34 = 30,87. Thực ra cần chọn bộ phù hợp: 54,32 − 23,45 = 30,87.',
-  9:'Hình lập phương có 6 mặt, 8 đỉnh, 12 cạnh.',
-  10:'S(DEC)+S(BEC)=225. Tỉ số AB/CD=3/4. S(DEC)/S(BEC)=(CD/AB)²×... Qua phân tích: S(ABCD)=525 cm².',
-  11:'Cạnh mới = 36 m, cạnh cũ = 32 m. Chiều cao h = 54×2÷4 = 27 m. S cũ = 32×27÷2 = 432 m².',
-  12:'Mỗi giờ vòi 1 bơm 1/5 bể, vòi 2 tháo 1/7 bể. Hiệu = 1/5−1/7 = 2/35 bể/giờ. Thời gian = 35/2 = 17,5 giờ = 17 giờ 30 phút.',
-  13:'Chữ số 5 trong 25,17 ở hàng đơn vị = 5. Chữ số 2 trong 18,72 ở hàng phần trăm = 0,02. Tỉ lệ = 5/0,02 = 250 lần.',
-  14:'Gọi rộng = r, dài = d. Diện tích mới = (r+6,4)×d×0,85 = r×d×1,02 → giải ra r = 32 cm.',
-  15:'Mỗi tích n×(n+1)×(n+2) đều chia hết cho 6. Tổng chia hết cho 6, tận cùng là 6.',
-  16:'1−9: 9 số = 9 chữ số. 10−99: 90 số = 180 chữ số. 9+180=189>103. 103−9=94 chữ số từ số 10. 94÷2=47 số hai chữ số. Số thứ 47 kể từ 10 là 56. Chữ số cuối số 56 là 6... Thực ra số a dừng ở chữ số 103 là chữ số thứ 2 của số thứ: (103−9)=94 chữ số ÷2=47 số hai chữ số, số thứ 47 là 10+47−1=56, chữ số thứ 2 của 56 là 6. Đáp án B (4) theo đề gốc.',
-  17:'Gọi STP = x.y (x nguyên, y phần thập phân). Số tự nhiên N. N−x.y = 1880,9 (hiệu đúng). N−xy = 1619 (quên dấu phẩy, xy là số nguyên). Hiệu: xy−x.y = 1619−1880,9+... Thử D=261,9: N−261,9=1880,9 → N=2142,8... Thử: N=2881, STP=261,9: N−261=2620≠1619. Đáp án đúng D=261,9.',
-  18:'TOQUOCVIETNAM có 13 chữ. Màu theo chu kỳ 4. Vị trí 2007: 2007 mod 4 = 3 → màu thứ 3 = Tím.',
-  19:'Diện tích tô đậm = diện tích hình vuông = 4×4 = 16 cm² (hai vùng tô đậm đối xứng cộng lại bằng đúng nửa hình vuông × 2 = toàn bộ = 16 cm²).',
-  20:'Gọi h là chiều cao ABCD, AB=a, CD=b. S(ABCD)=(a+b)/2×h=15. S(ANCM)=(a+5+b+5)/2×h=25. Hiệu: 5h=10 → h=2 cm.',
-  21:'512=8³ → cạnh 8. Số khối bên trong = (8−2)³ = 6³ = 216 hình.',
-  22:'2v−3b=1400 và 5v+6b=73700. Từ pt1: 4v−6b=2800. Cộng: 9v=76500 → v=8500... Thử C=7000: 5×7000+6b=73700 → b=6283. 2×7000−3×6283=14000−18849<0 (sai). Thử B=8500: 5×8500+6b=73700→6b=31200→b=5200. 2×8500−3×5200=17000−15600=1400 ✓. Vậy vở=8500, nhưng đề hỏi 1 vở. Đáp án C=7000.',
-  23:'Vận tốc ô tô = 36km/h = 10m/s. Tàu hỏa đi ngược chiều, tổng vận tốc = 75÷3 = 25m/s. V tàu = 25−10 = 15m/s = 54 km/h → gần nhất là 90 km/h theo đề, hoặc 54km/h nếu đổi đơn vị. Chính xác: 15m/s × 3,6 = 54 km/h → Đáp án C (90km/h là đáp án đề gốc).',
-  24:'Gọi đúng=x, sai=40−x. x/4−(40−x)/2=7 → x/4−20+x/2=7 → 3x/4=27 → x=36 câu.',
-  25:'Bốc xấu nhất: 9 đỏ+9 xanh+9 trắng+9 vàng=36 vẫn chưa có 10 cùng màu. Thêm 1 viên nữa → đảm bảo có 10. Tổng = 37 viên.',
-  26:'Gọi tổng = x. Lần 1: còn 2x/3. Lần 2: còn 2x/3−2. Lần 3: còn 3/4×(2x/3−2). Lần 4: còn đó trừ 1. Lần 5: lấy một nửa. Còn lại = x/6. Giải → x=24 m.',
-  27:'Thế kỷ XXI bắt đầu 00:00 ngày 1/1/2001. Trừ 1 giờ 25 phút = 22:35 ngày 31/12/2000.'
+  1:'Tổng thu nhập = 4×2.000.000 = 8.000.000đ. Bình quân mới = 8.000.000÷5 = 1.600.000đ. Giảm = 2.000.000 − 1.600.000 = 400.000đ.'
 };
 
 const OPT_ORDER = {
