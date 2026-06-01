@@ -119,6 +119,6 @@ def track_application_running_time(APPLICATION_NAME, poll_interval=5):
         save_daily_usage(usage_data)
 
 if __name__ == "__main__":
-    track_application_running_time("chrome.exe")
+    track_application_running_time("RobloxPlayerBeta.exe")
 
  
