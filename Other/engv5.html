@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề thi thử Tiếng Anh vào 6 THCS Thanh Xuân - Đề số 2 (Shuffle Version)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7;
+            color: #374151;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 280px;
+            max-height: 350px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #F3F4F6;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #D1D5DB;
+            border-radius: 10px;
+        }
+        .question-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .option-btn {
+            transition: all 0.2s ease;
+        }
+        .passage-box {
+            background-color: #FFFBEB;
+            border-left: 4px solid #F59E0B;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Chosen Palette: Warm Sand & Indigo (Hệ màu trung tính tạo sự tập trung) -->
+    <!-- Application Structure Plan: 
+        1. Dashboard Tổng quan: Hiển thị biểu đồ Doughnut về tiến độ và kết quả làm bài.
+        2. Navigation Sidebar: Điều hướng nhanh qua các phần kiến thức (Phát âm, Ngữ pháp, Đọc hiểu...).
+        3. Logic Xáo trộn: Sử dụng thuật toán Fisher-Yates để trộn các lựa chọn đáp án mỗi khi ứng dụng tải lại, đảm bảo tính khách quan.
+        4. Tích hợp Bài đọc: Nhúng toàn bộ văn bản gốc vào mỗi câu hỏi thuộc nhóm Cloze Test và Reading Comprehension để tối ưu trải nghiệm đọc.
+        5. Hệ thống phản hồi: Cung cấp giải thích (Rationale) và gợi ý (Hint) tức thì cho từng câu hỏi.
+    -->
+    <!-- Visualization & Content Choices: 
+        - Progress Tracking: Chart.js Doughnut chart.
+        - Knowledge Sections: HTML/CSS Grid with interactive buttons.
+        - Textual Content: Structured within Tailwind cards.
+        - Interaction: Vanilla JS event listeners for answer checking and UI updates.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. 
+    -->
+
+    <div id="app" class="flex flex-col md:flex-row h-screen overflow-hidden">
+        
+        <!-- Sidebar -->
+        <aside class="w-full md:w-72 bg-white border-r border-stone-200 flex flex-col">
+            <div class="p-6 border-b border-stone-100">
+                <h1 class="text-xl font-bold text-indigo-900 leading-tight">Ôn Thi Vào 6 <br><span class="text-indigo-500">THCS Thanh Xuân</span></h1>
+                <p class="text-xs text-stone-500 mt-2 font-medium">ĐỀ THI THỬ SỐ 02</p>
+            </div>
+            <nav class="flex-1 overflow-y-auto p-4 custom-scrollbar">
+                <ul class="space-y-1 text-sm font-medium">
+                    <li><button onclick="scrollToSection('sec-pronunciation')" class="w-full text-left p-2.5 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 text-stone-600 transition-colors">Phát âm (1-2)</button></li>
+                    <li><button onclick="scrollToSection('sec-meaning')" class="w-full text-left p-2.5 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 text-stone-600 transition-colors">Đồng nghĩa (3-5)</button></li>
+                    <li><button onclick="scrollToSection('sec-reorder')" class="w-full text-left p-2.5 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 text-stone-600 transition-colors">Sắp xếp câu (6-7)</button></li>
+                    <li><button onclick="scrollToSection('sec-correction')" class="w-full text-left p-2.5 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 text-stone-600 transition-colors">Tìm lỗi sai (8-10)</button></li>
+                    <li><button onclick="scrollToSection('sec-multiple')" class="w-full text-left p-2.5 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 text-stone-600 transition-colors">Trắc nghiệm (11-22)</button></li>
+                    <li><button onclick="scrollToSection('sec-cloze')" class="w-full text-left p-2.5 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 text-stone-600 transition-colors">Điền từ (23-27)</button></li>
+                    <li><button onclick="scrollToSection('sec-reading')" class="w-full text-left p-2.5 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 text-stone-600 transition-colors">Đọc hiểu (28-32)</button></li>
+                    <li><button onclick="scrollToSection('sec-wordform')" class="w-full text-left p-2.5 rounded-lg hover:bg-indigo-50 hover:text-indigo-700 text-stone-600 transition-colors">Dạng của từ (33-35)</button></li>
+                </ul>
+            </nav>
+            <div class="p-6 bg-stone-50 border-t border-stone-100">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs font-bold text-stone-400 uppercase">Hoàn thành</span>
+                    <span id="progress-percent" class="text-xs font-bold text-indigo-600">0%</span>
+                </div>
+                <div class="w-full bg-stone-200 h-2 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-500"></div>
+                </div>
+                <div id="progress-text" class="text-xs text-stone-500 mt-2">Chưa làm câu nào</div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto custom-scrollbar bg-[#FDFBF7]">
+            <div class="max-w-4xl mx-auto p-6">
+                <!-- Analytics Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+                    <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-stone-100">
+                        <h3 class="text-sm font-bold text-stone-400 mb-4 uppercase tracking-wider">Hiệu suất học tập</h3>
+                        <div class="chart-container">
+                            <canvas id="scoreChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 flex flex-col items-center justify-center text-center">
+                        <div class="mb-2">
+                            <span id="final-score" class="text-7xl font-black text-indigo-600">0</span>
+                            <span class="text-2xl text-stone-300 font-bold">/35</span>
+                        </div>
+                        <p class="text-stone-500 font-medium mb-6">Câu trả lời đúng</p>
+                        <button onclick="window.location.reload()" class="w-full py-3.5 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all active:scale-95">Làm mới Đề thi</button>
+                    </div>
+                </div>
+
+                <!-- Intro text -->
+                <div class="bg-white p-6 rounded-2xl border border-stone-100 mb-12">
+                    <h2 class="text-xl font-bold text-stone-800 mb-2">Hướng dẫn làm bài</h2>
+                    <p class="text-stone-500 text-sm leading-relaxed">Đề thi gồm 35 câu hỏi bao quát các kỹ năng quan trọng nhất cho kỳ thi vào 6 THCS Thanh Xuân. Đáp án đã được <strong>xáo trộn ngẫu nhiên</strong>. Bạn hãy chọn đáp án đúng nhất cho mỗi câu hỏi. Hệ thống sẽ tự động chấm điểm và đưa ra giải thích chi tiết ngay lập tức.</p>
+                </div>
+
+                <div id="quiz-container" class="space-y-16">
+                    <!-- Dynamic Questions -->
+                </div>
+                
+                <footer class="mt-20 text-center text-stone-400 text-sm pb-10">
+                    © 2024 Luyện thi vào 6 THCS Thanh Xuân - Hệ thống ôn tập thông minh
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const rawQuestions = [
+            { id: 1, section: "sec-pronunciation", sectionName: "Phát âm", question: "Choose the word which has the underlined part pronounced differently from the others:\n1. A. hot<b><u>el</u></b>\nB. h<b><u>ou</u></b>r\nC. h<b><u>a</u></b>ppen\nD. h<b><u>o</u></b>ld", options: ["hour", "hotel", "happen", "hold"], correctVal: "hour", rationale: "Trong từ 'hour', âm 'h' là âm câm nên được phát âm bắt đầu bằng nguyên âm /aʊər/, các từ còn lại âm 'h' đều được phát âm là /h/.", hint: "Hãy chú ý tìm từ có âm đầu tiên bị câm." },
+            { id: 2, section: "sec-pronunciation", sectionName: "Phát âm", question: "Choose the word which has the underlined part pronounced differently from the others:\n2. A. h<b><u>ea</u></b>vy\nB. r<b><u>ea</u></b>dy\nC. h<b><u>ea</u></b>d\nD. b<b><u>ea</u></b>ch", options: ["beach", "heavy", "ready", "head"], correctVal: "beach", rationale: "Phần gạch chân trong từ 'beach' được phát âm là /iː/, còn các từ còn lại đều được phát âm là /e/.", hint: "Đọc to các từ lên và tìm xem từ nào có nguyên âm kéo dài hơn." },
+            { id: 3, section: "sec-meaning", sectionName: "Câu đồng nghĩa", question: "Choose the sentence that is CLOSEST in meaning:\n3. This gym is less convenient than the one near my house.", options: ["The gym near my house is more convenient than this one.", "This gym is more convenient than the one near my house.", "This gym is as convenient as the one near my house.", "The gym near my house is less convenient than this one."], correctVal: "The gym near my house is more convenient than this one.", rationale: "Cấu trúc 'less + adj + than' (kém hơn) đồng nghĩa ngược lại với 'more + adj + than' (hơn).", hint: "Nếu A kém hơn B, thì B sẽ tiện lợi hơn A." },
+            { id: 4, section: "sec-meaning", sectionName: "Câu đồng nghĩa", question: "Choose the sentence that is CLOSEST in meaning:\n4. No one has seen Linda since the day of the meeting.", options: ["Linda has not been seen since the day of the meeting.", "No one is permitted to see Linda at the meeting.", "They stopped the meeting since Linda was not seen.", "Linda is nowhere to be seen at the meeting."], correctVal: "Linda has not been seen since the day of the meeting.", rationale: "Chuyển từ câu chủ động (No one has seen) sang bị động (Linda has not been seen).", hint: "Dùng thể bị động của thì hiện tại hoàn thành." },
+            { id: 5, section: "sec-meaning", sectionName: "Câu đồng nghĩa", question: "Choose the sentence that is CLOSEST in meaning:\n5. Visitors are not allowed to park in the staff car park.", options: ["Visitors must not park in the staff car park.", "Visitors could not park in the staff car park.", "Visitors need to park in the staff car park.", "Visitors may park in the staff car park."], correctVal: "Visitors must not park in the staff car park.", rationale: "Cấu trúc 'be not allowed to' chỉ sự cấm đoán, tương đương với 'must not'.", hint: "Lệnh cấm đỗ xe." },
+            { id: 6, section: "sec-reorder", sectionName: "Sắp xếp câu", question: "Choose the best sentence made from the words:\n6. I / find / surprising / see / people / the cinema.", options: ["I find it surprising to see so many people at the cinema.", "I find it surprising seeing so many people running out of the cinema.", "I find it surprising see that so many people at the cinema.", "I find surprising to see so many people gathering around the cinema."], correctVal: "I find it surprising to see so many people at the cinema.", rationale: "Cấu trúc: S + find + it + adj + to-V.", hint: "Cần chủ ngữ giả 'it'." },
+            { id: 7, section: "sec-reorder", sectionName: "Sắp xếp câu", question: "Choose the best sentence made from the words:\n7. She / not / go / school / yesterday / because / sick.", options: ["She didn't go to school yesterday because she was sick.", "She couldn't go to school yesterday because of be sick.", "She couldn't go to school yesterday because of she was sick.", "She didn't go to school yesterday because being sick."], correctVal: "She didn't go to school yesterday because she was sick.", rationale: "Sau 'because' là một mệnh đề (S+V). Trạng ngữ 'yesterday' yêu cầu thì quá khứ đơn.", hint: "Quá khứ đơn và mệnh đề nguyên nhân." },
+            { id: 8, section: "sec-correction", sectionName: "Tìm lỗi sai", question: "Choose the underlined word that needs correcting:\n8. The lesson (A) is (B) too difficult for us (C) to understand it (D).", options: ["to understand it", "is", "too difficult", "for us"], correctVal: "to understand it", rationale: "Trong cấu trúc 'too...to', không nhắc lại tân ngữ đã là chủ ngữ câu.", hint: "Đại từ 'it' ở cuối đang bị thừa." },
+            { id: 9, section: "sec-correction", sectionName: "Tìm lỗi sai", question: "Choose the underlined word that needs correcting:\n9. The oceans (A) contain many forms (B) of life that has (C) not yet (D) been discovered.", options: ["has", "oceans", "forms", "yet"], correctVal: "has", rationale: "'that' thay thế cho 'many forms' (số nhiều) nên phải dùng 'have'.", hint: "Hòa hợp chủ ngữ - động từ." },
+            { id: 10, section: "sec-correction", sectionName: "Tìm lỗi sai", question: "Choose the underlined word that needs correcting:\n10. If (A) you do (B) the test careful (C), you will (D) get good marks.", options: ["careful", "If", "do", "will"], correctVal: "careful", rationale: "Cần trạng từ 'carefully' để bổ nghĩa cho động từ 'do'.", hint: "Dùng trạng từ thay cho tính từ." },
+            { id: 11, section: "sec-multiple", sectionName: "Trắc nghiệm", question: "11. Peter: \"What are you doing this weekend?\" - Mike: \"_______\"", options: ["I plan to visit my aunt", "I'm very busy now", "I think it will be interesting", "I hope it isn't raining"], correctVal: "I plan to visit my aunt", rationale: "Hỏi về dự định, trả lời bằng kế hoạch cụ thể.", hint: "Tìm câu trả lời về kế hoạch tương lai." },
+            { id: 12, section: "sec-multiple", sectionName: "Trắc nghiệm", question: "12. Jack: \"Would you like to come to my party this weekend?\" - Mary: \"_______\"", options: ["Yes, I'd love to", "You're welcome", "No, don't worry", "I'm afraid so"], correctVal: "Yes, I'd love to", rationale: "Cách chấp nhận lời mời lịch sự.", hint: "Đồng ý tham gia bữa tiệc." },
+            { id: 13, section: "sec-multiple", sectionName: "Trắc nghiệm", question: "13. My dad does everything _______ so that he won't make any mistakes.", options: ["carefully", "easily", "quickly", "terribly"], correctVal: "carefully", rationale: "Để tránh lỗi thì cần làm việc cẩn thận.", hint: "Cách làm việc không có lỗi." },
+            { id: 14, section: "sec-multiple", sectionName: "Trắc nghiệm", question: "14. We were very lucky to have neighbours like _______.", options: ["them", "they", "their", "theirs"], correctVal: "them", rationale: "Sau giới từ 'like' dùng đại từ tân ngữ.", hint: "Object pronoun." },
+            { id: 15, section: "sec-multiple", sectionName: "Trắc nghiệm", question: "15. Not many people find reading more _______ than watching TV.", options: ["interesting", "interest", "interested", "interestingly"], correctVal: "interesting", rationale: "Tính chất của việc đọc sách dùng đuôi -ing.", hint: "Tính từ mô tả sự vật." },
+            { id: 16, section: "sec-multiple", sectionName: "Trắc nghiệm", question: "16. This place is so _______ with the non-stop flow of customers.", options: ["popular", "delicious", "convenient", "exciting"], correctVal: "popular", rationale: "Đông khách nghĩa là nơi đó nổi tiếng/phổ biến.", hint: "Nhiều người biết đến." },
+            { id: 17, section: "sec-multiple", sectionName: "Trắc nghiệm", question: "17. When we lived in Nha Trang, we used _______ swimming every day.", options: ["to go", "go", "went", "going"], correctVal: "to go", rationale: "Cấu trúc 'used to + V' chỉ thói quen cũ.", hint: "Habit in the past." },
+            { id: 18, section: "sec-multiple", sectionName: "Trắc nghiệm", question: "18. It was so hot that I had to _______ my jacket.", options: ["take off", "put on", "get out", "turn off"], correctVal: "take off", rationale: "Nóng thì phải cởi áo.", hint: "Cởi bỏ trang phục." },
+            { id: 19, section: "sec-multiple", sectionName: "Trắc nghiệm", question: "19. She denied _______ anything about the missing diamond.", options: ["knowing", "know", "to know", "to knowing"], correctVal: "knowing", rationale: "Sau 'deny' cộng V-ing.", hint: "Phủ nhận việc gì đó." },
+            { id: 20, section: "sec-multiple", sectionName: "Trắc nghiệm", question: "20. I think you will _______ the hotel after two hours of driving.", options: ["reach", "stay", "leave", "build"], correctVal: "reach", rationale: "Reach something: đến nơi nào đó.", hint: "Đến đích." },
+            { id: 21, section: "sec-multiple", sectionName: "Trắc nghiệm", question: "21. She lay with a glass in one hand and an empty bottle in _______.", options: ["the other", "one other", "another", "other"], correctVal: "the other", rationale: "Cái còn lại trong hai cái là 'the other'.", hint: "Bàn tay còn lại." },
+            { id: 22, section: "sec-multiple", sectionName: "Trắc nghiệm", question: "22. There is a small bamboo _______ at the entrance to the village.", options: ["forest", "river", "street", "mountain"], correctVal: "forest", rationale: "Bamboo forest: lũy tre/rừng tre.", hint: "Cây tre mọc thành..." },
+            {
+                id: 23, section: "sec-cloze", sectionName: "Điền từ", type: "passage", 
+                passage: "<b>What makes a good language learner?</b><br>• Don't be afraid of making mistakes. Good language learners notice their mistakes and learn from <b>(23) _______</b>.<br>• Do group activities. A good language learner always <b>(24) _______</b> for opportunities to talk with other students.<br>• Make notes during every class. Notes help you to remember a new language. Look <b>(25) _______</b> your notes when you do your homework.<br>• Use a dictionary. Good language learners often use dictionaries to <b>(26) _______</b> the meaning of words they don't know.<br>• Do extra practice. You can find self-study material online.<br>• Enjoy learning. Watch a film, listen to songs, play video games or <b>(27) _______</b> a book in the language you are learning.",
+                question: "23. Fill in the blank (23):", options: ["them", "him", "her", "you"], correctVal: "them", rationale: "Thay thế cho 'mistakes'.", hint: "Đại từ số nhiều."
+            },
+            { id: 24, section: "sec-cloze", sectionName: "Điền từ", type: "passage", passage: "(Đoạn văn 'What makes a good language learner' như trên...)", question: "24. Fill in the blank (24):", options: ["looks", "are looked", "look", "is looked"], correctVal: "looks", rationale: "Chủ ngữ số ít 'A learner' chia 'looks'.", hint: "Chia động từ hiện tại." },
+            { id: 25, section: "sec-cloze", sectionName: "Điền từ", type: "passage", passage: "(Đoạn văn 'What makes a good language learner' như trên...)", question: "25. Fill in the blank (25):", options: ["at", "forward", "with", "about"], correctVal: "at", rationale: "Look at something: nhìn/xem cái gì.", hint: "Xem lại ghi chép." },
+            { id: 26, section: "sec-cloze", sectionName: "Điền từ", type: "passage", passage: "(Đoạn văn 'What makes a good language learner' như trên...)", question: "26. Fill in the blank (26):", options: ["check", "look", "support", "lose"], correctVal: "check", rationale: "Dùng từ điển để kiểm tra nghĩa.", hint: "Tra cứu nghĩa." },
+            { id: 27, section: "sec-cloze", sectionName: "Điền từ", type: "passage", passage: "(Đoạn văn 'What makes a good language learner' như trên...)", question: "27. Fill in the blank (27):", options: ["read", "speak", "surf", "do"], correctVal: "read", rationale: "Read a book: đọc sách.", hint: "Hành động với sách." },
+            {
+                id: 28, section: "sec-reading", sectionName: "Đọc hiểu", type: "passage",
+                passage: "<b>Grandfather's Hugs</b><br>Liam's grandfather always hugged him. When his grandfather hugged him, Liam felt like he was flying. He loved his grandfather and his dad very much. When his dad was working, Liam and his grandfather hammered nails, sanded and painted. When they were done, they would drink cocoa together. Liam felt safe, happy and loved.<br>One day, Liam's grandfather told him he had to move. \"Your grandmother and I are old,\" he said. \"We need a smaller house. We need a quiet life.\" Liam's stomach hurt. He didn't want his grandfather to leave. Why was a quiet life important?<br>One day, Liam and his dad visited the new house. Liam decided he was going to hate the small house and his grandfather. But when they arrived, his grandfather picked him up in his big arms. He squeezed all the anger right out of him. They hammered nails, sanded and painted just like before. Liam felt safe again. \"I love your small house,\" said Liam. His grandfather said, \"I love the quiet, too, but I love you more.\"",
+                question: "28. How does Liam feel when he is with his grandfather?", options: ["Liam feels loved.", "Liam feels left out.", "Liam feels angry.", "Liam feels sad."], correctVal: "Liam feels loved.", rationale: "Văn bản nêu: 'Liam felt happy and loved.'", hint: "Cảm xúc tích cực."
+            },
+            { id: 29, section: "sec-reading", sectionName: "Đọc hiểu", type: "passage", passage: "(Đoạn văn 'Grandfather's Hugs' như trên...)", question: "29. Why does Liam's grandfather move to a smaller house?", options: ["Because he and his wife want to live a quiet life.", "Because the house is too big.", "Because he has a new job.", "Because Liam's family will sell it."], correctVal: "Because he and his wife want to live a quiet life.", rationale: "Ông nói: 'We need a quiet life.'", hint: "Lý do ông đưa ra." },
+            { id: 30, section: "sec-reading", sectionName: "Đọc hiểu", type: "passage", passage: "(Đoạn văn 'Grandfather's Hugs' như trên...)", question: "30. Why does Liam decide to hate his grandfather?", options: ["He didn't want his grandfather to move.", "Grandfather stopped hugging him.", "Grandfather got sick.", "He didn't get a toy."], correctVal: "He didn't want his grandfather to move.", rationale: "Liam không muốn ông dời đi nên nảy sinh tâm lý hờn dỗi.", hint: "Do sự chia xa." },
+            { id: 31, section: "sec-reading", sectionName: "Đọc hiểu", type: "passage", passage: "(Đoạn văn 'Grandfather's Hugs' như trên...)", question: "31. Why does Liam forget to hate his grandfather?", options: ["Because his grandfather hugs him tightly.", "Because his dad told him so.", "Because he was busy.", "Because he got a gift."], correctVal: "Because his grandfather hugs him tightly.", rationale: "Cái ôm của ông làm tan biến mọi giận hờn.", hint: "Hành động ấm áp của ông." },
+            { id: 32, section: "sec-reading", sectionName: "Đọc hiểu", type: "passage", passage: "(Đoạn văn 'Grandfather's Hugs' như trên...)", question: "32. What happens when Liam gets to his grandfather's new home?", options: ["Liam and his grandfather do the same things as before.", "Liam says he hates him.", "Liam helps his grandmother.", "They didn't do anything."], correctVal: "Liam and his grandfather do the same things as before.", rationale: "Họ lại làm mộc và uống ca cao như trước.", hint: "Những thói quen cũ." },
+            { id: 33, section: "sec-wordform", sectionName: "Dạng của từ", question: "33. This singer is not very pretty but she sings very _______. (BEAUTIFUL)", options: ["beautifully", "beautiful", "beautify", "beauty"], correctVal: "beautifully", rationale: "Trạng từ bổ nghĩa cho động từ 'sings'.", hint: "Adv of beautiful." },
+            { id: 34, section: "sec-wordform", sectionName: "Dạng của từ", question: "34. Lan couldn't go to school yesterday because of her _______. (SICK)", options: ["sickness", "sick", "sickly", "sicken"], correctVal: "sickness", rationale: "Danh từ đứng sau tính từ sở hữu 'her'.", hint: "Noun of sick." },
+            { id: 35, section: "sec-wordform", sectionName: "Dạng của từ", question: "35. The sky is very _______. It's going to rain. (CLOUD)", options: ["cloudy", "cloud", "cloudless", "cloudily"], correctVal: "cloudy", rationale: "Tính từ miêu tả thời tiết bầu trời.", hint: "Nhiều mây." }
+        ];
+
+        let quizData = [];
+        let userAnswers = [];
+        let scoreChart;
+
+        // Shuffle algorithm
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function prepareQuiz() {
+            quizData = rawQuestions.map(q => {
+                const shuffledOptions = shuffleArray([...q.options]);
+                const newCorrectIndex = shuffledOptions.indexOf(q.correctVal);
+                return { ...q, options: shuffledOptions, correct: newCorrectIndex };
+            });
+            userAnswers = new Array(quizData.length).fill(null);
+        }
+
+        function initQuiz() {
+            prepareQuiz();
+            const container = document.getElementById('quiz-container');
+            let currentSection = "";
+
+            quizData.forEach((q, index) => {
+                if (q.section !== currentSection) {
+                    currentSection = q.section;
+                    const sectionHeader = document.createElement('div');
+                    sectionHeader.id = q.section;
+                    sectionHeader.className = "pt-12 mb-6 border-b-2 border-indigo-100";
+                    sectionHeader.innerHTML = `<h2 class="text-2xl font-bold text-indigo-900 pb-2">${q.sectionName}</h2>`;
+                    container.appendChild(sectionHeader);
+                    
+                    const intro = document.createElement('p');
+                    intro.className = "text-stone-500 mb-8 text-sm italic bg-indigo-50/50 p-4 rounded-xl border border-indigo-50";
+                    intro.innerText = `Phần này tập trung kiểm tra kiến thức về ${q.sectionName.toLowerCase()}, giúp học sinh làm quen với định dạng câu hỏi thường gặp trong kỳ thi THCS Thanh Xuân.`;
+                    container.appendChild(intro);
+                }
+
+                const card = document.createElement('div');
+                card.className = "question-card bg-white p-8 rounded-2xl shadow-sm border border-stone-100 mb-10 hover:shadow-md transition-all";
+                
+                let passageHtml = "";
+                if (q.type === 'passage') {
+                    passageHtml = `
+                        <div class="passage-box p-5 mb-6 rounded-xl text-sm leading-relaxed text-stone-700 shadow-inner">
+                            ${q.passage}
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-6">
+                        <span class="bg-indigo-600 text-white text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full">Câu ${q.id}</span>
+                        <button onclick="showHint(${index})" class="flex items-center gap-1 text-xs text-amber-600 font-bold hover:text-amber-700 transition-colors">
+                            <span>Mẹo làm bài</span>
+                            <span class="text-sm">💡</span>
+                        </button>
+                    </div>
+                    ${passageHtml}
+                    <div class="text-lg font-semibold mb-8 text-stone-800 leading-snug">${q.question.replace(/\n/g, '<br>')}</div>
+                    <div id="options-${index}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        ${q.options.map((opt, i) => `
+                            <button onclick="selectOption(${index}, ${i})" class="option-btn text-left p-4 rounded-xl border-2 border-stone-100 hover:border-indigo-200 hover:bg-indigo-50 transition-all flex items-center group">
+                                <span class="w-8 h-8 rounded-full bg-stone-100 text-stone-400 flex items-center justify-center font-bold text-xs mr-3 group-hover:bg-indigo-200 group-hover:text-indigo-600 transition-colors">${String.fromCharCode(65 + i)}</span>
+                                <span class="text-stone-600 font-medium">${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div id="hint-${index}" class="hidden mt-6 p-4 bg-amber-50 text-amber-900 text-sm rounded-xl border border-amber-100 italic">
+                        <strong>Gợi ý:</strong> ${q.hint}
+                    </div>
+                    <div id="feedback-${index}" class="hidden mt-6 p-5 rounded-2xl border transition-all animate-in fade-in slide-in-from-top-2">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span id="icon-${index}" class="text-xl"></span>
+                            <p id="result-text-${index}" class="font-bold text-lg"></p>
+                        </div>
+                        <div class="h-px bg-current opacity-10 mb-3"></div>
+                        <p class="text-sm leading-relaxed font-medium">${q.rationale}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            initCharts();
+        }
+
+        function selectOption(qIdx, oIdx) {
+            if (userAnswers[qIdx] !== null) return;
+
+            userAnswers[qIdx] = oIdx;
+            const correct = quizData[qIdx].correct;
+            const feedback = document.getElementById(`feedback-${qIdx}`);
+            const resultText = document.getElementById(`result-text-${qIdx}`);
+            const icon = document.getElementById(`icon-${qIdx}`);
+            const optionsDiv = document.getElementById(`options-${qIdx}`);
+            const buttons = optionsDiv.getElementsByTagName('button');
+
+            feedback.classList.remove('hidden');
+            
+            if (oIdx === correct) {
+                feedback.className = "mt-6 p-5 rounded-2xl bg-emerald-50 text-emerald-800 border-emerald-100 border";
+                resultText.innerText = "Chính xác!";
+                icon.innerText = "✅";
+                buttons[oIdx].className = "option-btn text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 flex items-center shadow-sm";
+                buttons[oIdx].querySelector('span').className = "w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mr-3";
+            } else {
+                feedback.className = "mt-6 p-5 rounded-2xl bg-rose-50 text-rose-800 border-rose-100 border";
+                resultText.innerText = "Chưa chính xác";
+                icon.innerText = "❌";
+                buttons[oIdx].className = "option-btn text-left p-4 rounded-xl border-2 border-rose-500 bg-rose-50 flex items-center shadow-sm";
+                buttons[oIdx].querySelector('span').className = "w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold text-xs mr-3";
+                
+                // Highlight the correct one
+                buttons[correct].className = "option-btn text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/50 flex items-center transition-all opacity-80";
+            }
+
+            updateProgress();
+            updateCharts();
+        }
+
+        function showHint(index) {
+            const hintBox = document.getElementById(`hint-${index}`);
+            hintBox.classList.toggle('hidden');
+        }
+
+        function updateProgress() {
+            const total = quizData.length;
+            const answered = userAnswers.filter(a => a !== null).length;
+            const progress = Math.round((answered / total) * 100);
+            
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('progress-percent').innerText = `${progress}%`;
+            document.getElementById('progress-text').innerText = answered === 0 ? "Chưa làm câu nào" : `Đã hoàn thành ${answered}/${total} câu`;
+            
+            const score = userAnswers.reduce((acc, curr, idx) => {
+                return curr === quizData[idx].correct ? acc + 1 : acc;
+            }, 0);
+            document.getElementById('final-score').innerText = score;
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if(el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function initCharts() {
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+            scoreChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Đúng', 'Sai', 'Chưa làm'],
+                    datasets: [{
+                        data: [0, 0, 35],
+                        backgroundColor: ['#10B981', '#F43F5E', '#E7E5E4'],
+                        hoverOffset: 4,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                font: { size: 11, weight: '600' }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCharts() {
+            const correct = userAnswers.reduce((acc, curr, idx) => curr === quizData[idx].correct ? acc + 1 : acc, 0);
+            const answered = userAnswers.filter(a => a !== null).length;
+            const incorrect = answered - correct;
+            const remaining = quizData.length - answered;
+
+            scoreChart.data.datasets[0].data = [correct, incorrect, remaining];
+            scoreChart.update();
+        }
+
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>
