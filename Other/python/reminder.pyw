@@ -190,29 +190,7 @@ def wait_and_show_message(msg, seconds):
     có xử lý chơi thêm - hoãn nhiều lần liên tiếp nếu cần."""
     while True:
         print(f"Ứng dụng sẽ hiện thông báo sau {seconds} giây...")
-        #time.sleep(seconds)
-        # Đếm thời gian thực sự trôi qua kể từ lúc bắt đầu sleep cho tới khi bị tắt app bất thường
-        start_time = time.time()
-        elapsed = ELAPSED
-        try:
-            for i in range(seconds):
-                time.sleep(1)
-                elapsed = elapsed + 1
-                if elapsed % 60 == 0 and elapsed != 0:
-                    # Lưu lại thời gian đã qua mỗi 1 phút (ví dụ, ghi vào tệp)
-                    with open(COUNTER_TIME_FILE, "w", encoding="utf-8") as f:
-                        f.write(str(elapsed))
-        except KeyboardInterrupt:
-            pass
-        
-        Total_elapsed = int((time.time() - start_time + 59) // 60)  # phút, làm tròn lên   
-        print(f"Đã trôi qua {Total_elapsed} phút kể từ khi bắt đầu chờ.")
-        # Ghi log ra file mỗi lần hết giờ
-        try:
-            with open("reminder_log.txt", "a", encoding="utf-8") as log_file:
-                log_file.write(f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - Lần chạy thứ {count} - Đã hết {Total_elapsed} phút\n")
-        except Exception as e:
-            print(f"Lỗi ghi log: {e}")
+        time.sleep(seconds)
    
         res_minutes = show_big_message(msg)
         if res_minutes is None:
@@ -222,17 +200,6 @@ def wait_and_show_message(msg, seconds):
             # Người dùng chọn chơi thêm, tiếp tục chờ số phút mới
             # (Đổi sang *60 cho đúng phút)
             seconds = int(res_minutes) * 60
-
-
-def load_elaped():
-    """Đọc giá trị elapsed từ file COUNTER_TIME_FILE nếu có"""
-    try:
-        with open(COUNTER_TIME_FILE, "r", encoding="utf-8") as f:
-            content = f.read()
-            return int(content.strip()) if content.strip().isdigit() else 0
-    except Exception as e:
-        print(f"Exception in load_elaped: {e}")
-        return 0
 
 
 import urllib.request
@@ -303,20 +270,14 @@ save_today_count(count, today)
 
 
 WAIT_SECONDS = 20*60
-ELAPSED = WAIT_SECONDS #load_elaped()
-print(f"Đã mở {count-1} lần, lần trước đã sử dụng {ELAPSED} giây, còn lại {WAIT_SECONDS - ELAPSED} giây...")
-
 if count > 1:
     # Gọi show_big_message để lấy phút hoãn từ entry_time, rồi chuyển thành giây
     msg = "HÔM NAY ĐÃ HẾT GIỜ CHƠI RỒI!\nHÃY TẮT MÁY VÀ ĐỨNG DẬY VẬN ĐỘNG ĐI THÔI"
-    if ELAPSED < WAIT_SECONDS:
-        WAIT_SECONDS = WAIT_SECONDS - ELAPSED
+    res_minutes = show_big_message(msg)
+    if res_minutes is not None:
+        WAIT_SECONDS = int(res_minutes) * 60
     else:
-        res_minutes = show_big_message(msg)
-        if res_minutes is not None:
-            WAIT_SECONDS = int(res_minutes) * 60
-        else:
-            WAIT_SECONDS = 0
+        WAIT_SECONDS = 0
 else:
     msg = "HẾT GIỜ DÙNG MÁY TÍNH RỒI!\nHÃY TẮT MÁY VÀ ĐỨNG DẬY VẬN ĐỘNG ĐI THÔI"
 
