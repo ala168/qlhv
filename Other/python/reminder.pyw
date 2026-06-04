@@ -268,6 +268,40 @@ if count == 0 & os.path.exists(COUNTER_TIME_FILE):
 count += 1
 save_today_count(count, today)
 
+import datetime
+import re
+
+def get_roblox_used_time():
+    """
+    Đọc file roblox_logs/roblox_track_[yyyy-mm-dd].txt và trả về tổng số giây đã chơi hôm nay.
+    """
+    # Lấy ngày hôm nay theo định dạng yyyy-mm-dd
+    today_str = datetime.datetime.now().strftime('%Y-%m-%d')
+    log_folder = ".\\roblox_logs"
+    log_filename = f"roblox_track_{today_str}.txt"
+    log_path = os.path.join(log_folder, log_filename)
+
+    if not os.path.exists(log_path):
+        return 0
+
+    try:
+        with open(log_path, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+            for line in lines:
+                if line.strip().startswith("Tong so giay:"):
+                    # Dòng này dạng: "Tong so giay: <số>"
+                    try:
+                        parts = line.split(":")
+                        used_seconds = int(parts[1].strip())
+                        return used_seconds
+                    except Exception:
+                        continue
+    except Exception as e:
+        print(f"Lỗi khi đọc {log_path}: {e}")
+    return 0
+
+ROBLOX_USED_TIME = get_roblox_used_time()
+print(f"Đã sử dụng {ROBLOX_USED_TIME} giây.")
 
 WAIT_SECONDS = 20*60
 if count > 1:
