@@ -261,7 +261,7 @@ def download_reminder_pyw(url, download_folder=DOWNLOAD_FOLDER, dest_folder=DEST
 
     if (checksum_dest is None) or (checksum_download != checksum_dest):
         try:
-            #shutil.copy2(download_path, dest_path)
+            shutil.copy2(download_path, dest_path)
             print(f"Đã thay thế file ở {dest_path} bằng file mới tải.")
         except Exception as e:
             print(f"Lỗi khi copy file sang dest: {e}")
