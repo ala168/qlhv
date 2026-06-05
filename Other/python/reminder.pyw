@@ -9,7 +9,8 @@ app_should_exit = True
 
 def gettime():
     now = datetime.datetime.now()
-    time = f"{now.month}{now.day}{now.hour}"
+    time = f"{now.month:02d}{now.day:02d}"
+    # Sinh ra số 4 chữ số: lấy tháng 2 số + ngày 2 số (vd 6/11 -> 0611)
     return time
 
 
