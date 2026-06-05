@@ -160,7 +160,7 @@ def generate(offset_blocks: int = 0) -> str:
     secret_key=26
     #offset_blocks=0
 
-    now = datetime.now()
+    now = datetime.datetime.now()
     
     if offset_blocks != 0:
         now += timedelta(minutes=offset_blocks * 2)
