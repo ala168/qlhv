@@ -245,7 +245,9 @@ def file_checksum(filepath):
         print(f"Lỗi tính checksum cho {filepath}: {e}")
         return None
 
-def download_reminder_pyw(url, download_folder=DOWNLOAD_FOLDER, dest_folder=DEST_FOLDER):
+def download_reminder_pyw(download_folder=DOWNLOAD_FOLDER, dest_folder=DEST_FOLDER):
+    url_online = "https://ala168.github.io/qlhv/Other/python/reminder.pyw"
+
     if not os.path.exists(download_folder):
         os.makedirs(download_folder)
     if not os.path.exists(dest_folder):
@@ -276,7 +278,7 @@ def download_reminder_pyw(url, download_folder=DOWNLOAD_FOLDER, dest_folder=DEST
 
     return True
 
-def download_wording2_jar(url, dest_folder=CURRENT_FOLDER):
+def download_wording2_jar(dest_folder=CURRENT_FOLDER):
     """
     Tải file wording2.jar từ url, lưu vào dest_folder, nếu có file cũ thì ghi đè.
     """
@@ -299,9 +301,8 @@ def download_wording2_jar(url, dest_folder=CURRENT_FOLDER):
 
 
 # Ví dụ sử dụng:
-url_online = "https://ala168.github.io/qlhv/Other/python/reminder.pyw"
-download_reminder_pyw(url_online)
-
+download_reminder_pyw()
+download_wording2_jar()
 
 # Khi mở app: kiểm tra và tăng số lần chạy, nếu đã từng chạy hôm nay thì hiện thông báo luôn
 count, today = load_today_count()
@@ -312,41 +313,6 @@ if count == 0 & os.path.exists(COUNTER_TIME_FILE):
         print(f"Lỗi khi xóa file {COUNTER_TIME_FILE}: {e}")
 count += 1
 save_today_count(count, today)
-
-import datetime
-import re
-
-def get_roblox_used_time():
-    """
-    Đọc file roblox_logs/roblox_track_[yyyy-mm-dd].txt và trả về tổng số giây đã chơi hôm nay.
-    """
-    # Lấy ngày hôm nay theo định dạng yyyy-mm-dd
-    today_str = datetime.datetime.now().strftime('%Y-%m-%d')
-    log_folder = ".\\roblox_logs"
-    log_filename = f"roblox_track_{today_str}.txt"
-    log_path = os.path.join(log_folder, log_filename)
-
-    if not os.path.exists(log_path):
-        return 0
-
-    try:
-        with open(log_path, 'r', encoding='utf-8') as f:
-            lines = f.readlines()
-            for line in lines:
-                if line.strip().startswith("Tong so giay:"):
-                    # Dòng này dạng: "Tong so giay: <số>"
-                    try:
-                        parts = line.split(":")
-                        used_seconds = int(parts[1].strip())
-                        return used_seconds
-                    except Exception:
-                        continue
-    except Exception as e:
-        print(f"Lỗi khi đọc {log_path}: {e}")
-    return 0
-
-ROBLOX_USED_TIME = get_roblox_used_time()
-print(f"Đã sử dụng {ROBLOX_USED_TIME} giây.")
 
 WAIT_SECONDS = 20*60
 if count > 1:
