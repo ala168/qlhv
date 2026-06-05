@@ -307,7 +307,6 @@ if count == 0 & os.path.exists(COUNTER_TIME_FILE):
         print(f"Lỗi khi xóa file {COUNTER_TIME_FILE}: {e}")
 count += 1
 save_today_count(count, today)
-print(generate())
 
 WAIT_SECONDS = 20*60
 if count > 1:
