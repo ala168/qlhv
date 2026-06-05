@@ -334,5 +334,4 @@ else:
     msg = "HẾT GIỜ DÙNG MÁY TÍNH RỒI!\nHÃY TẮT MÁY VÀ ĐỨNG DẬY VẬN ĐỘNG ĐI THÔI"
 
 if WAIT_SECONDS > 0:
-    print(generate())
-    #wait_and_show_message(msg, WAIT_SECONDS)
+    wait_and_show_message(msg, WAIT_SECONDS)
