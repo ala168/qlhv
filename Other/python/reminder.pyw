@@ -9,10 +9,7 @@ from datetime import datetime, timedelta
 app_should_exit = True
 
 def gettime():
-    now = datetime.datetime.now()
-    time = f"{now.month:02d}{now.day:02d}"
-    # Sinh ra số 4 chữ số: lấy tháng 2 số + ngày 2 số (vd 6/11 -> 0611)
-    return time
+    return ""
 
 
 def show_big_message_fullscreen(message):
@@ -310,12 +307,13 @@ if count == 0 & os.path.exists(COUNTER_TIME_FILE):
         print(f"Lỗi khi xóa file {COUNTER_TIME_FILE}: {e}")
 count += 1
 save_today_count(count, today)
+print(generate())
 
 WAIT_SECONDS = 20*60
 if count > 1:
     # Gọi show_big_message để lấy phút hoãn từ entry_time, rồi chuyển thành giây
     msg = "HÔM NAY ĐÃ HẾT GIỜ CHƠI RỒI!\nHÃY TẮT MÁY VÀ ĐỨNG DẬY VẬN ĐỘNG ĐI THÔI"
-    res_minutes =show_big_message(msg)
+    res_minutes = show_big_message(msg)
     if res_minutes is not None:
         WAIT_SECONDS = int(res_minutes) * 60
     else:
