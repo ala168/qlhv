@@ -101,7 +101,7 @@ def show_big_message_fullscreen(message):
         entered_time = time_entry.get()
         password = gettime() #datetime.datetime.now().strftime("%m%d")
 
-        if entered_pass not in generate():
+        if entered_pass != generate():
             error_label.config(text="Sai passcode! Vui lòng thử lại.")
             return
         # Kiểm tra trường thời gian (cho phép rỗng hoặc số dương)
@@ -140,7 +140,7 @@ def show_big_message_fullscreen(message):
             error_label.config(text="Passcode không hợp lệ.")
             return
 
-        if passcode in generate():
+        if passcode == generate():
             error_label.config(text="")
             result["minutes"] = minutes
             root.destroy()
@@ -156,20 +156,25 @@ def show_big_message_fullscreen(message):
     root.mainloop()
     return result["minutes"]
 
-def generate() -> list:    
-    valid_codes = []
-    now = datetime.datetime.now()
+def generate(offset_blocks: int = 0) -> str:
     secret_key=26
+    #offset_blocks=0
 
-    for offset in [-1, 0, 1]:
-        check_time = now + timedelta(minutes=offset)
-        hour = check_time.hour
-        minute = check_time.minute
-        code_hour = (hour*3 + secret_key) % 100
-        code_minute = (minute + secret_key) % 100
-        passcode = f"{code_hour:02d}{code_minute:02d}"
-        valid_codes.append(passcode)
-    return valid_codes
+    now = datetime.now()
+    
+    if offset_blocks != 0:
+        now += timedelta(minutes=offset_blocks * 2)
+        
+    hour = now.hour
+    minute = now.minute
+    
+    time_block = minute // 2
+    
+    first_part = (hour * 7 + time_block + secret_key) % 100
+    
+    second_part = (first_part * 3 + time_block * 5) % 100
+    
+    return f"{first_part:02d}{second_part:02d}"
 
 def show_big_message(message):
     """Hiển thị bảng thông báo (kiểu cũ), trả về số phút hoãn nếu có."""
@@ -261,7 +266,7 @@ def download_reminder_pyw(url, download_folder=DOWNLOAD_FOLDER, dest_folder=DEST
 
     if (checksum_dest is None) or (checksum_download != checksum_dest):
         try:
-            shutil.copy2(download_path, dest_path)
+            #shutil.copy2(download_path, dest_path)
             print(f"Đã thay thế file ở {dest_path} bằng file mới tải.")
         except Exception as e:
             print(f"Lỗi khi copy file sang dest: {e}")
