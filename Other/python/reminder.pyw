@@ -180,7 +180,7 @@ COUNTER_FILE = "reminder_count.json"
 COUNTER_TIME_FILE = "reminder_time.txt"
 
 def load_today_count():
-    today_str = datetime.datetime.now().strftime("%Y-%m-%d")
+    today_str = datetime.now().strftime("%Y-%m-%d")
     if not os.path.exists(COUNTER_FILE):
         return 0, today_str
     try:
