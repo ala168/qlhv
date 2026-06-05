@@ -32,12 +32,19 @@
         .time-display {
             font-size: 15px;
             font-weight: bold;
-            color: #e67e22;
+            color: #2980b9;
             margin-bottom: 25px;
-            background-color: #fdf2e9;
+            background-color: #e1f5fe;
             padding: 6px 14px;
             border-radius: 20px;
             display: inline-block;
+            transition: all 0.5s ease;
+        }
+        /* Style cảnh báo khi thời gian còn lại dưới 15 giây */
+        .time-display.warning {
+            color: #c0392b;
+            background-color: #fadbd8;
+            animation: pulse 1s infinite;
         }
         .passcode-card {
             display: flex;
@@ -53,7 +60,7 @@
             font-size: 42px;
             font-weight: bold;
             letter-spacing: 4px;
-            color: #d35400;
+            color: #2c3e50;
             margin-bottom: 20px;
             line-height: 1;
         }
@@ -76,13 +83,18 @@
         .btn-copy.copied {
             background-color: #2ecc71;
         }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>Passcode</h2>
-    <div class="time-display" id="currentTime">--:--:--</div>
+    <div class="time-display" id="currentTime">--:--</div>
 
     <div class="passcode-card">
         <span class="code" id="blockPasscode">0000</span>
@@ -94,29 +106,43 @@
     // Cấu hình ngầm Số Bí Mật
     const SECRET_KEY = 26;
 
-    function updatePasscode() {
+    function updatePasscodeAndCountdown() {
         let now = new Date();
-        
-        // 1. Hiển thị đồng hồ thời gian thực
-        let hoursStr = String(now.getHours()).padStart(2, '0');
-        let minutesStr = String(now.getMinutes()).padStart(2, '0');
-        let secondsStr = String(now.getSeconds()).padStart(2, '0');
-        document.getElementById('currentTime').innerText = `${hoursStr}:${minutesStr}:${secondsStr}`;
-
-        let h = now.getHours();
         let m = now.getMinutes();
+        let s = now.getSeconds();
         
-        // 2. Chia lấy nguyên để ép thời gian vào block 2 phút cố định
+        // 1. TÍNH TOÁN THỜI GIAN CÒN LẠI (COUNTDOWN)
+        // Tổng số giây tính từ đầu chu kỳ 2 phút hiện tại
+        let elapsedSeconds = (m % 2) * 60 + s;
+        // Số giây còn lại cho đến khi hết chu kỳ 2 phút (120 giây)
+        let remainingSeconds = 120 - elapsedSeconds;
+        
+        let countdownMin = Math.floor(remainingSeconds / 60);
+        let countdownSec = remainingSeconds % 60;
+        
+        // Định dạng hiển thị chuỗi mm:ss
+        let minStr = String(countdownMin).padStart(2, '0');
+        let secStr = String(countdownSec).padStart(2, '0');
+        
+        let timerElement = document.getElementById('currentTime');
+        timerElement.innerText = `${minStr}:${secStr}`;
+        
+        // Hiệu ứng cảnh báo trực quan nếu thời gian còn lại dưới 15 giây
+        if (remainingSeconds <= 15) {
+            timerElement.classList.add('warning');
+        } else {
+            timerElement.classList.remove('warning');
+        }
+
+        // 2. TÍNH TOÁN PASSCODE (Cập nhật đồng bộ theo chu kỳ)
+        let h = now.getHours();
         let timeBlock = Math.floor(m / 2);
         
-        // 3. Thực thi thuật toán biến đổi phi tuyến tính
         let firstPart = (h * 7 + timeBlock + SECRET_KEY) % 100;
         let secondPart = (firstPart * 3 + timeBlock * 5) % 100;
         
-        // Định dạng chuỗi đủ 4 ký tự
         let finalCode = String(firstPart).padStart(2, '0') + String(secondPart).padStart(2, '0');
         
-        // Cập nhật lên giao diện
         document.getElementById('blockPasscode').innerText = finalCode;
     }
 
@@ -138,8 +164,8 @@
     }
 
     // Khởi chạy hệ thống
-    updatePasscode();
-    setInterval(updatePasscode, 1000);
+    updatePasscodeAndCountdown();
+    setInterval(updatePasscodeAndCountdown, 1000);
 </script>
 
 </body>
