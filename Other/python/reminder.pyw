@@ -2,6 +2,7 @@ import tkinter as tk
 import time
 import os
 import json
+import datetime
 from datetime import datetime, timedelta
 
 # Biến kiểm soát việc đang chờ hay thoát ứng dụng
