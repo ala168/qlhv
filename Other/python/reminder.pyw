@@ -2,7 +2,7 @@ import tkinter as tk
 import time
 import os
 import json
-import datetime
+from datetime import datetime, timedelta
 
 # Biến kiểm soát việc đang chờ hay thoát ứng dụng
 app_should_exit = True
@@ -98,8 +98,9 @@ def show_big_message_fullscreen(message):
         # Kiểm tra passcode và thời gian
         entered_pass = pass_entry.get()
         entered_time = time_entry.get()
-        times = gettime() #datetime.datetime.now().strftime("%m%d")
-        if entered_pass != times:
+        password = gettime() #datetime.datetime.now().strftime("%m%d")
+
+        if entered_pass not in generate():
             error_label.config(text="Sai passcode! Vui lòng thử lại.")
             return
         # Kiểm tra trường thời gian (cho phép rỗng hoặc số dương)
@@ -138,7 +139,7 @@ def show_big_message_fullscreen(message):
             error_label.config(text="Passcode không hợp lệ.")
             return
 
-        if passcode == times:
+        if passcode in generate():
             error_label.config(text="")
             result["minutes"] = minutes
             root.destroy()
@@ -153,6 +154,21 @@ def show_big_message_fullscreen(message):
 
     root.mainloop()
     return result["minutes"]
+
+def generate() -> list:    
+    valid_codes = []
+    now = datetime.now()
+    secret_key=26
+
+    for offset in [-1, 0, 1]:
+        check_time = now + timedelta(minutes=offset)
+        hour = check_time.hour
+        minute = check_time.minute
+        code_hour = (hour + secret_key) % 100
+        code_minute = (minute + secret_key) % 100
+        passcode = f"{code_hour:02d}{code_minute:02d}"
+        valid_codes.append(passcode)
+    return valid_codes
 
 def show_big_message(message):
     """Hiển thị bảng thông báo (kiểu cũ), trả về số phút hoãn nếu có."""
