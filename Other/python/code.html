@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trình Tạo Passcode Theo Thời Gian</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .time-display {
+            font-size: 18px;
+            font-weight: bold;
+            color: #3498db;
+            margin: 15px 0;
+            background-color: #e8f4f8;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .passcode-list {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .passcode-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+            border-left: 5px solid #bdc3c7;
+        }
+        .passcode-item.current {
+            background-color: #eafaf1;
+            border-left-color: #2ecc71;
+        }
+        .passcode-item.current .code {
+            color: #27ae60;
+        }
+        .label-text {
+            font-size: 14px;
+            color: #666;
+        }
+        .code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Mã Passcode Biến Đổi</h2>
+    
+    <div class="form-group">
+        <label for="secretKey">Số Bí Mật (Secret Key):</label>
+        <input type="number" id="secretKey" value="26" min="0" max="99" oninput="updatePasscodes()">
+    </div>
+
+    <div class="time-display" id="currentTime">
+        Thời gian: --:--:--
+    </div>
+
+    <div class="passcode-list">
+        <label>Danh sách Passcode hợp lệ (Trễ 2 phút):</label>
+        
+        <div class="passcode-item current">
+            <span class="label-text">Hiện tại (0p):</span>
+            <span class="code" id="code0">0000</span>
+        </div>
+        
+        <div class="passcode-item">
+            <span class="label-text">Độ trễ -1 phút:</span>
+            <span class="code" id="code1">0000</span>
+        </div>
+        
+        <div class="passcode-item">
+            <span class="label-text">Độ trễ -2 phút:</span>
+            <span class="code" id="code2">0000</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updatePasscodes() {
+        // Lấy giá trị Secret Key từ ô input
+        let secretKey = parseInt(document.getElementById('secretKey').value) || 0;
+        
+        let now = new Date();
+        
+        // Hiển thị đồng hồ thời gian thực dạng HH:MM:SS
+        let hoursStr = String(now.getHours()).padStart(2, '0');
+        let minutesStr = String(now.getMinutes()).padStart(2, '0');
+        let secondsStr = String(now.getSeconds()).padStart(2, '0');
+        document.getElementById('currentTime').innerText = `Thời gian: ${hoursStr}:${minutesStr}:${secondsStr}`;
+
+        // Tính toán passcode cho phút hiện tại (i=0), 1 phút trước (i=1), 2 phút trước (i=2)
+        for (let i = 0; i < 3; i++) {
+            let checkTime = new Date(now.getTime() - i * 60 * 1000);
+            
+            let h = checkTime.getHours();
+            let m = checkTime.getMinutes();
+            
+            // Thuật toán: (Thời gian + Secret Key) % 100
+            let codeH = (h + secretKey) % 100;
+            let codeM = (m + secretKey) % 100;
+            
+            // Format chuỗi 2 chữ số
+            let finalCode = String(codeH).padStart(2, '0') + String(codeM).padStart(2, '0');
+            
+            // Cập nhật lên giao diện
+            document.getElementById(`code${i}`).innerText = finalCode;
+        }
+    }
+
+    // Chạy cập nhật ngay khi tải trang
+    updatePasscodes();
+    
+    // Cập nhật lại mỗi giây để đồng hồ và mã luôn chính xác
+    setInterval(updatePasscodes, 1000);
+</script>
+
+</body>
+</html>
