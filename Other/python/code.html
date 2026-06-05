@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trình Tạo Passcode Theo Thời Gian</title>
+    <title>Trình Tạo Passcode</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -21,145 +21,123 @@
             border-radius: 12px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 450px;
+            max-width: 350px;
             text-align: center;
         }
         h2 {
             color: #2c3e50;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        label {
-            font-weight: 600;
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-        }
-        input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-            box-sizing: border-box;
+            margin-bottom: 10px;
+            font-size: 22px;
         }
         .time-display {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: bold;
             color: #3498db;
-            margin: 15px 0;
+            margin-bottom: 25px;
             background-color: #e8f4f8;
-            padding: 10px;
-            border-radius: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            display: inline-block;
         }
-        .passcode-list {
-            margin-top: 20px;
-            text-align: left;
-        }
-        .passcode-item {
+        .passcode-card {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            padding: 12px;
-            margin-bottom: 8px;
-            border-radius: 6px;
+            padding: 25px 20px;
+            border-radius: 10px;
             background-color: #f8f9fa;
-            border-left: 5px solid #bdc3c7;
-        }
-        .passcode-item.current {
-            background-color: #eafaf1;
-            border-left-color: #2ecc71;
-        }
-        .passcode-item.current .code {
-            color: #27ae60;
-        }
-        .label-text {
-            font-size: 14px;
-            color: #666;
+            border: 1px solid #e2e8f0;
         }
         .code {
             font-family: 'Courier New', Courier, monospace;
-            font-size: 22px;
+            font-size: 42px; /* Tăng kích thước chữ một chút cho cân đối */
             font-weight: bold;
-            letter-spacing: 2px;
+            letter-spacing: 4px;
             color: #2c3e50;
+            margin-bottom: 20px;
+            line-height: 1;
+        }
+        .btn-copy {
+            background-color: #34495e;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .btn-copy:hover {
+            background-color: #2c3e50;
+        }
+        .btn-copy.copied {
+            background-color: #2ecc71;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Mã Passcode Biến Đổi</h2>
-    
-    <div class="form-group">
-        <label for="secretKey">Số Bí Mật (Secret Key):</label>
-        <input type="number" id="secretKey" value="26" min="0" max="99" oninput="updatePasscodes()">
-    </div>
+    <h2>Mã Passcode</h2>
+    <div class="time-display" id="currentTime">--:--:--</div>
 
-    <div class="time-display" id="currentTime">
-        Thời gian: --:--:--
-    </div>
-
-    <div class="passcode-list">
-        <label>Danh sách Passcode hợp lệ (Trễ 2 phút):</label>
-        
-        <div class="passcode-item current">
-            <span class="label-text">Hiện tại (0p):</span>
-            <span class="code" id="code0">0000</span>
-        </div>
-        
-        <div class="passcode-item">
-            <span class="label-text">Độ trễ -1 phút:</span>
-            <span class="code" id="code1">0000</span>
-        </div>
-        
-        <div class="passcode-item">
-            <span class="label-text">Độ trễ -2 phút:</span>
-            <span class="code" id="code2">0000</span>
-        </div>
+    <div class="passcode-card">
+        <span class="code" id="passcode3">0000</span>
+        <button class="btn-copy" onclick="copyCode(this)">Copy Passcode</button>
     </div>
 </div>
 
 <script>
-    function updatePasscodes() {
-        // Lấy giá trị Secret Key từ ô input
-        let secretKey = parseInt(document.getElementById('secretKey').value) || 0;
-        
+    // Cấu hình ngầm Số Bí Mật tại đây
+    const SECRET_KEY = 26;
+
+    function updatePasscode() {
         let now = new Date();
         
-        // Hiển thị đồng hồ thời gian thực dạng HH:MM:SS
+        // Cập nhật đồng hồ hiển thị (HH:MM:SS)
         let hoursStr = String(now.getHours()).padStart(2, '0');
         let minutesStr = String(now.getMinutes()).padStart(2, '0');
         let secondsStr = String(now.getSeconds()).padStart(2, '0');
-        document.getElementById('currentTime').innerText = `Thời gian: ${hoursStr}:${minutesStr}:${secondsStr}`;
+        document.getElementById('currentTime').innerText = `${hoursStr}:${minutesStr}:${secondsStr}`;
 
-        // Tính toán passcode cho phút hiện tại (i=0), 1 phút trước (i=1), 2 phút trước (i=2)
-        for (let i = 0; i < 3; i++) {
-            let checkTime = new Date(now.getTime() - i * 60 * 1000);
-            
-            let h = checkTime.getHours();
-            let m = checkTime.getMinutes();
-            
-            // Thuật toán: (Thời gian + Secret Key) % 100
-            let codeH = (h + secretKey) % 100;
-            let codeM = (m + secretKey) % 100;
-            
-            // Format chuỗi 2 chữ số
-            let finalCode = String(codeH).padStart(2, '0') + String(codeM).padStart(2, '0');
-            
-            // Cập nhật lên giao diện
-            document.getElementById(`code${i}`).innerText = finalCode;
-        }
+        // Tính toán cho mốc +1 phút so với hiện tại
+        let passcode3Time = new Date(now.getTime() + 1 * 60 * 1000);
+        
+        let h = passcode3Time.getHours();
+        let m = passcode3Time.getMinutes();
+        
+        let codeH = (h + SECRET_KEY) % 100;
+        let codeM = (m + SECRET_KEY) % 100;
+        
+        let finalCode = String(codeH).padStart(2, '0') + String(codeM).padStart(2, '0');
+        
+        // Cập nhật lên giao diện
+        document.getElementById('passcode3').innerText = finalCode;
     }
 
-    // Chạy cập nhật ngay khi tải trang
-    updatePasscodes();
-    
-    // Cập nhật lại mỗi giây để đồng hồ và mã luôn chính xác
-    setInterval(updatePasscodes, 1000);
+    // Hàm xử lý Copy mã
+    function copyCode(button) {
+        let codeText = document.getElementById('passcode3').innerText;
+        
+        navigator.clipboard.writeText(codeText).then(() => {
+            button.innerText = "Copied!";
+            button.classList.add('copied');
+            
+            setTimeout(() => {
+                button.innerText = "Copy Passcode";
+                button.classList.remove('copied');
+            }, 1500);
+        }).catch(err => {
+            console.error('Không thể copy mã: ', err);
+        });
+    }
+
+    // Khởi chạy
+    updatePasscode();
+    setInterval(updatePasscode, 1000);
 </script>
 
 </body>
