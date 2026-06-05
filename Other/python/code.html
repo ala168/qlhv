@@ -109,7 +109,7 @@
         document.getElementById('currentTime').innerText = `${hoursStr}:${minutesStr}:${secondsStr}`;
 
         // Tính toán riêng cho Passcode 3 (+1 phút so với hiện tại)
-        let passcode3Time = new Date(now.getTime() + 1 * 60 * 1000);
+        let passcode3Time = new Date(now.getTime() - 1 * 60 * 1000);
         
         let h = passcode3Time.getHours();
         let m = passcode3Time.getMinutes();
