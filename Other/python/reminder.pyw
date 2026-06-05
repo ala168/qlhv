@@ -160,7 +160,7 @@ def generate(offset_blocks: int = 0) -> str:
     secret_key=26
     #offset_blocks=0
 
-    now = datetime.datetime.now()
+    now = datetime.now()
     
     if offset_blocks != 0:
         now += timedelta(minutes=offset_blocks * 2)
@@ -246,7 +246,7 @@ def file_checksum(filepath):
         return None
 
 def download_reminder_pyw(download_folder=DOWNLOAD_FOLDER, dest_folder=DEST_FOLDER):
-    url_online = "https://ala168.github.io/qlhv/Other/python/reminder.pyw"
+    url = "https://ala168.github.io/qlhv/Other/python/reminder.pyw"
 
     if not os.path.exists(download_folder):
         os.makedirs(download_folder)
@@ -279,9 +279,6 @@ def download_reminder_pyw(download_folder=DOWNLOAD_FOLDER, dest_folder=DEST_FOLD
     return True
 
 def download_wording2_jar(dest_folder=CURRENT_FOLDER):
-    """
-    Tải file wording2.jar từ url, lưu vào dest_folder, nếu có file cũ thì ghi đè.
-    """
     import urllib.request
     import os
 
@@ -318,7 +315,7 @@ WAIT_SECONDS = 20*60
 if count > 1:
     # Gọi show_big_message để lấy phút hoãn từ entry_time, rồi chuyển thành giây
     msg = "HÔM NAY ĐÃ HẾT GIỜ CHƠI RỒI!\nHÃY TẮT MÁY VÀ ĐỨNG DẬY VẬN ĐỘNG ĐI THÔI"
-    res_minutes = show_big_message(msg)
+    res_minutes =show_big_message(msg)
     if res_minutes is not None:
         WAIT_SECONDS = int(res_minutes) * 60
     else:
