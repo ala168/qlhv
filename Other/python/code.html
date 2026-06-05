@@ -43,25 +43,30 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 25px 20px;
+            padding: 20px;
             border-radius: 10px;
             background-color: #f8f9fa;
             border: 1px solid #e2e8f0;
         }
+        .label-text {
+            font-weight: 600;
+            font-size: 16px;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
         .code {
             font-family: 'Courier New', Courier, monospace;
-            font-size: 42px; /* Tăng kích thước chữ một chút cho cân đối */
+            font-size: 36px;
             font-weight: bold;
             letter-spacing: 4px;
             color: #2c3e50;
-            margin-bottom: 20px;
-            line-height: 1;
+            margin-bottom: 15px;
         }
         .btn-copy {
             background-color: #34495e;
             color: white;
             border: none;
-            padding: 10px 24px;
+            padding: 8px 24px;
             font-size: 14px;
             font-weight: 500;
             border-radius: 6px;
@@ -103,13 +108,13 @@
         let secondsStr = String(now.getSeconds()).padStart(2, '0');
         document.getElementById('currentTime').innerText = `${hoursStr}:${minutesStr}:${secondsStr}`;
 
-        // Tính toán cho mốc +1 phút so với hiện tại
+        // Tính toán riêng cho Passcode 3 (+1 phút so với hiện tại)
         let passcode3Time = new Date(now.getTime() + 1 * 60 * 1000);
         
         let h = passcode3Time.getHours();
         let m = passcode3Time.getMinutes();
         
-        let codeH = (h + SECRET_KEY) % 100;
+        let codeH = (h*3 + SECRET_KEY) % 100;
         let codeM = (m + SECRET_KEY) % 100;
         
         let finalCode = String(codeH).padStart(2, '0') + String(codeM).padStart(2, '0');

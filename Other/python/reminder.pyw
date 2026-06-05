@@ -164,7 +164,7 @@ def generate() -> list:
         check_time = now + timedelta(minutes=offset)
         hour = check_time.hour
         minute = check_time.minute
-        code_hour = (hour + secret_key) % 100
+        code_hour = (hour*3 + secret_key) % 100
         code_minute = (minute + secret_key) % 100
         passcode = f"{code_hour:02d}{code_minute:02d}"
         valid_codes.append(passcode)
