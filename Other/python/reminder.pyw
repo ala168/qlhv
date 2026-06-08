@@ -275,6 +275,24 @@ def download_reminder_pyw(download_folder=DOWNLOAD_FOLDER, dest_folder=DEST_FOLD
 
     return True
 
+def download_wording_jar(dest_folder=CURRENT_FOLDER):
+    import urllib.request
+    import os
+
+    url="https://ala168.github.io/qlhv/Other/python/wording.jar"
+
+    if not os.path.exists(dest_folder):
+        os.makedirs(dest_folder)
+
+    dest_path = os.path.join(dest_folder, "wording.jar")
+    try:
+        urllib.request.urlretrieve(url, dest_path)
+        print(f"Đã tải wording.jar về {dest_path}")
+        return True
+    except Exception as e:
+        print(f"Lỗi khi tải wording.jar: {e}")
+        return False
+
 def download_wording2_jar(dest_folder=CURRENT_FOLDER):
     import urllib.request
     import os
@@ -353,6 +371,7 @@ def download_reminder_bat(dest_folder=None):
 
 # Ví dụ sử dụng:
 download_reminder_pyw()
+download_wording_jar()
 download_wording2_jar()
 download_reminder_bat()
 
