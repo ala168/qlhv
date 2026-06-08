@@ -293,10 +293,68 @@ def download_wording2_jar(dest_folder=CURRENT_FOLDER):
         print(f"Lỗi khi tải wording2.jar: {e}")
         return False
 
+def download_reminder_bat(dest_folder=None):
+    """
+    Tải file reminder.bat từ url và thay thế file cũ nếu có.
+    """
+    import urllib.request
+    import os
+    import hashlib
+    import shutil
+
+    url = "https://ala168.github.io/qlhv/Other/python/reminder.bat"
+
+    if dest_folder is None:
+        dest_folder = os.path.dirname(os.path.abspath(__file__))
+
+    # Hàm tính checksum đơn giản để kiểm tra file có giống nhau không
+    def file_checksum(path):
+        if not os.path.exists(path):
+            return None
+        hasher = hashlib.sha256()
+        with open(path, "rb") as f:
+            while True:
+                data = f.read(8192)
+                if not data:
+                    break
+                hasher.update(data)
+        return hasher.hexdigest()
+
+    # Đặt đường dẫn tạm để tải về rồi mới thay thế
+    download_path = os.path.join(dest_folder, "reminder.bat.new")
+    dest_path = os.path.join(dest_folder, "reminder.bat")
+    try:
+        urllib.request.urlretrieve(url, download_path)
+        print(f"Đã tải reminder.bat về {download_path}")
+    except Exception as e:
+        print(f"Lỗi khi tải file reminder.bat: {e}")
+        return False
+
+    # So sánh checksum file mới tải và file cũ (nếu có)
+    checksum_download = file_checksum(download_path)
+    checksum_dest = file_checksum(dest_path) if os.path.exists(dest_path) else None
+
+    if (checksum_dest is None) or (checksum_download != checksum_dest):
+        try:
+            shutil.move(download_path, dest_path)
+            print(f"Đã thay thế file {dest_path} bằng file mới tải.")
+        except Exception as e:
+            print(f"Lỗi khi ghi đè reminder.bat: {e}")
+            return False
+    else:
+        print("File reminder.bat đã giống nhau, không cần thay thế.")
+        try:
+            os.remove(download_path)
+        except Exception as e:
+            print(f"Lỗi khi xóa file tạm: {e}")
+    return True
+
+
 
 # Ví dụ sử dụng:
 download_reminder_pyw()
 download_wording2_jar()
+download_reminder_bat()
 
 # Khi mở app: kiểm tra và tăng số lần chạy, nếu đã từng chạy hôm nay thì hiện thông báo luôn
 count, today = load_today_count()
