@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Luyện Thi Tiếng Anh Vào 6 - THCS Chu Văn An & Nguyễn Gia Thiều</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+            color: #1E293B;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Mobile horizontal scroll jump utility */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .question-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+        }
+        .option-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .passage-box {
+            background-color: #FDFDFD;
+            border-left: 4px solid #6366F1;
+        }
+        @media (max-width: 768px) {
+            .option-btn {
+                padding: 0.9rem 0.75rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col md:flex-row">
+
+    <!-- Mobile Sticky Navigation & Quick Progress -->
+    <div class="md:hidden sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm w-full">
+        <div class="px-4 py-3 flex items-center justify-between border-b border-slate-100">
+            <div>
+                <h1 class="text-sm font-black text-slate-900 leading-tight">THCS Chu Văn An - Nguyễn Gia Thiều</h1>
+                <p class="text-[10px] text-indigo-600 font-bold uppercase tracking-wider">Đề luyện thi vào 6 CLC</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span id="mobile-score-badge" class="bg-indigo-50 text-indigo-700 text-xs font-black px-2.5 py-1 rounded-full border border-indigo-100">Đúng: 0/30</span>
+            </div>
+        </div>
+        <!-- Horizontal scrollable category jump bar for mobile -->
+        <div class="flex overflow-x-auto whitespace-nowrap px-4 py-2 gap-2 no-scrollbar scroll-smooth">
+            <button onclick="scrollToSection('sec-phonetics')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Phát âm</button>
+            <button onclick="scrollToSection('sec-language')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Ngữ pháp</button>
+            <button onclick="scrollToSection('sec-cloze')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Điền từ</button>
+            <button onclick="scrollToSection('sec-reading')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Đọc hiểu</button>
+            <button onclick="scrollToSection('sec-writing')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Viết câu</button>
+        </div>
+        <!-- Slim progress tracker line -->
+        <div class="w-full bg-slate-100 h-1">
+            <div id="mobile-progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+        </div>
+    </div>
+
+    <!-- Desktop Sidebar -->
+    <aside class="hidden md:flex w-80 bg-white border-r border-slate-200 flex-col h-screen sticky top-0 overflow-y-auto">
+        <div class="p-6 border-b border-slate-150">
+            <h1 class="text-lg font-black text-slate-900 leading-tight">Chu Văn An - Nguyễn Gia Thiều</h1>
+            <p class="text-[10px] text-indigo-600 mt-2 font-bold uppercase tracking-widest">ĐỀ LUYỆN THI THỬ VÀO 6 CLC</p>
+        </div>
+        <nav class="flex-1 p-4 space-y-1">
+            <button onclick="scrollToSection('sec-phonetics')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-sm font-semibold transition-all flex items-center justify-between">
+                <span>Phát âm (1-4)</span>
+                <span class="text-xs text-slate-400">⚡</span>
+            </button>
+            <button onclick="scrollToSection('sec-language')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-sm font-semibold transition-all flex items-center justify-between">
+                <span>Ngữ pháp & Từ vựng (5-17)</span>
+                <span class="text-xs text-slate-400">📖</span>
+            </button>
+            <button onclick="scrollToSection('sec-cloze')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-sm font-semibold transition-all flex items-center justify-between">
+                <span>Điền từ đoạn văn (18-22)</span>
+                <span class="text-xs text-slate-400">✏️</span>
+            </button>
+            <button onclick="scrollToSection('sec-reading')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-sm font-semibold transition-all flex items-center justify-between">
+                <span>Đọc hiểu Mariana (23-27)</span>
+                <span class="text-xs text-slate-400">🌊</span>
+            </button>
+            <button onclick="scrollToSection('sec-writing')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-sm font-semibold transition-all flex items-center justify-between">
+                <span>Viết & Sắp xếp câu (28-30)</span>
+                <span class="text-xs text-slate-400">✍️</span>
+            </button>
+        </nav>
+        <div class="p-6 bg-slate-50 border-t border-slate-150">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Tiến độ</span>
+                <span id="progress-percent" class="text-xs font-black text-indigo-600">0%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+            </div>
+            <div id="progress-text" class="text-[11px] text-slate-500 mt-2 font-medium">Chưa hoàn thành câu nào</div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-x-hidden">
+        <div class="max-w-4xl mx-auto px-4 py-6 md:p-8 space-y-6">
+            
+            <!-- Dashboard / Analytics Section -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Chart Container -->
+                <div class="md:col-span-2 bg-white p-4 md:p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xs font-black text-slate-400 mb-3 uppercase tracking-widest">Biểu đồ kết quả luyện tập</h3>
+                    </div>
+                    <div class="relative w-full h-44 md:h-48">
+                        <canvas id="scoreChart"></canvas>
+                    </div>
+                </div>
+                <!-- Score & Reset Button -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center text-center">
+                    <div class="mb-1">
+                        <span id="final-score" class="text-6xl md:text-7xl font-black text-indigo-600">0</span>
+                        <span class="text-xl text-slate-300 font-bold">/30</span>
+                    </div>
+                    <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-5">Đúng</p>
+                    <button onclick="window.location.reload()" class="w-full py-3 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 active:scale-95 transition-all shadow-md shadow-indigo-150">Xáo trộn & Làm lại</button>
+                </div>
+            </div>
+
+            <!-- Intro Info Box -->
+            <div class="bg-gradient-to-r from-indigo-50 to-indigo-100/50 p-5 md:p-6 rounded-2xl border border-indigo-100 shadow-sm space-y-2">
+                <h2 class="text-base md:text-lg font-black text-slate-800 flex items-center gap-2">
+                    <span>📝 Hướng dẫn học tập</span>
+                </h2>
+                <p class="text-slate-600 text-xs md:text-sm leading-relaxed">
+                    Đề thi có 30 câu hỏi tuyển chọn từ cấu trúc đề thi chính thức vào các lớp Chất lượng cao (CLC). 
+                    Các đáp án được <strong>xáo trộn ngẫu nhiên hoàn toàn</strong> trên mọi thiết bị. Đối với phần bài đọc, văn bản nguồn được đính kèm trọn vẹn tại tất cả các câu hỏi liên quan để các con dễ dàng đối chiếu mà không cần di chuyển màn hình.
+                </p>
+            </div>
+
+            <!-- Quiz Cards Container -->
+            <div id="quiz-container" class="space-y-6 md:space-y-8">
+                <!-- Injected dynamically via JavaScript -->
+            </div>
+
+            <!-- Footer -->
+            <footer class="pt-10 pb-6 text-center text-slate-400 text-xs border-t border-slate-150">
+                © 2026 CLB EduNow - Ôn thi vào lớp 6 CLC THCS Chu Văn An - Nguyễn Gia Thiều
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        const rawQuestions = [
+            { id: 1, section: "sec-phonetics", sectionName: "Phát âm (Phonetics)", question: "Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others:\n\n1. A. char<u>a</u>cter\nB. <u>a</u>rchitect\nC. mech<u>a</u>nic\nD. ch<u>a</u>rity", options: ["charity", "character", "architect", "mechanic"], correctVal: "charity", rationale: "Trong từ 'charity', phần gạch chân 'ch' được phát âm là /tʃ/. Trong các từ 'character', 'architect' và 'mechanic', phần gạch chân 'ch' được phát âm là /k/.", hint: "Chú ý đến phát âm của chữ cái kết hợp 'ch'." },
+            { id: 2, section: "sec-phonetics", sectionName: "Phát âm (Phonetics)", question: "Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others:\n\n2. A. br<u>ea</u>k\nB. st<u>ea</u>k\nC. b<u>ea</u>d\nD. gr<u>ea</u>t", options: ["bead", "break", "steak", "great"], correctVal: "bead", rationale: "Trong từ 'bead', phần gạch chân 'ea' được phát âm là /iː/. Trong các từ còn lại, 'ea' được phát âm là /eɪ/.", hint: "Hãy tìm từ có phát âm chứa âm dài /iː/ khác với âm /eɪ/." },
+            { id: 3, section: "sec-phonetics", sectionName: "Phát âm (Phonetics)", question: "Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others:\n\n3. A. <u>s</u>ugar\nB. <u>s</u>imple\nC. <u>s</u>hell\nD. <u>s</u>hip", options: ["simple", "sugar", "shell", "ship"], correctVal: "simple", rationale: "Trong từ 'simple', âm đầu tiên phát âm là /s/. Trong 'sugar', 'shell', 'ship', âm đầu được phát âm là /ʃ/.", hint: "Hãy tìm từ phát âm nhẹ hơn (/s/) các từ còn lại." },
+            { id: 4, section: "sec-phonetics", sectionName: "Phát âm (Phonetics)", question: "Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others:\n\n4. A. help<u>ed</u>\nB. laugh<u>ed</u>\nC. cook<u>ed</u>\nD. decid<u>ed</u>", options: ["decided", "helped", "laughed", "cooked"], correctVal: "decided", rationale: "Trong từ 'decided', đuôi '-ed' phát âm là /ɪd/ vì kết thúc bằng âm /d/. Trong các từ còn lại, '-ed' phát âm là /t/.", hint: "Nhớ quy tắc phát âm đuôi '-ed' sau các âm vô thanh và hữu thanh đặc biệt." },
+            
+            { id: 5, section: "sec-language", sectionName: "Ngữ pháp & Từ vựng (Use of Language)", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n5. By the time the firemen arrived, the fire _________ out.", options: ["had gone", "went", "goes", "has gone"], correctVal: "had gone", rationale: "Cấu trúc 'By the time + S1 + V (quá khứ đơn), S2 + V (quá khứ hoàn thành)'. Đám cháy đã tắt trước khi lính cứu hỏa đến.", hint: "Chú ý trạng từ thời gian chỉ một hành động đã hoàn thành trước một mốc thời gian trong quá khứ." },
+            { id: 6, section: "sec-language", sectionName: "Ngữ pháp & Từ vựng (Use of Language)", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n6. The word \"hazardous\" is closest in meaning to _________.", options: ["dangerous", "safe", "secure", "convenient"], correctVal: "dangerous", rationale: "Từ 'hazardous' có nghĩa là nguy hại, nguy hiểm, đồng nghĩa với 'dangerous'.", hint: "Tìm từ miêu tả điều gì đó có thể gây hại cho con người." },
+            { id: 7, section: "sec-language", sectionName: "Ngữ pháp & Từ vựng (Use of Language)", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n7. John: \"Do you mind if I sit here?\" - Mary: \"_________\"", options: ["No, not at all. Please sit down.", "Yes, please do.", "Yes, I would love to.", "You're welcome."], correctVal: "No, not at all. Please sit down.", rationale: "Câu trả lời lịch sự cho lời đề nghị 'Do you mind...' (Bạn có phiền nếu...) để cho phép ngồi là 'No, not at all' (Không, không phiền đâu).", hint: "Nếu không phiền, hãy trả lời phủ định 'No'." },
+            { id: 8, section: "sec-language", sectionName: "Ngữ pháp & Từ vựng (Use of Language)", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n8. _________ the heavy storm, they still went hiking in the mountains.", options: ["In spite of", "Because of", "Although", "Because"], correctVal: "In spite of", rationale: "Cấu trúc 'In spite of / Despite + cụm danh từ' mang nghĩa mặc dù. 'Heavy storm' là cụm danh từ nên dùng 'In spite of'.", hint: "Cần từ chỉ sự tương phản đi kèm với cụm danh từ ở vế trước." },
+            { 
+                id: 9, section: "sec-language", sectionName: "Ngữ pháp & Từ vựng (Use of Language)", type: "passage",
+                passage: `<div class="p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs font-mono max-w-sm mx-auto shadow-inner">
+                    <p class="text-center font-bold border-b pb-1 mb-2 text-indigo-700">🍿 CINEMA STAR LIGHT</p>
+                    <p><b>Movie:</b> The Lion King</p>
+                    <p><b>Date:</b> Sunday, December 24th</p>
+                    <p><b>Time:</b> 19:30</p>
+                    <p><b>Seat:</b> G12 (Row G)</p>
+                    <p><b>Price:</b> 85,000 VND</p>
+                </div>`,
+                question: "Look at the movie ticket. Which of the following is TRUE?", 
+                options: ["The movie is shown on Christmas Eve.", "The movie starts at half past seven in the morning.", "The ticket price is eighty-five dollars.", "The seat is in the front row of the cinema."], 
+                correctVal: "The movie is shown on Christmas Eve.", 
+                rationale: "Ngày 24 tháng 12 (December 24th) chính là đêm Giáng sinh (Christmas Eve). 19:30 là 7 giờ tối (không phải buổi sáng). Đơn vị tiền là VND, không phải Đô-la.", 
+                hint: "Xem kỹ mốc ngày đặc biệt trong văn hóa phương Tây (24/12)." 
+            },
+            { id: 10, section: "sec-language", sectionName: "Ngữ pháp & Từ vựng (Use of Language)", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n10. I am really looking forward _________ you again next summer.", options: ["to seeing", "to see", "seeing", "see"], correctVal: "to seeing", rationale: "Cấu trúc 'look forward to + V-ing': mong đợi, mong chờ một điều gì đó.", hint: "Nhớ giới từ 'to' đi kèm dạng V-ing của động từ phía sau." },
+            { id: 11, section: "sec-language", sectionName: "Ngữ pháp & Từ vựng (Use of Language)", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n11. The opposite of the word \"poverty\" is _________.", options: ["wealth", "poorness", "shortage", "hunger"], correctVal: "wealth", rationale: "Từ 'poverty' có nghĩa là sự nghèo đói, nghèo khổ. Trái nghĩa của nó là 'wealth' (sự giàu có).", hint: "Tìm từ mô tả trạng thái có nhiều tiền bạc và tài sản của cải." },
+            { id: 12, section: "sec-language", sectionName: "Ngữ pháp & Từ vựng (Use of Language)", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n12. If I _________ a billionaire, I would build a school for disabled children.", options: ["were", "was", "am", "have been"], correctVal: "were", rationale: "Câu điều kiện loại 2 (giả định một điều không có thật ở hiện tại). Mệnh đề 'If' dùng 'were' với tất cả các ngôi chủ ngữ.", hint: "Sử dụng thì giả định quá khứ (subjunctive) cho câu điều kiện loại 2." },
+            { id: 13, section: "sec-language", sectionName: "Ngữ pháp & Từ vựng (Use of Language)", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n13. Let's go for a walk along the river, _________?", options: ["shall we", "will we", "do we", "don't we"], correctVal: "shall we", rationale: "Câu hỏi đuôi đi kèm với cấu trúc đề nghị bắt đầu bằng 'Let's' luôn là 'shall we'.", hint: "Xem lại mẫu câu hỏi đuôi cho câu rủ rê, bắt đầu bằng 'Let's'." },
+            { id: 14, section: "sec-language", sectionName: "Ngữ pháp & Từ vựng (Use of Language)", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n14. The ancient pyramids of Egypt _________ thousands of years ago.", options: ["were built", "built", "have built", "are built"], correctVal: "were built", rationale: "Chủ ngữ chỉ vật 'The ancient pyramids' (những kim tự tháp cổ đại) nên dùng thể bị động ở quá khứ đơn vì có trạng từ 'thousands of years ago'.", hint: "Chủ ngữ là vật cần thể bị động và có trạng ngữ chỉ thời gian quá khứ rõ ràng." },
+            { id: 15, section: "sec-language", sectionName: "Ngữ pháp & Từ vựng (Use of Language)", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n15. English _________ as a second language in many countries.", options: ["is spoken", "speaks", "is speaking", "has spoken"], correctVal: "is spoken", rationale: "Thể bị động ở thì hiện tại đơn: English (số ít) + is + V3/V-ed (spoken). Tiếng Anh được nói.", hint: "Tiếng Anh không thể tự nói mà phải 'được nói'." },
+            { id: 16, section: "sec-language", sectionName: "Ngữ pháp & Từ vựng (Use of Language)", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n16. He suggests that we _________ more trees in the school garden.", options: ["A & B are correct", "plant", "should plant", "to plant"], correctVal: "A & B are correct", rationale: "Cấu trúc giả định với suggest: 'S1 + suggest + that + S2 + (should) + V-inf'. Vì vậy, cả 'plant' (V nguyên thể) và 'should plant' đều chính xác.", hint: "Mệnh đề chứa suggest có thể dùng 'should V-inf' hoặc chỉ có 'V-inf'." },
+            { id: 17, section: "sec-language", sectionName: "Ngữ pháp & Từ vựng (Use of Language)", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n17. I'm not good at math, _________?", options: ["am I", "are I", "aren't I", "do I"], correctVal: "am I", rationale: "Với câu bắt đầu bằng dạng phủ định 'I am not / I'm not', phần câu hỏi đuôi tương ứng sẽ là 'am I'.", hint: "Ngược lại với cấu trúc khẳng định 'I am' thì dùng 'aren't I', còn dạng phủ định dùng gì?" },
+            
+            {
+                id: 18, section: "sec-cloze", sectionName: "Điền từ vào đoạn văn (Reading - Cloze Test)", type: "passage",
+                passage: `<b>The Importance of Bees</b><br>Bees are flying insects known for their role in pollination and for producing honey. They are absolutely <b>(18) _______</b> to our ecosystem. In fact, a third of the food we eat depends on pollinators like bees. <b>(19) _______</b> bee populations are declining worldwide rapidly due to habitat loss and the overuse of toxic pesticides. If bees became <b>(20) _______</b>, it would severely affect global food production and biodiversity. To solve this, many countries have started <b>(21) _______</b> flowers in urban areas. Protecting bees is not just about honey, but about our <b>(22) _______</b>.`,
+                question: "Câu 18. Fill in the blank (18):", options: ["essential", "unnecessary", "harmful", "optional"], correctVal: "essential", rationale: "Bees đóng vai trò quan trọng đối với hệ sinh thái nên chúng cực kỳ thiết yếu ('essential'), không thể thiếu.", hint: "Chọn từ thể hiện vai trò bắt buộc, tối quan trọng của loài ong."
+            },
+            {
+                id: 19, section: "sec-cloze", sectionName: "Điền từ vào đoạn văn (Reading - Cloze Test)", type: "passage",
+                passage: `<b>The Importance of Bees</b><br>Bees are flying insects known for their role in pollination and for producing honey. They are absolutely <b>(18) _______</b> to our ecosystem. In fact, a third of the food we eat depends on pollinators like bees. <b>(19) _______</b> bee populations are declining worldwide rapidly due to habitat loss and the overuse of toxic pesticides. If bees became <b>(20) _______</b>, it would severely affect global food production and biodiversity. To solve this, many countries have started <b>(21) _______</b> flowers in urban areas. Protecting bees is not just about honey, but about our <b>(22) _______</b>.`,
+                question: "Câu 19. Fill in the blank (19):", options: ["However", "Therefore", "Moreover", "Because"], correctVal: "However", rationale: "Từ chuyển ý 'However' (tuy nhiên) được sử dụng để thể hiện sự đối lập giữa vai trò quan trọng của ong và tình trạng suy giảm số lượng của chúng.", hint: "Từ nối biểu thị sự trái ngược so với thông tin tích cực ở câu trước."
+            },
+            {
+                id: 20, section: "sec-cloze", sectionName: "Điền từ vào đoạn văn (Reading - Cloze Test)", type: "passage",
+                passage: `<b>The Importance of Bees</b><br>Bees are flying insects known for their role in pollination and for producing honey. They are absolutely <b>(18) _______</b> to our ecosystem. In fact, a third of the food we eat depends on pollinators like bees. <b>(19) _______</b> bee populations are declining worldwide rapidly due to habitat loss and the overuse of toxic pesticides. If bees became <b>(20) _______</b>, it would severely affect global food production and biodiversity. To solve this, many countries have started <b>(21) _______</b> flowers in urban areas. Protecting bees is not just about honey, but about our <b>(22) _______</b>.`,
+                question: "Câu 20. Fill in the blank (20):", options: ["extinct", "alive", "dangerous", "common"], correctVal: "extinct", rationale: "Nếu loài ong bị tuyệt chủng ('extinct'), sản lượng lương thực toàn cầu sẽ bị ảnh hưởng nghiêm trọng.", hint: "Mối đe dọa không còn tồn tại một sinh vật nào nữa trên Trái Đất."
+            },
+            {
+                id: 21, section: "sec-cloze", sectionName: "Điền từ vào đoạn văn (Reading - Cloze Test)", type: "passage",
+                passage: `<b>The Importance of Bees</b><br>Bees are flying insects known for their role in pollination and for producing honey. They are absolutely <b>(18) _______</b> to our ecosystem. In fact, a third of the food we eat depends on pollinators like bees. <b>(19) _______</b> bee populations are declining worldwide rapidly due to habitat loss and the overuse of toxic pesticides. If bees became <b>(20) _______</b>, it would severely affect global food production and biodiversity. To solve this, many countries have started <b>(21) _______</b> flowers in urban areas. Protecting bees is not just about honey, but about our <b>(22) _______</b>.`,
+                question: "Câu 21. Fill in the blank (21):", options: ["planting", "plant", "planted", "to planting"], correctVal: "planting", rationale: "Sau động từ 'start' ta có thể dùng động từ đuôi -ing để diễn tả việc bắt đầu một thói quen/hoạt động lâu dài.", hint: "Tìm dạng danh động từ (V-ing) tương thích sau động từ 'start'."
+            },
+            {
+                id: 22, section: "sec-cloze", sectionName: "Điền từ vào đoạn văn (Reading - Cloze Test)", type: "passage",
+                passage: `<b>The Importance of Bees</b><br>Bees are flying insects known for their role in pollination and for producing honey. They are absolutely <b>(18) _______</b> to our ecosystem. In fact, a third of the food we eat depends on pollinators like bees. <b>(19) _______</b> bee populations are declining worldwide rapidly due to habitat loss and the overuse of toxic pesticides. If bees became <b>(20) _______</b>, it would severely affect global food production and biodiversity. To solve this, many countries have started <b>(21) _______</b> flowers in urban areas. Protecting bees is not just about honey, but about our <b>(22) _______</b>.`,
+                question: "Câu 22. Fill in the blank (22):", options: ["survival", "death", "history", "money"], correctVal: "survival", rationale: "Bảo vệ loài ong không chỉ vì mật ngọt, mà còn vì chính sự sinh tồn ('survival') của nhân loại.", hint: "Sự duy trì sự sống bền bỉ của chính chúng ta."
+            },
+            
+            {
+                id: 23, section: "sec-reading", sectionName: "Đọc hiểu văn bản (Reading Comprehension)", type: "passage",
+                passage: `<b>The Mariana Trench</b><br>The Mariana Trench is the deepest oceanic trench on Earth, located in the western Pacific Ocean. It reaches a maximum-known depth of about 10,984 meters at a small slot-shaped valley known as the Challenger Deep. Because it is so unimaginably deep, the water pressure is extremely high—more than 1,000 times the standard atmospheric pressure at sea level. Sunlight cannot penetrate this depth, plunging the environment into perpetual darkness. Despite these harsh conditions, scientists have discovered unique marine life, such as the bioluminescent anglerfish, which has adapted to survive by producing its own light where no sunlight exists. This area remains one of the least explored places on our planet.`,
+                question: "Câu 23. What is the text mainly about?", options: ["The deepest part of the world's oceans.", "A dangerous fish in the ocean.", "How to measure water pressure.", "The islands of the Pacific Ocean."], correctVal: "The deepest part of the world's oceans.", rationale: "Chủ đề bao quát của bài đọc giới thiệu về Rãnh Mariana - khu vực đại dương sâu nhất thế giới.", hint: "Đọc dòng đầu tiên giới thiệu về 'the deepest oceanic trench on Earth'."
+            },
+            {
+                id: 24, section: "sec-reading", sectionName: "Đọc hiểu văn bản (Reading Comprehension)", type: "passage",
+                passage: `<b>The Mariana Trench</b><br>The Mariana Trench is the deepest oceanic trench on Earth, located in the western Pacific Ocean. It reaches a maximum-known depth of about 10,984 meters at a small slot-shaped valley known as the Challenger Deep. Because it is so unimaginably deep, the water pressure is extremely high—more than 1,000 times the standard atmospheric pressure at sea level. Sunlight cannot penetrate this depth, plunging the environment into perpetual darkness. Despite these harsh conditions, scientists have discovered unique marine life, such as the bioluminescent anglerfish, which has adapted to survive by producing its own light where no sunlight exists. This area remains one of the least explored places on our planet.`,
+                question: "Câu 24. Why is the environment in the trench in \"perpetual darkness\"?", options: ["Because sunlight cannot reach that extreme depth.", "Because the sun never shines in the Pacific Ocean.", "Because giant marine life blocks the light.", "Because it is located in a small valley."], correctVal: "Because sunlight cannot reach that extreme depth.", rationale: "Trích xuất thông tin: 'Sunlight cannot penetrate this depth, plunging the environment into perpetual darkness.' Ánh sáng mặt trời không thể xuyên qua độ sâu này.", hint: "Tìm câu văn nói về ánh nắng mặt trời (sunlight) và độ sâu (depth)."
+            },
+            {
+                id: 25, section: "sec-reading", sectionName: "Đọc hiểu văn bản (Reading Comprehension)", type: "passage",
+                passage: `<b>The Mariana Trench</b><br>The Mariana Trench is the deepest oceanic trench on Earth, located in the western Pacific Ocean. It reaches a maximum-known depth of about 10,984 meters at a small slot-shaped valley known as the Challenger Deep. Because it is so unimaginably deep, the water pressure is extremely high—more than 1,000 times the standard atmospheric pressure at sea level. Sunlight cannot penetrate this depth, plunging the environment into perpetual darkness. Despite these harsh conditions, scientists have discovered unique marine life, such as the bioluminescent anglerfish, which has adapted to survive by producing its own light where no sunlight exists. This area remains one of the least explored places on our planet.`,
+                question: "Câu 25. The word \"harsh\" in the passage is closest in meaning to:", options: ["severe", "gentle", "comfortable", "warm"], correctVal: "severe", rationale: "Từ 'harsh' có nghĩa là khắc nghiệt, dữ dội, tương ứng gần nhất với từ 'severe' (khắc nghiệt, dữ dội).", hint: "Thời tiết hoặc môi trường cực kỳ khó khăn, nguy hiểm."
+            },
+            {
+                id: 26, section: "sec-reading", sectionName: "Đọc hiểu văn bản (Reading Comprehension)", type: "passage",
+                passage: `<b>The Mariana Trench</b><br>The Mariana Trench is the deepest oceanic trench on Earth, located in the western Pacific Ocean. It reaches a maximum-known depth of about 10,984 meters at a small slot-shaped valley known as the Challenger Deep. Because it is so unimaginably deep, the water pressure is extremely high—more than 1,000 times the standard atmospheric pressure at sea level. Sunlight cannot penetrate this depth, plunging the environment into perpetual darkness. Despite these harsh conditions, scientists have discovered unique marine life, such as the bioluminescent anglerfish, which has adapted to survive by producing its own light where no sunlight exists. This area remains one of the least explored places on our planet.`,
+                question: "Câu 26. Which of the following is TRUE about the bioluminescent anglerfish?", options: ["It produces its own light to survive in the dark.", "It cannot survive in high pressure environments.", "It lives near the surface of the sea to get sunlight.", "It is the only animal species living in the trench."], correctVal: "It produces its own light to survive in the dark.", rationale: "Trích dẫn: 'the bioluminescent anglerfish, which has adapted to survive by producing its own light where no sunlight exists.' Loài cá này tự phát sáng để sinh tồn.", hint: "Xem hành vi thích nghi của cá trong vùng tối tăm."
+            },
+            {
+                id: 27, section: "sec-reading", sectionName: "Đọc hiểu văn bản (Reading Comprehension)", type: "passage",
+                passage: `<b>The Mariana Trench</b><br>The Mariana Trench is the deepest oceanic trench on Earth, located in the western Pacific Ocean. It reaches a maximum-known depth of about 10,984 meters at a small slot-shaped valley known as the Challenger Deep. Because it is so unimaginably deep, the water pressure is extremely high—more than 1,000 times the standard atmospheric pressure at sea level. Sunlight cannot penetrate this depth, plunging the environment into perpetual darkness. Despite these harsh conditions, scientists have discovered unique marine life, such as the bioluminescent anglerfish, which has adapted to survive by producing its own light where no sunlight exists. This area remains one of the least explored places on our planet.`,
+                question: "Câu 27. What does the word \"This area\" in the last sentence refer to?", options: ["The Mariana Trench", "The Pacific Ocean", "The Challenger Deep valley", "The surface level"], correctVal: "The Mariana Trench", rationale: "Cụm từ 'This area' (Khu vực này) thay thế cho chủ thể lớn đang được nói tới xuyên suốt cả bài văn: Rãnh Mariana (Mariana Trench).", hint: "Tập trung vào đối tượng cốt lõi đang được mô tả trong toàn bộ đoạn văn."
+            },
+            
+            { id: 28, section: "sec-writing", sectionName: "Sắp xếp & Viết lại câu (Writing)", question: "Circle the letter A, B, C or D to indicate the most meaningful sentence made from the words given:\n\n28. It / be / such / cold / day / that / we / decide / stay / home /.", options: ["It was such a cold day that we decided to stay at home.", "It was such cold day that we decided staying at home.", "It was so a cold day that we decided to stay at home.", "It was such cold a day that we decided stay at home."], correctVal: "It was such a cold day that we decided to stay at home.", rationale: "Cấu trúc 'such + a/an + adj + danh từ số ít + that + clause' (quá... đến nỗi mà) kết hợp cấu trúc 'decide + to-V'.", hint: "Nhớ danh từ đếm được số ít 'day' phải có mạo từ 'a' sau 'such'." },
+            { id: 29, section: "sec-writing", sectionName: "Sắp xếp & Viết lại câu (Writing)", question: "Circle the letter A, B, C or D to indicate the most meaningful sentence made from the words given:\n\n29. I / wish / I / can / speak / English / fluently / native speaker /.", options: ["I wish I could speak English as fluently as a native speaker.", "I wish I can speak English as fluently as a native speaker.", "I wish I could speak English as fluent as native speaker.", "I wish I speak English as fluently as a native speaker."], correctVal: "I wish I could speak English as fluently as a native speaker.", rationale: "Câu ước cho điều không thể thực hiện ở hiện tại dùng 'could + V-inf'. Cấu trúc so sánh bằng: 'as + trạng từ (fluently) + as + tân ngữ'. Trạng từ 'fluently' bổ nghĩa cho động từ hành động 'speak'.", hint: "Sử dụng thể quá khứ giả định và cấu trúc so sánh bằng của trạng từ." },
+            { id: 30, section: "sec-writing", sectionName: "Sắp xếp & Viết lại câu (Writing)", question: "Circle the letter A, B, C or D to indicate the correct arrangement from jumbled words:\n\n30. rarely / we / such / seen / have / beautiful / a / sunset /.", options: ["Rarely have we seen such a beautiful sunset.", "We have rarely seen a such beautiful sunset.", "Rarely we have seen such a beautiful sunset.", "We have seen such a beautiful sunset rarely."], correctVal: "Rarely have we seen such a beautiful sunset.", rationale: "Cấu trúc đảo ngữ với trạng từ phủ định/tần suất cực hiếm 'Rarely': 'Rarely + trợ động từ (have) + chủ ngữ (we) + V3/ed (seen)...'", hint: "Khi trạng từ 'Rarely' đứng đầu câu, chúng ta phải thực hiện phép đảo ngữ." }
+        ];
+
+        let quizData = [];
+        let userAnswers = [];
+        let scoreChartInstance = null;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function prepareQuiz() {
+            quizData = rawQuestions.map(q => {
+                const shuffledOptions = shuffleArray([...q.options]);
+                const newCorrectIndex = shuffledOptions.indexOf(q.correctVal);
+                return { ...q, options: shuffledOptions, correct: newCorrectIndex };
+            });
+            userAnswers = new Array(quizData.length).fill(null);
+        }
+
+        function initQuiz() {
+            prepareQuiz();
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = "";
+            let currentSection = "";
+
+            quizData.forEach((q, index) => {
+                if (q.section !== currentSection) {
+                    currentSection = q.section;
+                    const sectionHeader = document.createElement('div');
+                    sectionHeader.id = q.section;
+                    sectionHeader.className = "pt-6 md:pt-8 mb-4 border-b-2 border-indigo-100";
+                    sectionHeader.innerHTML = `<h2 class="text-lg md:text-xl font-extrabold text-slate-850 pb-2 flex items-center gap-2">
+                        <span class="w-2.5 h-6 bg-indigo-600 rounded-full inline-block"></span>${q.sectionName}
+                    </h2>`;
+                    container.appendChild(sectionHeader);
+                }
+
+                const card = document.createElement('div');
+                card.className = "question-card bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-all";
+                
+                let passageHtml = "";
+                if (q.type === 'passage') {
+                    passageHtml = `
+                        <div class="passage-box p-4 md:p-5 mb-5 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                            ${q.passage}
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="bg-indigo-600 text-white text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full">Câu ${q.id}</span>
+                        <button onclick="showHint(${index})" class="flex items-center gap-1 text-[11px] text-amber-600 font-bold hover:text-amber-700 active:scale-95 transition-all">
+                            <span>💡 Mẹo giải nhanh</span>
+                        </button>
+                    </div>
+                    ${passageHtml}
+                    <div class="text-sm md:text-base font-semibold mb-6 text-slate-800 leading-relaxed whitespace-pre-line">${q.question}</div>
+                    
+                    <div id="options-${index}" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                        ${q.options.map((opt, i) => `
+                            <button onclick="selectOption(${index}, ${i})" class="option-btn text-left p-3.5 rounded-xl border-2 border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/40 transition-all flex items-center group active:scale-[0.99]">
+                                <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-xs mr-3 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors">${String.fromCharCode(65 + i)}</span>
+                                <span class="text-slate-700 text-xs md:text-sm font-medium flex-1">${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                    
+                    <div id="hint-${index}" class="hidden mt-4 p-4 bg-amber-50 text-amber-950 text-xs rounded-xl border border-amber-100 italic leading-relaxed">
+                        <strong>Gợi ý:</strong> ${q.hint}
+                    </div>
+                    
+                    <div id="feedback-${index}" class="hidden mt-4 p-4 rounded-xl border transition-all">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span id="icon-${index}" class="text-base"></span>
+                            <p id="result-text-${index}" class="font-bold text-sm md:text-base"></p>
+                        </div>
+                        <div class="h-px bg-current opacity-10 mb-2"></div>
+                        <p class="text-xs md:text-sm leading-relaxed font-medium opacity-95">${q.rationale}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            initCharts();
+        }
+
+        function selectOption(qIdx, oIdx) {
+            if (userAnswers[qIdx] !== null) return;
+
+            userAnswers[qIdx] = oIdx;
+            const correct = quizData[qIdx].correct;
+            const feedback = document.getElementById(`feedback-${qIdx}`);
+            const resultText = document.getElementById(`result-text-${qIdx}`);
+            const icon = document.getElementById(`icon-${qIdx}`);
+            const optionsDiv = document.getElementById(`options-${qIdx}`);
+            const buttons = optionsDiv.getElementsByTagName('button');
+
+            feedback.classList.remove('hidden');
+            
+            if (oIdx === correct) {
+                feedback.className = "mt-4 p-4 rounded-xl bg-emerald-50 text-emerald-800 border-emerald-200 border text-xs md:text-sm";
+                resultText.innerText = "Chính xác!";
+                icon.innerText = "✅";
+                buttons[oIdx].className = "option-btn text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 flex items-center shadow-sm w-full";
+                buttons[oIdx].querySelector('span').className = "w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mr-3";
+            } else {
+                feedback.className = "mt-4 p-4 rounded-xl bg-rose-50 text-rose-800 border-rose-200 border text-xs md:text-sm";
+                resultText.innerText = "Chưa chính xác";
+                icon.innerText = "❌";
+                buttons[oIdx].className = "option-btn text-left p-3.5 rounded-xl border-2 border-rose-500 bg-rose-50 flex items-center shadow-sm w-full";
+                buttons[oIdx].querySelector('span').className = "w-7 h-7 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold text-xs mr-3";
+                
+                // Highlight the correct answer
+                buttons[correct].className = "option-btn text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50/50 flex items-center w-full transition-all";
+                buttons[correct].querySelector('span').className = "w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mr-3";
+            }
+
+            for (let b = 0; b < buttons.length; b++) {
+                if (b !== oIdx && b !== correct) {
+                    buttons[b].classList.add('opacity-40');
+                }
+            }
+
+            updateProgress();
+            updateCharts();
+        }
+
+        function showHint(index) {
+            const hintBox = document.getElementById(`hint-${index}`);
+            hintBox.classList.toggle('hidden');
+        }
+
+        function updateProgress() {
+            const total = quizData.length;
+            const answered = userAnswers.filter(a => a !== null).length;
+            const progress = Math.round((answered / total) * 100);
+            
+            // Desktop updates
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('progress-percent').innerText = `${progress}%`;
+            document.getElementById('progress-text').innerText = answered === 0 ? "Chưa hoàn thành câu nào" : `Đã hoàn thành ${answered}/${total} câu`;
+            
+            // Mobile updates
+            document.getElementById('mobile-progress-bar').style.width = `${progress}%`;
+
+            const score = userAnswers.reduce((acc, curr, idx) => {
+                return curr === quizData[idx].correct ? acc + 1 : acc;
+            }, 0);
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('mobile-score-badge').innerText = `Đúng: ${score}/${total}`;
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if(el) {
+                const offset = window.innerWidth < 768 ? 100 : 0;
+                const elementPosition = el.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function initCharts() {
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+            if (scoreChartInstance) {
+                scoreChartInstance.destroy();
+            }
+            scoreChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Đúng', 'Sai', 'Chưa làm'],
+                    datasets: [{
+                        data: [0, 0, 30],
+                        backgroundColor: ['#10B981', '#F43F5E', '#E2E8F0'],
+                        borderWidth: 0,
+                        hoverOffset: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '72%',
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                boxWidth: 10,
+                                usePointStyle: true,
+                                font: { size: 11, weight: 'bold' }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCharts() {
+            if (!scoreChartInstance) return;
+            const correct = userAnswers.reduce((acc, curr, idx) => curr === quizData[idx].correct ? acc + 1 : acc, 0);
+            const answered = userAnswers.filter(a => a !== null).length;
+            const incorrect = answered - correct;
+            const remaining = quizData.length - answered;
+
+            scoreChartInstance.data.datasets[0].data = [correct, incorrect, remaining];
+            scoreChartInstance.update();
+        }
+
+        window.onload = function() {
+            initQuiz();
+        };
+    </script>
+</body>
+</html>
