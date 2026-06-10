@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Luyện Thi Tiếng Anh Vào 6 - THCS&THPT Nguyễn Tất Thành</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+            color: #1E293B;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .question-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+        }
+        .option-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .passage-box {
+            background-color: #FDFDFD;
+            border-left: 4px solid #4F46E5;
+        }
+        @media (max-width: 768px) {
+            .option-btn {
+                padding: 0.9rem 0.75rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- Mobile Sticky Navigation -->
+    <div class="lg:hidden sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm w-full">
+        <div class="px-4 py-3 flex items-center justify-between border-b border-slate-100">
+            <div>
+                <h1 class="text-sm font-black text-slate-900 leading-tight">THCS&THPT Nguyễn Tất Thành</h1>
+                <p class="text-[10px] text-indigo-600 font-bold uppercase tracking-wider">Đề luyện thi thử vào 6</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span id="mobile-score-badge" class="bg-indigo-50 text-indigo-700 text-xs font-black px-2.5 py-1 rounded-full border border-indigo-100">Đúng: 0/26</span>
+            </div>
+        </div>
+        <!-- Scrollable Mobile Menu -->
+        <div class="flex overflow-x-auto whitespace-nowrap px-4 py-2 gap-2 no-scrollbar scroll-smooth">
+            <button onclick="scrollToSection('sec-vocab')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Từ vựng (1-11)</button>
+            <button onclick="scrollToSection('sec-communication')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Giao tiếp (12-13)</button>
+            <button onclick="scrollToSection('sec-notices')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Biển báo (14-15)</button>
+            <button onclick="scrollToSection('sec-env')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Đọc hiểu Môi trường (16-19)</button>
+            <button onclick="scrollToSection('sec-story')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Điền từ Chuyến đi (20-22)</button>
+            <button onclick="scrollToSection('sec-writing')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Viết câu & Sửa lỗi (23-25)</button>
+            <button onclick="scrollToSection('sec-paragraph')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Viết đoạn văn (26)</button>
+        </div>
+        <div class="w-full bg-slate-100 h-1">
+            <div id="mobile-progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+        </div>
+    </div>
+
+    <!-- Desktop Sidebar -->
+    <aside class="hidden lg:flex w-80 bg-white border-r border-slate-200 flex-col h-screen sticky top-0 overflow-y-auto shrink-0">
+        <div class="p-6 border-b border-slate-150">
+            <h1 class="text-base font-black text-slate-900 leading-tight">THCS&THPT Nguyễn Tất Thành</h1>
+            <p class="text-[10px] text-indigo-600 mt-2 font-bold uppercase tracking-widest">ĐỀ THI TUYỂN SINH LỚP 6</p>
+        </div>
+        <nav class="flex-1 p-4 space-y-1">
+            <button onclick="scrollToSection('sec-vocab')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Hoàn thành câu (1-11)</span>
+                <span class="text-xs text-slate-400">📝</span>
+            </button>
+            <button onclick="scrollToSection('sec-communication')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Hội thoại (12-13)</span>
+                <span class="text-xs text-slate-400">💬</span>
+            </button>
+            <button onclick="scrollToSection('sec-notices')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Đọc Biển báo (14-15)</span>
+                <span class="text-xs text-slate-400">⚠️</span>
+            </button>
+            <button onclick="scrollToSection('sec-env')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Bảo vệ Môi trường (16-19)</span>
+                <span class="text-xs text-slate-400">🌿</span>
+            </button>
+            <button onclick="scrollToSection('sec-story')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Đọc hiểu điền từ (20-22)</span>
+                <span class="text-xs text-slate-400">🎒</span>
+            </button>
+            <button onclick="scrollToSection('sec-writing')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Viết & Sửa lỗi (23-25)</span>
+                <span class="text-xs text-slate-400">✍️</span>
+            </button>
+            <button onclick="scrollToSection('sec-paragraph')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Viết đoạn văn ngắn (26)</span>
+                <span class="text-xs text-slate-400">🏞️</span>
+            </button>
+        </nav>
+        <div class="p-6 bg-slate-50 border-t border-slate-150">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Tiến trình</span>
+                <span id="progress-percent" class="text-xs font-black text-indigo-600">0%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+            </div>
+            <div id="progress-text" class="text-[11px] text-slate-500 mt-2 font-medium">Chưa làm câu nào</div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-x-hidden">
+        <div class="max-w-4xl mx-auto px-4 py-6 md:p-8 space-y-6">
+            
+            <!-- Dashboard Tracker -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Doughnut Chart -->
+                <div class="md:col-span-2 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-[10px] font-black text-slate-400 mb-3 uppercase tracking-widest">Tiến độ chi tiết</h3>
+                    </div>
+                    <div class="relative w-full h-40">
+                        <canvas id="scoreChart"></canvas>
+                    </div>
+                </div>
+                <!-- Action / Reset -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col items-center justify-center text-center">
+                    <div class="mb-1">
+                        <span id="final-score" class="text-6xl font-black text-indigo-600">0</span>
+                        <span class="text-xl text-slate-300 font-bold">/25</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-5">Số câu làm đúng</p>
+                    <button onclick="window.location.reload()" class="w-full py-3 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 active:scale-95 transition-all shadow-md shadow-indigo-150">Xáo trộn & Làm lại</button>
+                </div>
+            </div>
+
+            <!-- Header Info Box -->
+            <div class="bg-indigo-50/60 p-5 rounded-2xl border border-indigo-100 shadow-inner space-y-2">
+                <h2 class="text-sm font-black text-slate-800 flex items-center gap-2">
+                    <span>💡 Hướng dẫn làm bài</span>
+                </h2>
+                <ul class="text-slate-600 text-xs space-y-1.5 leading-relaxed">
+                    <li>• Đề thi có tổng cộng <b>26 câu hỏi</b> theo đúng khuôn mẫu chuẩn của trường Nguyễn Tất Thành.</li>
+                    <li>• Các phương án trắc nghiệm được <b>xáo trộn ngẫu nhiên</b> hoàn toàn để tránh thói quen học vẹt.</li>
+                    <li>• Ở các câu hỏi điền từ tự luận, hãy gõ từ chính xác sau đó bấm <b>Kiểm tra</b> để xem kết quả tức thì.</li>
+                </ul>
+            </div>
+
+            <!-- Quiz Container -->
+            <div id="quiz-container" class="space-y-6 md:space-y-8">
+                <!-- Dynamic cards injected here -->
+            </div>
+
+            <!-- Footer -->
+            <footer class="pt-10 pb-6 text-center text-slate-400 text-xs border-t border-slate-150">
+                © 2026 CLB EduNow - Ôn thi chất lượng cao vào 6 trường THCS&THPT Nguyễn Tất Thành
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        const rawQuestions = [
+            // Vocabulary and Grammar (1 - 11)
+            { id: 1, section: "sec-vocab", sectionName: "Hoàn thành câu (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n1. I bought two pairs of socks yesterday, and now I can't find _________.", options: ["them", "they", "their", "theirs"], correctVal: "them", rationale: "Ở đây chúng ta cần một đại từ đóng vai trò tân ngữ (object pronoun) bổ nghĩa cho hành động 'can't find' để thay thế cho danh từ số nhiều 'two pairs of socks'. 'them' là lựa chọn chính xác.", hint: "Tìm đại từ nhân xưng làm tân ngữ chỉ vật số nhiều ở cuối câu." },
+            { id: 2, section: "sec-vocab", sectionName: "Hoàn thành câu (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n2. Fish have _________ to help them breathe underwater.", options: ["gills", "tails", "beaks", "wings"], correctVal: "gills", rationale: "Cá thở dưới nước nhờ vào 'gills' (mang cá). Các bộ phận khác: 'tails' (đuôi), 'beaks' (mỏ chim), 'wings' (cánh).", hint: "Bộ phận hô hấp đặc biệt của loài cá là gì?" },
+            { id: 3, section: "sec-vocab", sectionName: "Hoàn thành câu (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n3. I usually play chess after school, but today, I _________ my grandmother.", options: ["am visiting", "visit", "visited", "will visit"], correctVal: "am visiting", rationale: "Mặc dù thường ngày làm việc khác ('usually'), nhưng hôm nay ('but today') diễn tả một kế hoạch/sự thay đổi tạm thời ngoài thói quen, nên dùng thì Hiện tại tiếp diễn: 'am visiting'.", hint: "Sử dụng thì tiếp diễn để chỉ một sự việc bất thường, tạm thời diễn ra hôm nay." },
+            { id: 4, section: "sec-vocab", sectionName: "Hoàn thành câu (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n4. Let me _________ if you need any help with your project.", options: ["know", "to know", "known", "knowing"], correctVal: "know", rationale: "Cấu trúc cầu khiến lịch sự: 'Let + tân ngữ (me) + V-infinitive (động từ nguyên mẫu không to)'. Do đó ta chọn 'know'.", hint: "Sau động từ 'Let' là một động từ nguyên thể không có 'to'." },
+            { id: 5, section: "sec-vocab", sectionName: "Hoàn thành câu (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n5. My parents are always _________ when I get good results in English tests.", options: ["excited", "angry", "bored", "grateful"], correctVal: "excited", rationale: "Bố mẹ luôn cảm thấy hào hứng, phấn khởi ('excited') mỗi khi tôi đạt kết quả tốt trong các bài kiểm tra tiếng Anh.", hint: "Cảm xúc tích cực của cha mẹ khi thấy con cái đạt điểm cao." },
+            { id: 6, section: "sec-vocab", sectionName: "Hoàn thành câu (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n6. A _________ is an electrical appliance used in a building. It cools the air inside the building in the summer.", options: ["conditioner", "refrigerator", "hairdresser", "dishwasher"], correctVal: "conditioner", rationale: "Thiết bị điện ('appliance') dùng để làm mát không khí ('cools the air') trong tòa nhà vào mùa hè là 'air conditioner' (điều hòa).", hint: "Thiết bị nào trong nhà giúp làm mát lạnh phòng vào mùa hè nóng nực?" },
+            { id: 7, section: "sec-vocab", sectionName: "Hoàn thành câu (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n7. After working all morning, we decided to _________ and have some coffee.", options: ["take a break", "take a note", "keep in touch", "give a hand"], correctVal: "take a break", rationale: "Sau khi làm việc cả buổi sáng, họ quyết định nghỉ giải lao ('take a break') và uống cà phê.", hint: "Cụm từ mang nghĩa là nghỉ ngơi thư giãn một lát." },
+            { id: 8, section: "sec-vocab", sectionName: "Hoàn thành câu (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n8. She bought _________ grapes at the store for a healthy snack.", options: ["a bunch of", "a bar of", "a school of", "a piece of"], correctVal: "a bunch of", rationale: "Lượng từ phù hợp cho nho là 'a bunch of grapes' (một chùm nho). Các từ khác: 'a bar of' (thỏi/thanh sô-cô-la), 'a school of' (một đàn cá), 'a piece of' (một mẩu/miếng).", hint: "Nho thường mọc thành từng chùm, ta dùng từ phân loại nào?" },
+            { id: 9, section: "sec-vocab", sectionName: "Hoàn thành câu (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n9. Before you leave the room, please _________ the lights to save energy.", options: ["turn off", "look after", "put on", "take off"], correctVal: "turn off", rationale: "Hành động 'tắt đèn' để tiết kiệm năng lượng là 'turn off'. Các từ khác: 'look after' (chăm sóc), 'put on' (mặc vào), 'take off' (cởi ra/cất cánh).", hint: "Để tiết kiệm năng lượng điện khi ra khỏi phòng, chúng ta cần làm gì với bóng đèn?" },
+            { id: 10, section: "sec-vocab", sectionName: "Hoàn thành câu (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n10. Tom is joining a climbing club _________ he is interested in climbing.", options: ["because", "although", "so", "and"], correctVal: "because", rationale: "Chúng ta cần liên từ chỉ nguyên nhân kết nối hai vế: Tom tham gia câu lạc bộ leo núi 'bởi vì' cậu ấy yêu thích leo núi ('because').", hint: "Liên từ thể hiện lý do, giải thích cho hành động ở mệnh đề trước." },
+            { id: 11, section: "sec-vocab", sectionName: "Hoàn thành câu (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n11. The children really enjoy going to the _________ as they can watch their idols' performances.", options: ["concerts", "puppet shows", "exhibitions", "meetings"], correctVal: "concerts", rationale: "Trẻ em thích đến xem các buổi biểu diễn âm nhạc ('concerts - hòa nhạc') nơi thần tượng của chúng hát và nhảy.", hint: "Nơi biểu diễn các bài hát của những ca sĩ thần tượng nổi tiếng." },
+            
+            // Communication (12 - 13)
+            { id: 12, section: "sec-communication", sectionName: "Giao tiếp & Tình huống (Communication)", type: "choice", question: "Circle the correct letter A, B, C, or D to complete the conversation:\n\nAnn: There's a new pupil in our class. Her name's Lily.\nTom: What's she like?\nAnn: _________", options: ["She's friendly", "She loves flowers.", "She's tall.", "She likes playing basketball."], correctVal: "She's friendly", rationale: "Câu hỏi 'What's she like?' dùng để hỏi về tính cách, phẩm chất của một người. Câu trả lời 'She's friendly' (Cô ấy thân thiện) là chuẩn nhất. (Hỏi ngoại hình sẽ là 'What does she look like?').", hint: "Câu hỏi hỏi về đặc điểm tính cách bên trong của con người." },
+            { id: 13, section: "sec-communication", sectionName: "Giao tiếp & Tình huống (Communication)", type: "choice", question: "Circle the correct letter A, B, C, or D to complete the conversation:\n\nLee: \"Do you want me to put up the tent?\"\nMike: \"_________\"", options: ["That would be great!", "Sure. I can do that.", "Me too.", "Really? That sounds interesting."], correctVal: "That would be great!", rationale: "Khi Lee đề nghị giúp dựng lều ('Do you want me to...'), Mike đồng ý một cách lịch sự và cảm kích bằng câu: 'That would be great!' (Thế thì tốt quá!).", hint: "Đáp lại lời đề xuất muốn giúp đỡ của bạn một cách tích cực." },
+            
+            // Notices (14 - 15)
+            { 
+                id: 14, section: "sec-notices", sectionName: "Đọc hiểu biển báo & Thông báo (Notices)", type: "passage_choice",
+                passage: `<div class="p-4 bg-amber-50 border-2 border-dashed border-amber-300 rounded-xl text-center max-w-sm mx-auto shadow-inner font-mono text-xs text-slate-800">
+                    <p class="font-bold text-amber-700 text-sm mb-2">📢 NOTICE</p>
+                    <p class="italic mb-2">"Please don't eat ice creams here. They aren't good for our books! Please finish them outside before you come in. Thanks."</p>
+                </div>`,
+                question: "Question 14. Where might you see this sign?",
+                options: ["In a library", "In an ice cream shop", "In a supermarket", "In a restaurant"],
+                correctVal: "In a library",
+                rationale: "Biển báo yêu cầu không ăn kem vì sẽ ảnh hưởng không tốt đến sách vở ('not good for our books'), vậy địa điểm hợp lý nhất phải là thư viện ('library').",
+                hint: "Nơi nào tập trung rất nhiều sách vở cần được giữ gìn sạch sẽ?"
+            },
+            { 
+                id: 15, section: "sec-notices", sectionName: "Đọc hiểu biển báo & Thông báo (Notices)", type: "passage_choice",
+                passage: `<div class="p-4 bg-indigo-50 border border-indigo-200 rounded-xl text-center max-w-sm mx-auto shadow-inner font-mono text-xs text-slate-800">
+                    <p class="font-bold text-indigo-700 text-sm mb-2">🚌 TOMORROW'S TRIP</p>
+                    <p class="text-left mb-1">• The coach leaves school at 8:50.</p>
+                    <p class="text-left mb-1">• Please arrive no later than 8:40.</p>
+                    <p class="text-left">• The school gates will open at about 8:30.</p>
+                </div>`,
+                question: "Question 15. Which statement is NOT true according to the notice?",
+                options: ["The school gates will open exactly at 8:30.", "The coach will depart from school at 8:50.", "Students should arrive by 8:40 at the latest.", "The school is organizing a trip tomorrow."],
+                correctVal: "The school gates will open exactly at 8:30.",
+                rationale: "Trong thông báo ghi 'The school gates will open at about 8:30' (khoảng 8:30) chứ không phải mở 'exactly' (chính xác) lúc 8:30. Do đó đáp án này không đúng.",
+                hint: "Đối chiếu từ khóa 'exactly' (chính xác) với từ 'about' (khoảng tầm) trong thông báo."
+            },
+
+            // Reading - Environment (16 - 19)
+            {
+                id: 16, section: "sec-env", sectionName: "Đọc hiểu - Bảo vệ Môi trường (Environment)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Protecting Our Environment</b><br>
+                    There are many ways we can help protect the environment. First, we should try to recycle things. This means using old things to make something new. We can recycle paper, glass, and plastic. By doing this, we can save resources and reduce waste. Secondly, saving energy is essential. We can switch off lights when we leave a room and unplug chargers when they are not in use. This helps to reduce the amount of electricity we use. Additionally, we should try to close the tap while brushing our teeth; it can make a big difference. Finally, planting trees is a great way to help the environment. Trees clean the air and provide homes for animals. Everyone can do something small, and together we can make a big change to help our planet.
+                </div>`,
+                question: "Question 16. What is the main idea of the passage?",
+                options: ["We can help to protect the environment in many ways.", "Recycling is a way to protect the planet.", "Saving energy is the most important action to save the environment.", "Planting trees makes a big difference to our planet."],
+                correctVal: "We can help to protect the environment in many ways.",
+                rationale: "Câu mở đầu của bài đọc nêu rõ chủ đề chính: 'There are many ways we can help protect the environment.' (Có rất nhiều cách để bảo vệ môi trường), các đoạn sau bổ sung ví dụ cho câu chủ đề này.",
+                hint: "Hãy chú ý đến câu mở đầu (topic sentence) của đoạn văn."
+            },
+            {
+                id: 17, section: "sec-env", sectionName: "Đọc hiểu - Bảo vệ Môi trường (Environment)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Protecting Our Environment</b><br>
+                    There are many ways we can help protect the environment. First, we should try to recycle things. This means using old things to make something new. We can recycle paper, glass, and plastic. By doing this, we can save resources and reduce waste. Secondly, saving energy is essential. We can switch off lights when we leave a room and unplug chargers when they are not in use. This helps to reduce the amount of electricity we use. Additionally, we should try to close the tap while brushing our teeth; it can make a big difference. Finally, planting trees is a great way to help the environment. Trees clean the air and provide homes for animals. Everyone can do something small, and together we can make a big change to help our planet.
+                </div>`,
+                question: "Question 17. Which of the following is described as a way to reduce waste?",
+                options: ["Recycling materials", "Driving less", "Taking shorter showers", "Unplugging chargers"],
+                correctVal: "Recycling materials",
+                rationale: "Bài viết chỉ ra: 'First, we should try to recycle things... By doing this, we can save resources and reduce waste.' Tái chế vật liệu giúp giảm thiểu rác thải.",
+                hint: "Tìm đoạn thông tin có chứa từ khóa 'reduce waste' trong văn bản."
+            },
+            {
+                id: 18, section: "sec-env", sectionName: "Đọc hiểu - Bảo vệ Môi trường (Environment)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Protecting Our Environment</b><br>
+                    There are many ways we can help protect the environment. First, we should try to recycle things. This means using old things to make something new. We can recycle paper, glass, and plastic. By doing this, we can save resources and reduce waste. Secondly, saving energy is essential. We can switch off lights when we leave a room and unplug chargers when they are not in use. This helps to reduce the amount of electricity we use. Additionally, we should try to close the tap while brushing our teeth; it can make a big difference. Finally, planting trees is a great way to help the environment. Trees clean the air and provide homes for animals. Everyone can do something small, and together we can make a big change to help our planet.
+                </div>`,
+                question: "Question 18. Which of the following is NOT a benefit of planting trees?",
+                options: ["Reducing energy use", "Providing homes for animals", "Cleaning the air", "Protecting the environment"],
+                correctVal: "Reducing energy use",
+                rationale: "Trong văn bản đề cập lợi ích của cây: 'Trees clean the air and provide homes for animals' và 'planting trees is a great way to help the environment.' Việc 'giảm lượng sử dụng năng lượng' không liên quan trực tiếp đến việc trồng cây trong ngữ cảnh bài này.",
+                hint: "Dùng phương pháp loại trừ những lợi ích đã được kể trực tiếp ở dòng cuối."
+            },
+            {
+                id: 19, section: "sec-env", sectionName: "Đọc hiểu - Bảo vệ Môi trường (Environment)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Protecting Our Environment</b><br>
+                    There are many ways we can help protect the environment. First, we should try to recycle things. This means using old things to make something new. We can recycle paper, glass, and plastic. By doing this, we can save resources and reduce waste. Secondly, saving energy is essential. We can switch off lights when we leave a room and unplug chargers when they are not in use. This helps to reduce the amount of electricity we use. Additionally, we should try to close the tap while brushing our teeth; it can make a big difference. Finally, planting trees is a great way to help the environment. Trees clean the air and provide homes for animals. Everyone can do something small, and together we can make a big change to help our planet.
+                </div>`,
+                question: "Question 19. The word \"essential\" in the passage is CLOSEST in meaning to _________.",
+                options: ["important", "thrilling", "common", "exciting"],
+                correctVal: "important",
+                rationale: "Từ 'essential' mang ý nghĩa vô cùng thiết yếu, cực kỳ quan trọng, tương đồng với 'important'. Các từ còn lại: 'thrilling' (ly kỳ), 'common' (bình thường/phổ biến).",
+                hint: "Khi một điều gì đó là 'essential' thì ta bắt buộc phải lưu tâm làm nó."
+            },
+
+            // Reading Story (20 - 22) - Fill-in-the-blank style
+            {
+                id: 20, section: "sec-story", sectionName: "Đọc hiểu & Điền từ (Short Story)", type: "text",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>A Family Trip to London</b><br>
+                    I'm Mark and my little sister's name is Katy. Last Saturday, we went to London with our parents. Mum drove us there in the car. Our cousin Michael came to London too, but he went by train, so we met him at King's Cross Station. He had a heavy rucksack with him. "Put your rucksack in our car, Michael." Dad said, "We're going to walk now." "No, thanks. I might need it," Michael said.<br><br>
+                    We went to the dinosaur museum first. I asked Dad lots of questions, but he didn't know the answers. Michael took a book about dinosaurs out of his rucksack. "Here you are!" he said to Dad. "Thanks, Michael," said Dad. When we left the museum, it was raining. "It's OK," said Michael. "I've got an umbrella in my rucksack."<br><br>
+                    In the afternoon, we wanted to go to the cinema, but we couldn't find it. Michael took a map of London out of his rucksack, and we soon found the street where the cinema was.
+                </div>`,
+                question: "Question 20. Fill in the blank with ONE word from the text:\n\nLast Saturday, Mark, his sister Katy, and their parents went to London by _________.",
+                correctAnswers: ["car"],
+                rationale: "Dựa vào đoạn: 'Mum drove us there in the car' (Mẹ lái xe chở chúng tôi đến đó bằng ô tô), do đó phương tiện di chuyển là 'car'.",
+                hint: "Hãy tìm xem mẹ (Mum) đã chở cả nhà bằng phương tiện gì ('drove us there in the...')."
+            },
+            {
+                id: 21, section: "sec-story", sectionName: "Đọc hiểu & Điền từ (Short Story)", type: "text",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>A Family Trip to London</b><br>
+                    I'm Mark and my little sister's name is Katy. Last Saturday, we went to London with our parents. Mum drove us there in the car. Our cousin Michael came to London too, but he went by train, so we met him at King's Cross Station. He had a heavy rucksack with him. "Put your rucksack in our car, Michael." Dad said, "We're going to walk now." "No, thanks. I might need it," Michael said.<br><br>
+                    We went to the dinosaur museum first. I asked Dad lots of questions, but he didn't know the answers. Michael took a book about dinosaurs out of his rucksack. "Here you are!" he said to Dad. "Thanks, Michael," said Dad. When we left the museum, it was raining. "It's OK," said Michael. "I've got an umbrella in my rucksack."<br><br>
+                    In the afternoon, we wanted to go to the cinema, but we couldn't find it. Michael took a map of London out of his rucksack, and we soon found the street where the cinema was.
+                </div>`,
+                question: "Question 21. Fill in the blank with ONE word from the text:\n\nAt the dinosaur museum, Michael gave Mark's Dad a _________ and he could find the information he needed about the animals.",
+                correctAnswers: ["book"],
+                rationale: "Trích xuất thông tin: 'Michael took a book about dinosaurs out of his rucksack. 'Here you are!' he said to Dad.' Michael đã đưa cho bố của Mark một cuốn sách ('book').",
+                hint: "Tìm đồ vật Michael lấy từ balo ra đưa cho bố ở bảo tàng khủng long."
+            },
+            {
+                id: 22, section: "sec-story", sectionName: "Đọc hiểu & Điền từ (Short Story)", type: "text",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>A Family Trip to London</b><br>
+                    I'm Mark and my little sister's name is Katy. Last Saturday, we went to London with our parents. Mum drove us there in the car. Our cousin Michael came to London too, but he went by train, so we met him at King's Cross Station. He had a heavy rucksack with him. "Put your rucksack in our car, Michael." Dad said, "We're going to walk now." "No, thanks. I might need it," Michael said.<br><br>
+                    We went to the dinosaur museum first. I asked Dad lots of questions, but he didn't know the answers. Michael took a book about dinosaurs out of his rucksack. "Here you are!" he said to Dad. "Thanks, Michael," said Dad. When we left the museum, it was raining. "It's OK," said Michael. "I've got an umbrella in my rucksack."<br><br>
+                    In the afternoon, we wanted to go to the cinema, but we couldn't find it. Michael took a map of London out of his rucksack, and we soon found the street where the cinema was.
+                </div>`,
+                question: "Question 22. Fill in the blank with ONE word from the text:\n\nLater, when they couldn't find the cinema, Michael used a _________ from his rucksack to locate it.",
+                correctAnswers: ["map"],
+                rationale: "Trích xuất: 'Michael took a map of London out of his rucksack, and we soon found the street...' Như vậy Michael đã dùng một bản đồ ('map').",
+                hint: "Michael dùng công cụ gì để tìm đường tới rạp chiếu phim?"
+            },
+
+            // Writing and Correction (23 - 25)
+            {
+                id: 23, section: "sec-writing", sectionName: "Viết lại câu & Tìm lỗi sai (Writing & Spelling)", type: "text",
+                question: "Complete the second sentence so that it has a similar meaning to the first one:\n\nWhy don't we go to the movies tonight?\n\n-> How about _________________________________?",
+                correctAnswers: ["going to the movies tonight", "going to the movies tonight?"],
+                rationale: "Cấu trúc rủ rê gợi ý: 'Why don't we + V-inf...?' tương đương với 'How about + V-ing...?'. Động từ chính 'go' đổi thành 'going'.",
+                hint: "Sau 'How about' là dạng V-ing của hành động 'go'."
+            },
+            {
+                id: 24, section: "sec-writing", sectionName: "Viết lại câu & Tìm lỗi sai (Writing & Spelling)", type: "text",
+                question: "Complete the second sentence so that it has a similar meaning to the first one:\n\nThere is a canteen in my school.\n\n-> My school _________________________________.",
+                correctAnswers: ["has a canteen", "has a canteen."],
+                rationale: "Cấu trúc chuyển đổi giữa sự tồn tại và sự sở hữu: 'There is/are + danh từ + in + nơi chốn' tương đương với 'Nơi chốn + has/have + danh từ'.",
+                hint: "Trường học của tôi 'sở hữu/có' một căng tin."
+            },
+            {
+                id: 25, section: "sec-writing", sectionName: "Viết lại câu & Tìm lỗi sai (Writing & Spelling)", type: "text_correction",
+                question: "The following sentence has ONE word that is not correct. Find the wrong word and write the CORRECT word into the box (The correct word has the same pronunciation as the wrong one):\n\n\"When they were young, they wanted to sale around the world as part of their adventure.\"",
+                correctAnswers: ["sail"],
+                wrongWord: "sale",
+                rationale: "Từ 'sale' (sự bán hàng) dùng sai ngữ pháp ở đây vì sau 'wanted to' cần một động từ nguyên mẫu. Động từ đồng âm là 'sail' (chèo thuyền/bơi thuyền buồm) mới đúng ngữ nghĩa.",
+                hint: "Tìm từ chỉ hành động chèo thuyền du ngoạn quanh thế giới, phát âm giống hệt từ 'sale'."
+            }
+        ];
+
+        let quizData = [];
+        let userAnswers = [];
+        let scoreChartInstance = null;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function prepareQuiz() {
+            quizData = rawQuestions.map(q => {
+                if (q.type === 'choice' || q.type === 'passage_choice') {
+                    const shuffledOptions = shuffleArray([...q.options]);
+                    const newCorrectIndex = shuffledOptions.indexOf(q.correctVal);
+                    return { ...q, options: shuffledOptions, correct: newCorrectIndex };
+                }
+                return { ...q }; // Keep text questions as is
+            });
+            userAnswers = new Array(quizData.length).fill(null);
+        }
+
+        function initQuiz() {
+            prepareQuiz();
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = "";
+            let currentSection = "";
+
+            quizData.forEach((q, index) => {
+                if (q.section !== currentSection) {
+                    currentSection = q.section;
+                    const sectionHeader = document.createElement('div');
+                    sectionHeader.id = q.section;
+                    sectionHeader.className = "pt-6 lg:pt-8 mb-4 border-b-2 border-indigo-100";
+                    sectionHeader.innerHTML = `<h2 class="text-sm md:text-base font-extrabold text-slate-800 pb-2 flex items-center gap-2">
+                        <span class="w-2.5 h-5 bg-indigo-600 rounded-full inline-block"></span>${q.sectionName}
+                    </h2>`;
+                    container.appendChild(sectionHeader);
+                }
+
+                const card = document.createElement('div');
+                card.className = "question-card bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-all";
+                
+                let passageHtml = "";
+                if (q.passage) {
+                    passageHtml = `
+                        <div class="mb-4">
+                            ${q.passage}
+                        </div>
+                    `;
+                }
+
+                let interactionHtml = "";
+                if (q.type === 'choice' || q.type === 'passage_choice') {
+                    interactionHtml = `
+                        <div id="options-${index}" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                            ${q.options.map((opt, i) => `
+                                <button onclick="selectOption(${index}, ${i})" class="option-btn text-left p-3.5 rounded-xl border-2 border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/40 transition-all flex items-center group active:scale-[0.99] w-full">
+                                    <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-xs mr-3 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors shrink-0">${String.fromCharCode(65 + i)}</span>
+                                    <span class="text-slate-700 text-xs md:text-sm font-medium flex-1">${opt}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    `;
+                } else if (q.type === 'text' || q.type === 'text_correction') {
+                    interactionHtml = `
+                        <div class="space-y-3">
+                            <div class="flex gap-2 max-w-md">
+                                <input type="text" id="input-${index}" placeholder="Nhập đáp án tại đây..." class="flex-1 px-4 py-3 border-2 border-slate-200 rounded-xl text-xs md:text-sm focus:border-indigo-500 focus:outline-none transition-all">
+                                <button onclick="checkTextAnswer(${index})" id="btn-check-${index}" class="px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs md:text-sm rounded-xl active:scale-95 transition-all">Kiểm tra</button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="bg-indigo-600 text-white text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full">Câu ${q.id}</span>
+                        <button onclick="showHint(${index})" class="flex items-center gap-1 text-[11px] text-amber-600 font-bold hover:text-amber-700 active:scale-95 transition-all">
+                            <span>💡 Mẹo giải nhanh</span>
+                        </button>
+                    </div>
+                    ${passageHtml}
+                    <div class="text-xs md:text-sm font-semibold mb-5 text-slate-850 leading-relaxed whitespace-pre-line">${q.question}</div>
+                    
+                    ${interactionHtml}
+                    
+                    <div id="hint-${index}" class="hidden mt-4 p-4 bg-amber-50 text-amber-950 text-xs rounded-xl border border-amber-100 italic leading-relaxed">
+                        <strong>Gợi ý:</strong> ${q.hint}
+                    </div>
+                    
+                    <div id="feedback-${index}" class="hidden mt-4 p-4 rounded-xl border transition-all">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span id="icon-${index}" class="text-base"></span>
+                            <p id="result-text-${index}" class="font-bold text-xs md:text-sm"></p>
+                        </div>
+                        <div class="h-px bg-current opacity-10 mb-2"></div>
+                        <p class="text-xs md:text-sm leading-relaxed font-medium opacity-95">${q.rationale}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Injection for Question 26 (Paragraph writing helper)
+            injectParagraphSection();
+
+            initCharts();
+        }
+
+        function selectOption(qIdx, oIdx) {
+            if (userAnswers[qIdx] !== null) return;
+
+            userAnswers[qIdx] = oIdx;
+            const correct = quizData[qIdx].correct;
+            const feedback = document.getElementById(`feedback-${qIdx}`);
+            const resultText = document.getElementById(`result-text-${qIdx}`);
+            const icon = document.getElementById(`icon-${qIdx}`);
+            const optionsDiv = document.getElementById(`options-${qIdx}`);
+            const buttons = optionsDiv.getElementsByTagName('button');
+
+            feedback.classList.remove('hidden');
+            
+            if (oIdx === correct) {
+                feedback.className = "mt-4 p-4 rounded-xl bg-emerald-50 text-emerald-800 border-emerald-200 border text-xs md:text-sm";
+                resultText.innerText = "Chính xác!";
+                icon.innerText = "✅";
+                buttons[oIdx].className = "option-btn text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 flex items-center shadow-sm w-full";
+                buttons[oIdx].querySelector('span').className = "w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+            } else {
+                feedback.className = "mt-4 p-4 rounded-xl bg-rose-50 text-rose-800 border-rose-200 border text-xs md:text-sm";
+                resultText.innerText = "Chưa chính xác";
+                icon.innerText = "❌";
+                buttons[oIdx].className = "option-btn text-left p-3.5 rounded-xl border-2 border-rose-500 bg-rose-50 flex items-center shadow-sm w-full";
+                buttons[oIdx].querySelector('span').className = "w-7 h-7 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+                
+                // Highlight correct
+                buttons[correct].className = "option-btn text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50/50 flex items-center w-full transition-all";
+                buttons[correct].querySelector('span').className = "w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+            }
+
+            for (let b = 0; b < buttons.length; b++) {
+                if (b !== oIdx && b !== correct) {
+                    buttons[b].classList.add('opacity-40');
+                }
+            }
+
+            updateProgress();
+            updateCharts();
+        }
+
+        function checkTextAnswer(qIdx) {
+            if (userAnswers[qIdx] !== null) return;
+
+            const inputEl = document.getElementById(`input-${qIdx}`);
+            const rawVal = inputEl.value;
+            const cleanVal = rawVal.trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"");
+            
+            const q = quizData[qIdx];
+            let isCorrect = false;
+
+            for (let i = 0; i < q.correctAnswers.length; i++) {
+                const target = q.correctAnswers[i].toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"");
+                if (cleanVal === target) {
+                    isCorrect = true;
+                    break;
+                }
+            }
+
+            userAnswers[qIdx] = isCorrect ? 1 : 0;
+
+            const feedback = document.getElementById(`feedback-${qIdx}`);
+            const resultText = document.getElementById(`result-text-${qIdx}`);
+            const icon = document.getElementById(`icon-${qIdx}`);
+            const checkBtn = document.getElementById(`btn-check-${qIdx}`);
+
+            feedback.classList.remove('hidden');
+            inputEl.disabled = true;
+            checkBtn.disabled = true;
+            checkBtn.className = "px-5 py-3 bg-slate-300 text-slate-500 font-bold text-xs md:text-sm rounded-xl cursor-not-allowed";
+
+            if (isCorrect) {
+                feedback.className = "mt-4 p-4 rounded-xl bg-emerald-50 text-emerald-800 border-emerald-200 border text-xs md:text-sm";
+                resultText.innerText = "Chính xác!";
+                icon.innerText = "✅";
+                inputEl.className = "flex-1 px-4 py-3 border-2 border-emerald-500 bg-emerald-50 rounded-xl text-xs md:text-sm text-emerald-900";
+            } else {
+                feedback.className = "mt-4 p-4 rounded-xl bg-rose-50 text-rose-800 border-rose-200 border text-xs md:text-sm";
+                resultText.innerText = `Chưa chính xác (Đáp án đúng mẫu: ${q.correctAnswers[0]})`;
+                icon.innerText = "❌";
+                inputEl.className = "flex-1 px-4 py-3 border-2 border-rose-500 bg-rose-50 rounded-xl text-xs md:text-sm text-rose-900";
+            }
+
+            updateProgress();
+            updateCharts();
+        }
+
+        function injectParagraphSection() {
+            const container = document.getElementById('quiz-container');
+            
+            const header = document.createElement('div');
+            header.id = "sec-paragraph";
+            header.className = "pt-6 lg:pt-8 mb-4 border-b-2 border-indigo-100";
+            header.innerHTML = `<h2 class="text-sm md:text-base font-extrabold text-slate-800 pb-2 flex items-center gap-2">
+                <span class="w-2.5 h-5 bg-indigo-600 rounded-full inline-block"></span>Tự luận viết đoạn văn (Writing Paragraph)
+            </h2>`;
+            container.appendChild(header);
+
+            const card = document.createElement('div');
+            card.className = "question-card bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200/80";
+            card.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <span class="bg-indigo-600 text-white text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full">Câu 26</span>
+                    <span class="text-xs text-indigo-600 font-bold">50 - 70 từ</span>
+                </div>
+                <div class="text-xs md:text-sm font-semibold mb-5 text-slate-850 leading-relaxed">
+                    Write a paragraph of 50-70 words to describe a place you would like to visit. You may use the following guiding questions:<br><br>
+                    • What is that place?<br>
+                    • Why do you want to go there?<br>
+                    • What would you like to do there?
+                </div>
+                
+                <div class="space-y-2">
+                    <textarea id="essay-input" oninput="countWords()" rows="6" placeholder="Gõ đoạn văn bằng tiếng Anh của bạn tại đây..." class="w-full p-4 border-2 border-slate-200 rounded-2xl text-xs md:text-sm focus:border-indigo-500 focus:outline-none transition-all"></textarea>
+                    <div class="flex justify-between items-center text-xs text-slate-400 font-semibold px-1">
+                        <span id="essay-word-count">0 từ (Yêu cầu: 50 - 70 từ)</span>
+                        <button onclick="revealSampleEssay()" class="text-indigo-600 hover:text-indigo-700">Xem bài mẫu gợi ý</button>
+                    </div>
+                </div>
+
+                <div id="essay-sample-box" class="hidden mt-5 p-4 bg-indigo-50/50 border border-indigo-150 rounded-2xl text-xs md:text-sm text-slate-700 leading-relaxed space-y-3">
+                    <p class="font-bold text-indigo-800">🌟 Bài viết gợi ý tham khảo (Đà Lạt):</p>
+                    <p class="italic font-medium">"I would like to visit Da Lat. It is a beautiful city with cool weather and a lot of flowers. I want to go there to see the flower gardens and eat fresh strawberries. I also want to take pictures of the mountains and ride a bicycle around the lake. I hope I can visit Da Lat with my family one day."</p>
+                    <div class="h-px bg-indigo-200 my-2"></div>
+                    <p class="text-[11px] text-slate-500 font-medium"><b>Mẹo ghi điểm:</b> Luôn trả lời đủ 3 câu hỏi dẫn đường, sử dụng các tính từ miêu tả sinh động (cool, beautiful, fresh) và chú ý độ dài đoạn văn đúng tiêu chuẩn từ 50-70 từ.</p>
+                </div>
+            `;
+            container.appendChild(card);
+        }
+
+        function countWords() {
+            const txt = document.getElementById('essay-input').value.trim();
+            const words = txt === "" ? 0 : txt.split(/\s+/).length;
+            const countLabel = document.getElementById('essay-word-count');
+            
+            if (words >= 50 && words <= 70) {
+                countLabel.innerHTML = `<span class="text-emerald-600 font-bold">✨ ${words} từ (Đạt yêu cầu)</span>`;
+            } else {
+                countLabel.innerHTML = `<span class="text-amber-500">${words} từ (Yêu cầu: 50 - 70 từ)</span>`;
+            }
+        }
+
+        function revealSampleEssay() {
+            document.getElementById('essay-sample-box').classList.toggle('hidden');
+        }
+
+        function showHint(index) {
+            const hintBox = document.getElementById(`hint-${index}`);
+            hintBox.classList.toggle('hidden');
+        }
+
+        function updateProgress() {
+            const total = quizData.length;
+            const answered = userAnswers.filter(a => a !== null).length;
+            const progress = Math.round((answered / total) * 100);
+            
+            // Desktop
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('progress-percent').innerText = `${progress}%`;
+            document.getElementById('progress-text').innerText = answered === 0 ? "Chưa làm câu nào" : `Đã hoàn thành ${answered}/${total} câu`;
+            
+            // Mobile
+            document.getElementById('mobile-progress-bar').style.width = `${progress}%`;
+
+            const score = userAnswers.reduce((acc, curr, idx) => {
+                if (curr === null) return acc;
+                if (quizData[idx].type === 'choice' || quizData[idx].type === 'passage_choice') {
+                    return curr === quizData[idx].correct ? acc + 1 : acc;
+                } else {
+                    return curr === 1 ? acc + 1 : acc;
+                }
+            }, 0);
+            
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('mobile-score-badge').innerText = `Đúng: ${score}/${total}`;
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                const offset = window.innerWidth < 1024 ? 120 : 20;
+                const elementPosition = el.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function initCharts() {
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+            if (scoreChartInstance) {
+                scoreChartInstance.destroy();
+            }
+            scoreChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Đúng', 'Sai', 'Chưa làm'],
+                    datasets: [{
+                        data: [0, 0, 25],
+                        backgroundColor: ['#10B981', '#F43F5E', '#E2E8F0'],
+                        borderWidth: 0,
+                        hoverOffset: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '72%',
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                boxWidth: 10,
+                                usePointStyle: true,
+                                font: { size: 11, weight: 'bold' }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCharts() {
+            if (!scoreChartInstance) return;
+            const total = quizData.length;
+            
+            const correct = userAnswers.reduce((acc, curr, idx) => {
+                if (curr === null) return acc;
+                if (quizData[idx].type === 'choice' || quizData[idx].type === 'passage_choice') {
+                    return curr === quizData[idx].correct ? acc + 1 : acc;
+                } else {
+                    return curr === 1 ? acc + 1 : acc;
+                }
+            }, 0);
+
+            const answered = userAnswers.filter(a => a !== null).length;
+            const incorrect = answered - correct;
+            const remaining = total - answered;
+
+            scoreChartInstance.data.datasets[0].data = [correct, incorrect, remaining];
+            scoreChartInstance.update();
+        }
+
+        window.onload = function() {
+            initQuiz();
+        };
+    </script>
+</body>
+</html>
+```
