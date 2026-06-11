@@ -385,7 +385,7 @@ if count == 0 & os.path.exists(COUNTER_TIME_FILE):
 count += 1
 save_today_count(count, today)
 
-WAIT_SECONDS = 60
+WAIT_SECONDS = 30
 if count > 1:
     # Gọi show_big_message để lấy phút hoãn từ entry_time, rồi chuyển thành giây
     msg = "HÔM NAY ĐÃ HẾT GIỜ CHƠI RỒI!\nHÃY TẮT MÁY VÀ ĐỨNG DẬY VẬN ĐỘNG ĐI THÔI"
