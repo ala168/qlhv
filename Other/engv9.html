@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Luyện Thi Tiếng Anh Vào 6 - Nguyễn Gia Thiều Đề 4</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+            color: #1E293B;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .question-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+        }
+        .option-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .passage-box {
+            background-color: #FDFDFD;
+            border-left: 4px solid #0D9488;
+        }
+        @media (max-width: 768px) {
+            .option-btn {
+                padding: 0.9rem 0.75rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- Mobile Sticky Navigation -->
+    <div class="lg:hidden top-0 sticky z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm w-full">
+        <div class="px-4 py-3 flex items-center justify-between border-b border-slate-100">
+            <div>
+                <h1 class="text-sm font-black text-slate-900 leading-tight">THCS Nguyễn Gia Thiều</h1>
+                <p class="text-[10px] text-teal-600 font-bold uppercase tracking-wider">Đề luyện thi thử vào 6 - Đề số 04</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span id="mobile-score-badge" class="bg-teal-50 text-teal-700 text-xs font-black px-2.5 py-1 rounded-full border border-teal-100">Đúng: 0/30</span>
+            </div>
+        </div>
+        <!-- Scrollable Mobile Menu -->
+        <div class="flex overflow-x-auto whitespace-nowrap px-4 py-2 gap-2 no-scrollbar scroll-smooth">
+            <button onclick="scrollToSection('sec-phonetics')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-teal-50 hover:text-teal-700 active:scale-95 transition-all">Phát âm (1-4)</button>
+            <button onclick="scrollToSection('sec-vocab')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-teal-50 hover:text-teal-700 active:scale-95 transition-all">Ngữ pháp & Từ vựng (5-17)</button>
+            <button onclick="scrollToSection('sec-cloze')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-teal-50 hover:text-teal-700 active:scale-95 transition-all">Điền từ Ô nhiễm (18-22)</button>
+            <button onclick="scrollToSection('sec-reading')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-teal-50 hover:text-teal-700 active:scale-95 transition-all">Hệ Mặt Trời (23-27)</button>
+            <button onclick="scrollToSection('sec-writing')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-teal-50 hover:text-teal-700 active:scale-95 transition-all">Viết lại câu (28-30)</button>
+        </div>
+        <div class="w-full bg-slate-100 h-1">
+            <div id="mobile-progress-bar" class="bg-teal-600 h-full w-0 transition-all duration-300"></div>
+        </div>
+    </div>
+
+    <!-- Desktop Sidebar -->
+    <aside class="hidden lg:flex w-80 bg-white border-r border-slate-200 flex-col h-screen sticky top-0 overflow-y-auto shrink-0">
+        <div class="p-6 border-b border-slate-150">
+            <h1 class="text-base font-black text-slate-900 leading-tight">THCS Nguyễn Gia Thiều</h1>
+            <p class="text-[10px] text-teal-600 mt-2 font-bold uppercase tracking-widest">ĐỀ THI TUYỂN SINH LỚP 6 - ĐỀ 4</p>
+        </div>
+        <nav class="flex-1 p-4 space-y-1">
+            <button onclick="scrollToSection('sec-phonetics')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-teal-50 hover:text-teal-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Ngữ âm & Phát âm (1-4)</span>
+                <span class="text-xs text-slate-400">🔊</span>
+            </button>
+            <button onclick="scrollToSection('sec-vocab')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-teal-50 hover:text-teal-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Ngữ pháp & Từ vựng (5-17)</span>
+                <span class="text-xs text-slate-400">📚</span>
+            </button>
+            <button onclick="scrollToSection('sec-cloze')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-teal-50 hover:text-teal-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Đọc điền từ rác thải (18-22)</span>
+                <span class="text-xs text-slate-400">🌱</span>
+            </button>
+            <button onclick="scrollToSection('sec-reading')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-teal-50 hover:text-teal-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Đọc Hệ Mặt Trời (23-27)</span>
+                <span class="text-xs text-slate-400">🌌</span>
+            </button>
+            <button onclick="scrollToSection('sec-writing')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-teal-50 hover:text-teal-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Viết lại câu & Trật tự từ (28-30)</span>
+                <span class="text-xs text-slate-400">✍️</span>
+            </button>
+        </nav>
+        <div class="p-6 bg-slate-50 border-t border-slate-150">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Tiến trình</span>
+                <span id="progress-percent" class="text-xs font-black text-teal-600">0%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-teal-600 h-full w-0 transition-all duration-300"></div>
+            </div>
+            <div id="progress-text" class="text-[11px] text-slate-500 mt-2 font-medium">Chưa làm câu nào</div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-x-hidden">
+        <div class="max-w-4xl mx-auto px-4 py-6 md:p-8 space-y-6">
+            
+            <!-- Dashboard Tracker -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Doughnut Chart -->
+                <div class="md:col-span-2 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-[10px] font-black text-slate-400 mb-3 uppercase tracking-widest">Biểu đồ kết quả</h3>
+                    </div>
+                    <div class="relative w-full h-40">
+                        <canvas id="scoreChart"></canvas>
+                    </div>
+                </div>
+                <!-- Action / Reset -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col items-center justify-center text-center">
+                    <div class="mb-1">
+                        <span id="final-score" class="text-6xl font-black text-teal-600">0</span>
+                        <span class="text-xl text-slate-300 font-bold">/30</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-5">Số câu làm đúng</p>
+                    <button onclick="window.location.reload()" class="w-full py-3 bg-teal-600 text-white rounded-xl text-xs font-bold hover:bg-teal-700 active:scale-95 transition-all shadow-md shadow-teal-150">Xáo trộn & Làm lại</button>
+                </div>
+            </div>
+
+            <!-- Header Info Box -->
+            <div class="bg-teal-50/60 p-5 rounded-2xl border border-teal-100 shadow-inner space-y-2">
+                <h2 class="text-sm font-black text-slate-800 flex items-center gap-2">
+                    <span>💡 Hướng dẫn làm bài</span>
+                </h2>
+                <ul class="text-slate-600 text-xs space-y-1.5 leading-relaxed">
+                    <li>• Đề thi gồm <b>30 câu hỏi trắc nghiệm</b> đầy đủ theo nguyên mẫu đề số 04 CLC THCS Nguyễn Gia Thiều.</li>
+                    <li>• Các đáp án của từng câu được hệ thống <b>xáo trộn ngẫu nhiên</b> hoàn toàn để chống học vẹt.</li>
+                    <li>• Sau khi chọn đáp án, hệ thống sẽ tự động hiển thị gợi ý và giải nghĩa ngữ pháp, từ vựng chi tiết ngay bên dưới.</li>
+                </ul>
+            </div>
+
+            <!-- Quiz Container -->
+            <div id="quiz-container" class="space-y-6 md:space-y-8">
+                <!-- Dynamic cards injected here -->
+            </div>
+
+            <!-- Footer -->
+            <footer class="pt-10 pb-6 text-center text-slate-400 text-xs border-t border-slate-150">
+                © 2026 CLB EduNow - Ôn thi đánh giá năng lực chất lượng cao vào THCS Nguyễn Gia Thiều
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        const rawQuestions = [
+            // Phonetics (1 - 4)
+            { id: 1, section: "sec-phonetics", sectionName: "Phát âm - Tìm từ có phần gạch chân khác biệt (Phonetics)", type: "choice", question: "Circle the word that has the underlined part pronounced differently from that of the others:\n\n1. A. h<u>o</u>nest\nB. h<u>o</u>ur\nC. h<u>o</u>nor\nD. h<u>o</u>ney", options: ["honey", "honest", "hour", "honor"], correctVal: "honey", rationale: "Trong các từ 'honest', 'hour', 'honor', âm 'h' đầu tiên là âm câm nên phần phát âm bắt đầu bằng nguyên âm. Chỉ có 'honey' âm 'h' được phát âm rõ ràng là /h/.", hint: "Hãy chú ý tìm từ có âm 'h' được phát âm thành tiếng (không phải âm câm)." },
+            { id: 2, section: "sec-phonetics", sectionName: "Phát âm - Tìm từ có phần gạch chân khác biệt (Phonetics)", type: "choice", question: "Circle the word that has the underlined part pronounced differently from that of the others:\n\n2. A. d<u>ea</u>f\nB. h<u>ea</u>d\nC. h<u>ea</u>l\nD. br<u>ea</u>d", options: ["heal", "deaf", "head", "bread"], correctVal: "heal", rationale: "Phần gạch chân 'ea' trong từ 'heal' được phát âm là âm /iː/ (nguyên âm dài), các từ còn lại đều được phát âm là /e/ (nguyên âm ngắn).", hint: "Đọc to các từ và tìm xem từ nào có nguyên âm kéo dài hơn hẳn." },
+            { id: 3, section: "sec-phonetics", sectionName: "Phát âm - Tìm từ có phần gạch chân khác biệt (Phonetics)", type: "choice", question: "Circle the word that has the underlined part pronounced differently from that of the others:\n\n3. A. preci<u>ou</u>s\nB. spl<u>e</u>ndid\nC. o<u>ce</u>an\nD. sh<u>u</u>gar", options: ["splendid", "precious", "ocean", "shugar"], correctVal: "splendid", rationale: "Các âm được gạch chân tương ứng phát âm là âm /ʃ/ đối với 'precious', 'ocean' và 'shugar'. Riêng 'splendid' được phát âm là /s/.", hint: "Tìm từ có phát âm là âm /s/ nhẹ thông thường thay vì âm /ʃ/ nặng." },
+            { id: 4, section: "sec-phonetics", sectionName: "Phát âm - Tìm từ có phần gạch chân khác biệt (Phonetics)", type: "choice", question: "Circle the word that has the underlined part pronounced differently from that of the others:\n\n4. A. pollut<u>ed</u>\nB. protect<u>ed</u>\nC. provid<u>ed</u>\nD. preserv<u>ed</u>", options: ["preserved", "polluted", "protected", "provided"], correctVal: "preserved", rationale: "Đuôi '-ed' trong 'preserved' phát âm là /d/. Ở các từ còn lại tận cùng bằng âm /t/ hoặc /d/ nên khi thêm '-ed' được phát âm là /ɪd/.", hint: "Nhớ lại quy tắc phát âm đuôi -ed đi sau các âm vô thanh/hữu thanh đặc biệt." },
+            
+            // Vocabulary and Grammar (5 - 17)
+            { id: 5, section: "sec-vocab", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n5. We haven't seen our grandparents _________ they moved to the countryside.", options: ["since", "for", "when", "during"], correctVal: "since", rationale: "Cấu trúc hiện tại hoàn thành đi kèm mốc thời gian trong quá khứ: 'S + have/has + V3/ed + since + S + V2/ed' (kể từ khi).", hint: "Vế trước chia Hiện tại hoàn thành, vế sau chia Quá khứ đơn. Từ nối nào phù hợp?" },
+            { id: 6, section: "sec-vocab", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n6. The word \"enormous\" is closest in meaning to _________.", options: ["gigantic", "tiny", "slight", "narrow"], correctVal: "gigantic", rationale: "Từ 'enormous' có nghĩa là khổng lồ, vô cùng lớn, đồng nghĩa với 'gigantic'. Các từ khác: 'tiny' (bé nhỏ), 'slight' (nhẹ/ít), 'narrow' (hẹp).", hint: "Enormous chỉ kích thước hoặc quy mô siêu to lớn." },
+            { id: 7, section: "sec-vocab", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n7. Tom: \"Could you tell me the way to the museum?\" - Jerry: \"_________\"", options: ["Go straight and turn left. It's on your right.", "Yes, I do.", "No, I don't like museums.", "It's very expensive."], correctVal: "Go straight and turn left. It's on your right.", rationale: "Câu hỏi 'Could you tell me the way to...?' dùng để hỏi đường. Câu trả lời chỉ hướng đi 'Go straight...' (Đi thẳng và rẽ trái...) là hoàn toàn phù hợp nhất với ngữ cảnh.", hint: "Jerry cần chỉ đường đi tới viện bảo tàng cho Tom." },
+            { id: 8, section: "sec-vocab", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n8. _________ the medicine was bitter, the little boy tried to swallow it.", options: ["Although", "Despite", "Because", "Since"], correctVal: "Although", rationale: "Để kết nối hai mệnh đề có ý nghĩa tương phản (thuốc đắng nhưng vẫn cố nuốt), ta dùng 'Although + Clause'. Không dùng 'Despite' vì sau 'Despite' phải là cụm danh từ/V-ing.", hint: "Liên từ mang ý nghĩa 'mặc dù' đứng trước một mệnh đề đầy đủ có chủ ngữ và động từ." },
+            { 
+                id: 9, section: "sec-vocab", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Vocabulary & Grammar)", type: "passage_choice",
+                passage: `<div class="p-4 bg-amber-50 border-2 border-dashed border-amber-300 rounded-xl text-center max-w-sm mx-auto shadow-inner font-mono text-xs text-slate-800">
+                    <p class="font-bold text-amber-750 text-sm mb-1">🥜 ENERGY BAR (YUMMY)</p>
+                    <p class="text-left mb-1">• Total Calories: 150 kcal</p>
+                    <p class="text-left mb-1">• Sugar: 2g | Fiber: 10g | Protein: 12g</p>
+                    <p class="text-left font-bold text-red-600 mb-1">*Warning: Contains peanuts and milk.</p>
+                    <p class="text-left text-[10px] text-slate-500">*Best before: October 2026</p>
+                </div>`,
+                question: "Question 9. Look at the label of the cereal box. Which statement is TRUE?",
+                options: ["People who are allergic to peanuts should not eat this.", "This food is very high in sugar.", "You must eat this bar after October 2026.", "There is no protein in this energy bar."],
+                correctVal: "People who are allergic to peanuts should not eat this.",
+                rationale: "Nhãn ghi rõ cảnh báo: '*Warning: Contains peanuts and milk' (Cảnh báo: Có chứa đậu phộng và sữa). Do đó, những người dị ứng đậu phộng tuyệt đối không nên ăn sản phẩm này.",
+                hint: "Tìm câu tương ứng với dòng chữ cảnh báo 'Warning' màu đỏ trên nhãn sản phẩm."
+            },
+            { id: 10, section: "sec-vocab", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n10. My sister is interested _________ traditional Vietnamese folk songs.", options: ["in listening to", "in to listen", "with listening", "at listening"], correctVal: "in listening to", rationale: "Ta có cấu trúc tính từ đi kèm giới từ cố định: 'be interested in + V-ing' (thích thú/quan tâm việc gì) và động từ 'listen' luôn đi kèm giới từ 'to': 'listen to'.", hint: "Cụm từ chỉ sở thích hứng thú kết hợp với hoạt động lắng nghe âm nhạc." },
+            { id: 11, section: "sec-vocab", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n11. The opposite of the word \"ancient\" is _________.", options: ["modern", "old", "historic", "antique"], correctVal: "modern", rationale: "Từ 'ancient' có nghĩa là cổ đại, xa xưa. Từ trái nghĩa (opposite) là 'modern' (hiện đại). Các từ còn lại: 'old' (cũ/già), 'historic' (mang tính lịch sử), 'antique' (đồ cổ).", hint: "Tìm từ mang nghĩa là 'hiện đại' trái ngược với thời kỳ cổ đại xa xưa." },
+            { id: 12, section: "sec-vocab", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n12. If we _________ more trees, the air will be fresher.", options: ["plant", "will plant", "planted", "are planting"], correctVal: "plant", rationale: "Câu điều kiện loại 1 (diễn tả sự việc có thể xảy ra ở hiện tại/tương lai): 'If + S + V(hiện tại đơn), S + will + V-inf'. Vì vậy vế IF chia ở hiện tại đơn chủ ngữ 'we' là 'plant'.", hint: "Cấu trúc câu điều kiện loại 1, mệnh đề chứa IF luôn được chia ở thì nào?" },
+            { id: 13, section: "sec-vocab", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n13. There is some milk left in the fridge, _________?", options: ["isn't there", "is there", "isn't it", "is it"], correctVal: "isn't there", rationale: "Câu hỏi đuôi (Tag question) với cấu trúc bắt đầu bằng 'There is' ở thể khẳng định, phần đuôi phải ở thể phủ định là 'isn't there'.", hint: "Phần đầu là khẳng định 'There is', hãy đổi thành phủ định tương ứng ở phần hỏi đuôi." },
+            { id: 14, section: "sec-vocab", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n14. This beautiful cake _________ by my mother yesterday.", options: ["was made", "was make", "is made", "makes"], correctVal: "was made", rationale: "Câu có từ chỉ thời gian quá khứ 'yesterday' và tác nhân 'by my mother' thể hiện thể bị động thì quá khứ đơn: 'S + was/were + V3/ed'. Chủ ngữ 'This beautiful cake' số ít nên chọn 'was made'.", hint: "Nhận diện mốc thời gian quá khứ và thể bị động do có từ 'by' chỉ tác nhân thực hiện." },
+            { id: 15, section: "sec-vocab", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n15. The Great Wall of China _________ by millions of tourists every year.", options: ["is visited", "visits", "visited", "is visiting"], correctVal: "is visited", rationale: "Chủ ngữ 'The Great Wall of China' là vật, kết hợp trạng từ chỉ tần suất lặp đi lặp lại 'every year' và từ 'by', chỉ thể bị động ở hiện tại đơn: 'is visited' (được ghé thăm).", hint: "Sự việc diễn ra thường xuyên ở hiện tại ở thể bị động vì chủ ngữ là địa danh vô tri." },
+            { id: 16, section: "sec-vocab", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n16. It is important that students _________ their homework regularly.", options: ["A & B are correct", "do", "should do", "doing"], correctVal: "A & B are correct", rationale: "Cấu trúc giả định (Subjunctive): 'It is important/necessary + that + S + V-infinitive (không chia)' hoặc 'S + should + V-inf'. Do đó cả 'do' (A) và 'should do' (B) đều chính xác.", hint: "Trong cấu trúc giả định bắt đầu bằng 'It is important that...', cả động từ nguyên mẫu và cấu trúc với 'should' đều dùng được." },
+            { id: 17, section: "sec-vocab", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Vocabulary & Grammar)", type: "choice", question: "Circle the letter A, B, C, or D to complete the following sentence:\n\n17. I'm a student in this class, _________?", options: ["aren't I", "am I", "am not I", "are I"], correctVal: "aren't I", rationale: "Trường hợp đặc biệt của câu hỏi đuôi: Với chủ ngữ và động từ là 'I am...', phần hỏi đuôi phủ định bắt buộc phải chuyển thành 'aren't I'.", hint: "Đây là một ngoại lệ cực kỳ đặc biệt và hay xuất hiện trong các bài thi chuyên lớp 6 của cấu trúc 'I am'." },
+            
+            // Reading Cloze (18 - 22)
+            {
+                id: 18, section: "sec-cloze", sectionName: "Đọc hiểu điền từ - Vấn đề ô nhiễm nhựa (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Plastic Pollution</b><br>
+                    Plastic pollution is one of the most serious environmental issues today. Every year, millions of tons of plastic waste are <b>(18) _______</b> into the oceans. This is extremely <b>(19) _______</b> to marine creatures because they can mistake plastic for food. <b>(20) _______</b>, many sea turtles die from eating plastic bags. To reduce this problem, we should stop using <b>(21) _______</b> plastic products like straws and bags. Instead, we can use reusable bottles to <b>(22) _______</b> our planet's beauty for future generations.
+                </div>`,
+                question: "Question 18. Choose the correct word to fill in the blank (18):",
+                options: ["thrown", "throw", "throwing", "threw"],
+                correctVal: "thrown",
+                rationale: "Cấu trúc bị động ở hiện tại đơn: 'are + V3/ed'. Động từ 'throw' chuyển thành 'thrown' để diễn đạt 'rác thải nhựa bị ném/vứt xuống đại dương'.",
+                hint: "Nhận diện cấu trúc bị động đi liền sau trợ động từ 'are'."
+            },
+            {
+                id: 19, section: "sec-cloze", sectionName: "Đọc hiểu điền từ - Vấn đề ô nhiễm nhựa (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Plastic Pollution</b><br>
+                    Plastic pollution is one of the most serious environmental issues today. Every year, millions of tons of plastic waste are <b>(18) _______</b> into the oceans. This is extremely <b>(19) _______</b> to marine creatures because they can mistake plastic for food. <b>(20) _______</b>, many sea turtles die from eating plastic bags. To reduce this problem, we should stop using <b>(21) _______</b> plastic products like straws and bags. Instead, we can use reusable bottles to <b>(22) _______</b> our planet's beauty for future generations.
+                </div>`,
+                question: "Question 19. Choose the correct word to fill in the blank (19):",
+                options: ["harmful", "safe", "helpful", "useful"],
+                correctVal: "harmful",
+                rationale: "Rác thải nhựa có hại, nguy hiểm đối với các sinh vật biển: 'harmful to' (có hại đối với cái gì). Các từ còn lại ngược nghĩa.",
+                hint: "Sinh vật ăn phải rác nhựa sẽ gặp nguy hiểm, điều này có tính chất như thế nào đối với chúng?"
+            },
+            {
+                id: 20, section: "sec-cloze", sectionName: "Đọc hiểu điền từ - Vấn đề ô nhiễm nhựa (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Plastic Pollution</b><br>
+                    Plastic pollution is one of the most serious environmental issues today. Every year, millions of tons of plastic waste are <b>(18) _______</b> into the oceans. This is extremely <b>(19) _______</b> to marine creatures because they can mistake plastic for food. <b>(20) _______</b>, many sea turtles die from eating plastic bags. To reduce this problem, we should stop using <b>(21) _______</b> plastic products like straws and bags. Instead, we can use reusable bottles to <b>(22) _______</b> our planet's beauty for future generations.
+                </div>`,
+                question: "Question 20. Choose the correct word to fill in the blank (20):",
+                options: ["Consequently", "However", "Although", "But"],
+                correctVal: "Consequently",
+                rationale: "Trạng từ liên kết 'Consequently' (Hậu quả là / Do đó) thể hiện mối quan hệ nguyên nhân - kết quả (do ăn nhầm nhựa nên rùa biển bị chết).",
+                hint: "Tìm trạng từ chỉ kết quả của hành động sai lầm ăn nhầm nhựa ở câu trước."
+            },
+            {
+                id: 21, section: "sec-cloze", sectionName: "Đọc hiểu điền từ - Vấn đề ô nhiễm nhựa (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Plastic Pollution</b><br>
+                    Plastic pollution is one of the most serious environmental issues today. Every year, millions of tons of plastic waste are <b>(18) _______</b> into the oceans. This is extremely <b>(19) _______</b> to marine creatures because they can mistake plastic for food. <b>(20) _______</b>, many sea turtles die from eating plastic bags. To reduce this problem, we should stop using <b>(21) _______</b> plastic products like straws and bags. Instead, we can use reusable bottles to <b>(22) _______</b> our planet's beauty for future generations.
+                </div>`,
+                question: "Question 21. Choose the correct word to fill in the blank (21):",
+                options: ["single-use", "one-time", "useful", "long-term"],
+                correctVal: "single-use",
+                rationale: "Cụm danh từ ghép chuẩn để chỉ các sản phẩm nhựa dùng một lần rồi vứt đi như ống hút, túi nilon là 'single-use plastic products'.",
+                hint: "Ống hút, túi nhựa là những loại nhựa dùng một lần rồi vứt, thuật ngữ tiếng Anh gọi là gì?"
+            },
+            {
+                id: 22, section: "sec-cloze", sectionName: "Đọc hiểu điền từ - Vấn đề ô nhiễm nhựa (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Plastic Pollution</b><br>
+                    Plastic pollution is one of the most serious environmental issues today. Every year, millions of tons of plastic waste are <b>(18) _______</b> into the oceans. This is extremely <b>(19) _______</b> to marine creatures because they can mistake plastic for food. <b>(20) _______</b>, many sea turtles die from eating plastic bags. To reduce this problem, we should stop using <b>(21) _______</b> plastic products like straws and bags. Instead, we can use reusable bottles to <b>(22) _______</b> our planet's beauty for future generations.
+                </div>`,
+                question: "Question 22. Choose the correct word to fill in the blank (22):",
+                options: ["preserve", "destroy", "pollute", "ignore"],
+                correctVal: "preserve",
+                rationale: "Động từ 'preserve' nghĩa là bảo tồn, giữ gìn (vẻ đẹp của hành tinh cho thế hệ tương lai). Các từ khác mang nghĩa tiêu cực: 'destroy' (phá hủy), 'pollute' (gây ô nhiễm).",
+                hint: "Hành động tích cực để giữ lại vẻ đẹp nguyên sơ của Trái Đất cho con cháu mai sau."
+            },
+
+            // Reading - The Solar System (23 - 27)
+            {
+                id: 23, section: "sec-reading", sectionName: "Đọc hiểu văn bản - Hệ Mặt Trời (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>The Solar System</b><br>
+                    Our solar system consists of the Sun and everything that travels around it. This includes the eight planets, their moons, dwarf planets, and countless asteroids and comets. At the center is the Sun, a massive star that provides the light and heat necessary for life on Earth. Jupiter is the largest planet, so big that all the other planets could fit inside it. In contrast, Mercury is the smallest and closest to the Sun. Scientists use powerful telescopes and space probes to explore these distant worlds. Although we have learned a lot, the vastness of space means there is still much more to discover.
+                </div>`,
+                question: "Question 23. What is the main topic of the passage?",
+                options: ["An overview of our solar system.", "The history of telescopes.", "The beauty of the moon.", "Life on other planets."],
+                correctVal: "An overview of our solar system.",
+                rationale: "Toàn bộ bài viết cung cấp cái nhìn tổng quan về các thành phần trong Hệ Mặt Trời gồm Mặt Trời ở trung tâm và các hành tinh như Sao Mộc, Sao Thủy.",
+                hint: "Chủ đề chính thường được tóm tắt ngay ở câu mở đầu của đoạn văn."
+            },
+            {
+                id: 24, section: "sec-reading", sectionName: "Đọc hiểu văn bản - Hệ Mặt Trời (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>The Solar System</b><br>
+                    Our solar system consists of the Sun and everything that travels around it. This includes the eight planets, their moons, dwarf planets, and countless asteroids and comets. At the center is the Sun, a massive star that provides the light and heat necessary for life on Earth. Jupiter is the largest planet, so big that all the other planets could fit inside it. In contrast, Mercury is the smallest and closest to the Sun. Scientists use powerful telescopes and space probes to explore these distant worlds. Although we have learned a lot, the vastness of space means there is still much more to discover.
+                </div>`,
+                question: "Question 24. Why is the Sun important according to the text?",
+                options: ["It gives light and heat to support life.", "It is the largest planet in the system.", "It travels around the Earth.", "It is made of ice and rocks."],
+                correctVal: "It gives light and heat to support life.",
+                rationale: "Bài viết đề cập trực tiếp tầm quan trọng của Mặt Trời: '...the Sun, a massive star that provides the light and heat necessary for life on Earth.' (cung cấp ánh sáng và nhiệt cần thiết cho sự sống).",
+                hint: "Tìm câu văn mô tả trực tiếp vai trò của Mặt Trời 'the Sun' ở đoạn giữa bài."
+            },
+            {
+                id: 25, section: "sec-reading", sectionName: "Đọc hiểu văn bản - Hệ Mặt Trời (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>The Solar System</b><br>
+                    Our solar system consists of the Sun and everything that travels around it. This includes the eight planets, their moons, dwarf planets, and countless asteroids and comets. At the center is the Sun, a massive star that provides the light and heat necessary for life on Earth. Jupiter is the largest planet, so big that all the other planets could fit inside it. In contrast, Mercury is the smallest and closest to the Sun. Scientists use powerful telescopes and space probes to explore these distant worlds. Although we have learned a lot, the vastness of space means there is still much more to discover.
+                </div>`,
+                question: "Question 25. The word \"massive\" in the passage is closest in meaning to:",
+                options: ["extremely large", "very small", "very hot", "extremely far"],
+                correctVal: "extremely large",
+                rationale: "Tính từ 'massive' có nghĩa là to lớn, khổng lồ, đồ sộ, đồng nghĩa với 'extremely large'.",
+                hint: "Mặt Trời là một ngôi sao khổng lồ, từ nào miêu tả sự to lớn phi thường này?"
+            },
+            {
+                id: 26, section: "sec-reading", sectionName: "Đọc hiểu văn bản - Hệ Mặt Trời (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>The Solar System</b><br>
+                    Our solar system consists of the Sun and everything that travels around it. This includes the eight planets, their moons, dwarf planets, and countless asteroids and comets. At the center is the Sun, a massive star that provides the light and heat necessary for life on Earth. Jupiter is the largest planet, so big that all the other planets could fit inside it. In contrast, Mercury is the smallest and closest to the Sun. Scientists use powerful telescopes and space probes to explore these distant worlds. Although we have learned a lot, the vastness of space means there is still much more to discover.
+                </div>`,
+                question: "Question 26. Which statement is TRUE about Jupiter?",
+                options: ["It is large enough to contain all other planets.", "It is the closest planet to the Sun.", "It is smaller than Mercury.", "It provides heat for the Earth."],
+                correctVal: "It is large enough to contain all other planets.",
+                rationale: "Trích xuất thông tin: 'Jupiter is the largest planet, so big that all the other planets could fit inside it.' (Sao Mộc to lớn đến mức tất cả các hành tinh khác đều có thể nằm gọn bên trong nó).",
+                hint: "Đọc kỹ phần thông tin về kích thước của 'Jupiter' so với các hành tinh khác."
+            },
+            {
+                id: 27, section: "sec-reading", sectionName: "Đọc hiểu văn bản - Hệ Mặt Trời (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>The Solar System</b><br>
+                    Our solar system consists of the Sun and everything that travels around it. This includes the eight planets, their moons, dwarf planets, and countless asteroids and comets. At the center is the Sun, a massive star that provides the light and heat necessary for life on Earth. Jupiter is the largest planet, so big that all the other planets could fit inside it. In contrast, Mercury is the smallest and closest to the Sun. Scientists use powerful telescopes and space probes to explore these distant worlds. Although we have learned a lot, the vastness of space means there is still much more to discover.
+                </div>`,
+                question: "Question 27. What does the word \"discover\" in the last sentence suggest?",
+                options: ["There are still many unknown things in space.", "Space is too small to study.", "Scientists have finished their research.", "Space probes are no longer useful."],
+                correctVal: "There are still many unknown things in space.",
+                rationale: "Câu cuối ghi: 'the vastness of space means there is still much more to discover' (Sự bao la của vũ trụ đồng nghĩa với việc vẫn còn rất nhiều điều đang chờ đón được khám phá). Điều này ngụ ý còn rất nhiều bí ẩn chưa biết trong không gian.",
+                hint: "Ý nói con người vẫn cần tìm tòi và thám hiểm vì không gian còn rất rộng lớn và nhiều bí ẩn."
+            },
+
+            // Writing (28 - 30)
+            {
+                id: 28, section: "sec-writing", sectionName: "Viết lại câu & Trật tự từ (Writing)", type: "choice", question: "Choose the most meaningful sentence made from the words given:\n\nMount Everest / be / high / mountain / world /.", options: ["Mount Everest is the highest mountain in the world.", "Mount Everest is higher mountain in the world.", "Mount Everest is highest mountain of world.", "Mount Everest be the highest mountain in world."], correctVal: "Mount Everest is the highest mountain in the world.", rationale: "Cấu trúc so sánh nhất của tính từ ngắn 'high' là 'the highest'. Giới từ chỉ phạm vi không gian là 'in the world'. Chủ ngữ số ít đi với động từ tobe 'is'.", hint: "Sử dụng cấu trúc so sánh nhất (the highest) của đỉnh núi Everest trên toàn thế giới." },
+            { id: 29, section: "sec-writing", sectionName: "Viết lại câu & Trật tự từ (Writing)", type: "choice", question: "Choose the most meaningful sentence made from the words given:\n\nHe / study / hard / so that / he / pass / final exam/.", options: ["He studied hard so that he could pass the final exam.", "He studies hard so that he passes the final exam.", "He studies hard so that pass the final exam.", "He studied hard so that to pass the final exam."], correctVal: "He studied hard so that he could pass the final exam.", rationale: "Mệnh đề chỉ mục đích trong quá khứ: 'S + V-ed + so that + S + could + V-inf'. Do đó, 'He studied hard so that he could pass...' là chuẩn cấu trúc ngữ pháp nhất.", hint: "Chú ý cấu trúc chỉ mục đích 'so that' đi liền với một mệnh đề chứa trợ động từ 'could'." },
+            { id: 30, section: "sec-writing", sectionName: "Viết lại câu & Trật tự từ (Writing)", type: "choice", question: "Choose the correct arrangement from jumbled words:\n\nnever / I / have / seen / such / a / fascinating / place /.", options: ["Never have I seen such a fascinating place.", "I have seen never such a fascinating place.", "Never I have seen such a fascinating place.", "Such a fascinating place have I never seen."], correctVal: "Never have I seen such a fascinating place.", rationale: "Cấu trúc đảo ngữ nhấn mạnh với trạng từ phủ định 'Never': 'Never + trợ động từ (have) + S (I) + V3 (seen) + such a/an + adj + N'.", hint: "Khi đưa trạng từ phủ định 'Never' lên đầu câu, chúng ta phải áp dụng hiện tượng ngữ pháp đảo ngữ." }
+        ];
+
+        let quizData = [];
+        let userAnswers = [];
+        let scoreChartInstance = null;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function prepareQuiz() {
+            quizData = rawQuestions.map(q => {
+                if (q.type === 'choice' || q.type === 'passage_choice') {
+                    const shuffledOptions = shuffleArray([...q.options]);
+                    const newCorrectIndex = shuffledOptions.indexOf(q.correctVal);
+                    return { ...q, options: shuffledOptions, correct: newCorrectIndex };
+                }
+                return { ...q };
+            });
+            userAnswers = new Array(quizData.length).fill(null);
+        }
+
+        function initQuiz() {
+            prepareQuiz();
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = "";
+            let currentSection = "";
+
+            quizData.forEach((q, index) => {
+                if (q.section !== currentSection) {
+                    currentSection = q.section;
+                    const sectionHeader = document.createElement('div');
+                    sectionHeader.id = q.section;
+                    sectionHeader.className = "pt-6 lg:pt-8 mb-4 border-b-2 border-indigo-100";
+                    sectionHeader.innerHTML = `<h2 class="text-sm md:text-base font-extrabold text-slate-800 pb-2 flex items-center gap-2">
+                        <span class="w-2.5 h-5 bg-teal-600 rounded-full inline-block"></span>${q.sectionName}
+                    </h2>`;
+                    container.appendChild(sectionHeader);
+                }
+
+                const card = document.createElement('div');
+                card.className = "question-card bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-all";
+                
+                let passageHtml = "";
+                if (q.passage) {
+                    passageHtml = `
+                        <div class="mb-4">
+                            ${q.passage}
+                        </div>
+                    `;
+                }
+
+                let interactionHtml = "";
+                if (q.type === 'choice' || q.type === 'passage_choice') {
+                    interactionHtml = `
+                        <div id="options-${index}" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                            ${q.options.map((opt, i) => `
+                                <button onclick="selectOption(${index}, ${i})" class="option-btn text-left p-3.5 rounded-xl border-2 border-slate-100 hover:border-teal-200 hover:bg-teal-50/40 transition-all flex items-center group active:scale-[0.99] w-full">
+                                    <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-xs mr-3 group-hover:bg-teal-100 group-hover:text-teal-600 transition-colors shrink-0">${String.fromCharCode(65 + i)}</span>
+                                    <span class="text-slate-700 text-xs md:text-sm font-medium flex-1">${opt}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="bg-teal-600 text-white text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full">Câu ${q.id}</span>
+                        <button onclick="showHint(${index})" class="flex items-center gap-1 text-[11px] text-amber-600 font-bold hover:text-amber-700 active:scale-95 transition-all">
+                            <span>💡 Mẹo giải nhanh</span>
+                        </button>
+                    </div>
+                    ${passageHtml}
+                    <div class="text-xs md:text-sm font-semibold mb-5 text-slate-850 leading-relaxed whitespace-pre-line">${q.question}</div>
+                    
+                    ${interactionHtml}
+                    
+                    <div id="hint-${index}" class="hidden mt-4 p-4 bg-amber-50 text-amber-950 text-xs rounded-xl border border-amber-100 italic leading-relaxed">
+                        <strong>Gợi ý:</strong> ${q.hint}
+                    </div>
+                    
+                    <div id="feedback-${index}" class="hidden mt-4 p-4 rounded-xl border transition-all">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span id="icon-${index}" class="text-base"></span>
+                            <p id="result-text-${index}" class="font-bold text-xs md:text-sm"></p>
+                        </div>
+                        <div class="h-px bg-current opacity-10 mb-2"></div>
+                        <p class="text-xs md:text-sm leading-relaxed font-medium opacity-95">${q.rationale}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            initCharts();
+        }
+
+        function selectOption(qIdx, oIdx) {
+            if (userAnswers[qIdx] !== null) return;
+
+            userAnswers[qIdx] = oIdx;
+            const correct = quizData[qIdx].correct;
+            const feedback = document.getElementById(`feedback-${qIdx}`);
+            const resultText = document.getElementById(`result-text-${qIdx}`);
+            const icon = document.getElementById(`icon-${qIdx}`);
+            const optionsDiv = document.getElementById(`options-${qIdx}`);
+            const buttons = optionsDiv.getElementsByTagName('button');
+
+            feedback.classList.remove('hidden');
+            
+            if (oIdx === correct) {
+                feedback.className = "mt-4 p-4 rounded-xl bg-emerald-50 text-emerald-800 border-emerald-200 border text-xs md:text-sm";
+                resultText.innerText = "Chính xác!";
+                icon.innerText = "✅";
+                buttons[oIdx].className = "option-btn text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 flex items-center shadow-sm w-full";
+                buttons[oIdx].querySelector('span').className = "w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+            } else {
+                feedback.className = "mt-4 p-4 rounded-xl bg-rose-50 text-rose-800 border-rose-200 border text-xs md:text-sm";
+                resultText.innerText = "Chưa chính xác";
+                icon.innerText = "❌";
+                buttons[oIdx].className = "option-btn text-left p-3.5 rounded-xl border-2 border-rose-500 bg-rose-50 flex items-center shadow-sm w-full";
+                buttons[oIdx].querySelector('span').className = "w-7 h-7 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+                
+                // Highlight correct
+                buttons[correct].className = "option-btn text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50/50 flex items-center w-full transition-all";
+                buttons[correct].querySelector('span').className = "w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+            }
+
+            for (let b = 0; b < buttons.length; b++) {
+                if (b !== oIdx && b !== correct) {
+                    buttons[b].classList.add('opacity-40');
+                }
+            }
+
+            updateProgress();
+            updateCharts();
+        }
+
+        function showHint(index) {
+            const hintBox = document.getElementById(`hint-${index}`);
+            hintBox.classList.toggle('hidden');
+        }
+
+        function updateProgress() {
+            const total = quizData.length;
+            const answered = userAnswers.filter(a => a !== null).length;
+            const progress = Math.round((answered / total) * 100);
+            
+            // Desktop
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('progress-percent').innerText = `${progress}%`;
+            document.getElementById('progress-text').innerText = answered === 0 ? "Chưa làm câu nào" : `Đã hoàn thành ${answered}/${total} câu`;
+            
+            // Mobile
+            document.getElementById('mobile-progress-bar').style.width = `${progress}%`;
+
+            const score = userAnswers.reduce((acc, curr, idx) => {
+                if (curr === null) return acc;
+                return curr === quizData[idx].correct ? acc + 1 : acc;
+            }, 0);
+            
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('mobile-score-badge').innerText = `Đúng: ${score}/${total}`;
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                const offset = window.innerWidth < 1024 ? 120 : 20;
+                const elementPosition = el.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function initCharts() {
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+            if (scoreChartInstance) {
+                scoreChartInstance.destroy();
+            }
+            scoreChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Đúng', 'Sai', 'Chưa làm'],
+                    datasets: [{
+                        data: [0, 0, 30],
+                        backgroundColor: ['#10B981', '#F43F5E', '#E2E8F0'],
+                        borderWidth: 0,
+                        hoverOffset: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '72%',
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                boxWidth: 10,
+                                usePointStyle: true,
+                                font: { size: 11, weight: 'bold' }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCharts() {
+            if (!scoreChartInstance) return;
+            const total = quizData.length;
+            
+            const correct = userAnswers.reduce((acc, curr, idx) => {
+                if (curr === null) return acc;
+                return curr === quizData[idx].correct ? acc + 1 : acc;
+            }, 0);
+
+            const answered = userAnswers.filter(a => a !== null).length;
+            const incorrect = answered - correct;
+            const remaining = total - answered;
+
+            scoreChartInstance.data.datasets[0].data = [correct, incorrect, remaining];
+            scoreChartInstance.update();
+        }
+
+        window.onload = function() {
+            initQuiz();
+        };
+    </script>
+</body>
+</html>
+```
