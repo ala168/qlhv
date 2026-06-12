@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Luyện Thi Tiếng Anh Vào 6 - Nguyễn Tất Thành 2023</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+            color: #1E293B;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .question-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+        }
+        .option-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .passage-box {
+            background-color: #FDFDFD;
+            border-left: 4px solid #3B82F6;
+        }
+        @media (max-width: 768px) {
+            .option-btn {
+                padding: 0.9rem 0.75rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- Mobile Sticky Navigation -->
+    <div class="lg:hidden top-0 sticky z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm w-full">
+        <div class="px-4 py-3 flex items-center justify-between border-b border-slate-100">
+            <div>
+                <h1 class="text-sm font-black text-slate-900 leading-tight">THCS Nguyễn Tất Thành</h1>
+                <p class="text-[10px] text-blue-600 font-bold uppercase tracking-wider">Đề thi chính thức - Năm 2023</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span id="mobile-score-badge" class="bg-blue-50 text-blue-700 text-xs font-black px-2.5 py-1 rounded-full border border-blue-100">Đúng: 0/25</span>
+            </div>
+        </div>
+        <!-- Scrollable Mobile Menu -->
+        <div class="flex overflow-x-auto whitespace-nowrap px-4 py-2 gap-2 no-scrollbar scroll-smooth">
+            <button onclick="scrollToSection('sec-multiple')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-blue-50 hover:text-blue-700 active:scale-95 transition-all">Hoàn thành câu (1-13)</button>
+            <button onclick="scrollToSection('sec-communication')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-blue-50 hover:text-blue-700 active:scale-95 transition-all">Giao tiếp (14-15)</button>
+            <button onclick="scrollToSection('sec-ads')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-blue-50 hover:text-blue-700 active:scale-95 transition-all">Quảng cáo & Thư (16-18)</button>
+            <button onclick="scrollToSection('sec-cycling')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-blue-50 hover:text-blue-700 active:scale-95 transition-all">Đọc hiểu Xe đạp (19-21)</button>
+            <button onclick="scrollToSection('sec-tobi')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-blue-50 hover:text-blue-700 active:scale-95 transition-all">Điền từ chú voi Tobi (22-24)</button>
+            <button onclick="scrollToSection('sec-spelling')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-blue-50 hover:text-blue-700 active:scale-95 transition-all">Sửa lỗi sai (25)</button>
+            <button onclick="scrollToSection('sec-paragraph')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-blue-50 hover:text-blue-700 active:scale-95 transition-all">Viết đoạn văn (26)</button>
+        </div>
+        <div class="w-full bg-slate-100 h-1">
+            <div id="mobile-progress-bar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
+        </div>
+    </div>
+
+    <!-- Desktop Sidebar -->
+    <aside class="hidden lg:flex w-80 bg-white border-r border-slate-200 flex-col h-screen sticky top-0 overflow-y-auto shrink-0">
+        <div class="p-6 border-b border-slate-150">
+            <h1 class="text-base font-black text-slate-900 leading-tight">THCS Nguyễn Tất Thành</h1>
+            <p class="text-[10px] text-blue-600 mt-2 font-bold uppercase tracking-widest">ĐỀ THI TUYỂN SINH - NĂM 2023</p>
+        </div>
+        <nav class="flex-1 p-4 space-y-1">
+            <button onclick="scrollToSection('sec-multiple')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-blue-50 hover:text-blue-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Hoàn thành câu (1-13)</span>
+                <span class="text-xs text-slate-400">📝</span>
+            </button>
+            <button onclick="scrollToSection('sec-communication')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-blue-50 hover:text-blue-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Giao tiếp hằng ngày (14-15)</span>
+                <span class="text-xs text-slate-400">💬</span>
+            </button>
+            <button onclick="scrollToSection('sec-ads')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-blue-50 hover:text-blue-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Quảng cáo & Thư tay (16-18)</span>
+                <span class="text-xs text-slate-400">🏷️</span>
+            </button>
+            <button onclick="scrollToSection('sec-cycling')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-blue-50 hover:text-blue-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Đọc hiểu môn xe đạp (19-21)</span>
+                <span class="text-xs text-slate-400">🚲</span>
+            </button>
+            <button onclick="scrollToSection('sec-tobi')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-blue-50 hover:text-blue-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Điền từ chú voi Tobi (22-24)</span>
+                <span class="text-xs text-slate-400">🐘</span>
+            </button>
+            <button onclick="scrollToSection('sec-spelling')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-blue-50 hover:text-blue-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Sửa lỗi chính tả (25)</span>
+                <span class="text-xs text-slate-400">✏️</span>
+            </button>
+            <button onclick="scrollToSection('sec-paragraph')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-blue-50 hover:text-blue-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Viết việc tốt muốn làm (26)</span>
+                <span class="text-xs text-slate-400">💖</span>
+            </button>
+        </nav>
+        <div class="p-6 bg-slate-50 border-t border-slate-150">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Tiến độ</span>
+                <span id="progress-percent" class="text-xs font-black text-blue-600">0%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
+            </div>
+            <div id="progress-text" class="text-[11px] text-slate-500 mt-2 font-medium">Chưa hoàn thành câu nào</div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-x-hidden">
+        <div class="max-w-4xl mx-auto px-4 py-6 md:p-8 space-y-6">
+            
+            <!-- Dashboard Tracker -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Doughnut Chart -->
+                <div class="md:col-span-2 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-[10px] font-black text-slate-400 mb-3 uppercase tracking-widest">Chi tiết trạng thái</h3>
+                    </div>
+                    <div class="relative w-full h-40">
+                        <canvas id="scoreChart"></canvas>
+                    </div>
+                </div>
+                <!-- Action / Reset -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col items-center justify-center text-center">
+                    <div class="mb-1">
+                        <span id="final-score" class="text-6xl font-black text-blue-600">0</span>
+                        <span class="text-xl text-slate-300 font-bold">/25</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-5">Số câu làm đúng</p>
+                    <button onclick="window.location.reload()" class="w-full py-3 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 active:scale-95 transition-all shadow-md shadow-blue-150">Xáo trộn & Làm lại</button>
+                </div>
+            </div>
+
+            <!-- Header Info Box -->
+            <div class="bg-blue-50/60 p-5 rounded-2xl border border-blue-100 shadow-inner space-y-2">
+                <h2 class="text-sm font-black text-slate-800 flex items-center gap-2">
+                    <span>💡 Hướng dẫn ôn luyện</span>
+                </h2>
+                <ul class="text-slate-600 text-xs space-y-1.5 leading-relaxed">
+                    <li>• Đề thi có cấu trúc gồm <b>26 câu hỏi</b> chính thức theo đúng định dạng khảo sát năng lực của trường Nguyễn Tất Thành.</li>
+                    <li>• Các phương án trắc nghiệm đã được <b>xáo trộn ngẫu nhiên hoàn toàn</b> để đo lường năng lực chuẩn xác.</li>
+                    <li>• Nhấn nút <b>Mẹo giải nhanh</b> ở góc phải mỗi câu nếu gặp khó khăn để thu nhận các gợi ý hữu dụng.</li>
+                </ul>
+            </div>
+
+            <!-- Quiz Container -->
+            <div id="quiz-container" class="space-y-6 md:space-y-8">
+                <!-- Dynamic cards injected here -->
+            </div>
+
+            <!-- Footer -->
+            <footer class="pt-10 pb-6 text-center text-slate-400 text-xs border-t border-slate-150">
+                © 2026 CLB EduNow - Ôn thi vào lớp 6 CLC Trường THCS&THPT Nguyễn Tất Thành
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        const rawQuestions = [
+            // Multiple Choice Grammar & Vocab (1 - 13)
+            { id: 1, section: "sec-multiple", sectionName: "Hoàn thành câu (Grammar & Vocabulary)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n1. Oxford is one of _________ oldest universities in Europe.", options: ["the", "a", "an", "x"], correctVal: "the", rationale: "Chúng ta bắt buộc phải sử dụng mạo từ xác định 'the' trước tính từ so sánh hơn nhất 'oldest'.", hint: "Mạo từ đứng trước tính từ so sánh nhất 'oldest' luôn luôn là gì?" },
+            { id: 2, section: "sec-multiple", sectionName: "Hoàn thành câu (Grammar & Vocabulary)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n2. Jane _________ up early on her trip to Hue last week.", options: ["woke", "is waking", "wakes", "will wake"], correctVal: "woke", rationale: "Trạng từ chỉ mốc thời gian rõ ràng trong quá khứ 'last week' (tuần trước) yêu cầu sử dụng thì Quá khứ đơn. Động từ 'wake' chuyển thành dạng bất quy tắc là 'woke'.", hint: "Quan sát mốc thời gian 'last week' ở cuối câu để chia đúng thì của động từ." },
+            { id: 3, section: "sec-multiple", sectionName: "Hoàn thành câu (Grammar & Vocabulary)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n3. Louise wrote the things she needed to buy for the meal on a _________ of paper.", options: ["piece", "slice", "part", "loaf"], correctVal: "piece", rationale: "Lượng từ đi với giấy viết là 'a piece of paper' (một mảnh giấy/tờ giấy). Các lượng từ khác: 'slice' (lát bánh mì/thịt), 'loaf' (ổ bánh mì).", hint: "Lượng từ quen thuộc thường dùng nhất đi cùng danh từ 'paper' là gì?" },
+            { id: 4, section: "sec-multiple", sectionName: "Hoàn thành câu (Grammar & Vocabulary)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n4. \"_________ chocolate do you eat every day?\" - \"Two bars.\"", options: ["How much", "How many", "How often", "How big"], correctVal: "How much", rationale: "Danh từ 'chocolate' là danh từ không đếm được, vì thế khi hỏi về lượng sô-cô-la tiêu thụ, ta phải dùng từ hỏi 'How much'. (Chỉ khi nào là 'How many bars of chocolate' mới dùng How many).", hint: "Danh từ 'chocolate' là danh từ không đếm được. Hãy dùng cụm từ hỏi lượng tương ứng." },
+            { id: 5, section: "sec-multiple", sectionName: "Hoàn thành câu (Grammar & Vocabulary)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n5. She took an aspirin _________ she wanted her headache to go away.", options: ["because", "and", "but", "so"], correctVal: "because", rationale: "Cần liên từ chỉ nguyên nhân để nối hai mệnh đề: Cô ấy uống thuốc aspirin 'bởi vì' cô ấy muốn cơn đau đầu biến mất.", hint: "Vế sau chỉ lý do/nguyên nhân cho việc uống thuốc ở vế trước." },
+            { id: 6, section: "sec-multiple", sectionName: "Hoàn thành câu (Grammar & Vocabulary)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n6. Tom is very good at English. He always helps _________ do English exercises.", options: ["us", "we", "our", "ours"], correctVal: "us", rationale: "Đứng sau động từ 'helps' đóng vai trò tân ngữ (object pronoun) nên phải dùng đại từ 'us'. Cấu trúc: 'help somebody (to) do something' (giúp ai làm việc gì).", hint: "Đại từ đóng vai trò làm tân ngữ đứng sau động từ chỉ hoạt động giúp đỡ 'helps'." },
+            { id: 7, section: "sec-multiple", sectionName: "Hoàn thành câu (Grammar & Vocabulary)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n7. The old sofa is _________ the new one.", options: ["more comfortable than", "comfortable than", "more comfortable", "comfortable"], correctVal: "more comfortable than", rationale: "Cấu trúc so sánh hơn đối với tính từ dài 'comfortable' là: 'more + adj + than'.", hint: "Cần đầy đủ cả từ chỉ mức độ 'more' và từ so sánh 'than' đối với tính từ dài." },
+            { id: 8, section: "sec-multiple", sectionName: "Hoàn thành câu (Grammar & Vocabulary)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n8. You wear these over your ears. You connect them to a device, so you can listen to music. What are they?", options: ["headphones", "glasses", "masks", "microphones"], correctVal: "headphones", rationale: "Thiết bị áp tai, kết nối để nghe nhạc cá nhân được gọi là 'headphones' (tai nghe chụp tai). Các từ khác: 'glasses' (kính), 'masks' (khẩu trang), 'microphones' (mic nói).", hint: "Thiết bị âm thanh đeo qua đầu bọc ngoài đôi tai của bạn để thưởng thức âm nhạc." },
+            { id: 9, section: "sec-multiple", sectionName: "Hoàn thành câu (Grammar & Vocabulary)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n9. After my grandmother gets up in the morning, she often _________ her bed.", options: ["makes", "does", "takes", "has"], correctVal: "makes", rationale: "Cụm động từ cố định (collocation): 'make one's bed' nghĩa là dọn dẹp, sắp xếp lại giường ngủ cho ngăn nắp sau khi ngủ dậy.", hint: "Động từ nào luôn đi với cụm 'her bed' mang nghĩa dọn dẹp chăn màn cho phẳng phiu?" },
+            { id: 10, section: "sec-multiple", sectionName: "Hoàn thành câu (Grammar & Vocabulary)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n10. The elevators are out of _________ , so you have to walk downstairs.", options: ["order", "work", "date", "practice"], correctVal: "order", rationale: "Thành ngữ cố định 'out of order' dùng để chỉ máy móc, thiết bị bị hỏng hóc, không hoạt động được. Ở đây là thang máy bị hỏng nên phải đi bộ cầu thang.", hint: "Tìm cụm danh từ kết hợp với giới từ 'out of' để chỉ trạng thái máy móc hỏng hóc." },
+            { id: 11, section: "sec-multiple", sectionName: "Hoàn thành câu (Grammar & Vocabulary)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n11. This summer holiday, Lan would like _________ to the beach with her family.", options: ["to go", "goes", "go", "going"], correctVal: "to go", rationale: "Cấu trúc diễn đạt mong muốn lịch sự: 'would like + to-infinitive' (muốn làm cái gì).", hint: "Sau cụm từ 'would like', ta bắt buộc phải sử dụng động từ nguyên mẫu có 'to' hay không?" },
+            { id: 12, section: "sec-multiple", sectionName: "Hoàn thành câu (Grammar & Vocabulary)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n12. We had a really exciting treasure _________ game in our last camping trip.", options: ["hunt", "search", "find", "look"], correctVal: "hunt", rationale: "Cụm danh từ ghép 'treasure hunt' chỉ trò chơi săn tìm kho báu/truy tìm kho báu cực kỳ phổ biến trong các chuyến dã ngoại.", hint: "Trò chơi đi tìm mật thư và các món quà ẩn giấu được gọi là 'treasure ___'." },
+            { id: 13, section: "sec-multiple", sectionName: "Hoàn thành câu (Grammar & Vocabulary)", type: "choice", question: "Circle the letter A, B, C, or D to best complete the following sentence:\n\n13. Amex should not touch the beehive because the bees will _________ him.", options: ["sting", "bite", "kick", "hit"], correctVal: "sting", rationale: "Động từ phù hợp nhất với loài ong khi tự vệ tấn công con người là 'sting' (châm, đốt bằng ngòi độc). 'bite' (cắn - dùng răng), 'kick' (đá), 'hit' (đấm/đánh).", hint: "Loài ong có ngòi độc ở đuôi, hành động châm đốt của chúng trong tiếng Anh là gì?" },
+
+            // Communication (14 - 15)
+            { id: 14, section: "sec-communication", sectionName: "Giao tiếp hằng ngày (Everyday Exchanges)", type: "choice", question: "Circle the correct letter A, B, C, or D to complete the conversation:\n\nHanh: Can you give me my book?\nLan: _________", options: ["Sure. Here you are.", "That's a great idea!", "No, thanks.", "Yes, you can"], correctVal: "Sure. Here you are.", rationale: "Khi Hanh nhờ Lan đưa cuốn sách hộ, lời phản hồi lịch sự nhất của Lan khi đồng ý và trao sách là: 'Sure. Here you are.' (Chắc chắn rồi. Của bạn đây này).", hint: "Lời đáp lịch sự khi đồng ý giúp đỡ và đưa đồ vật tận tay cho người đối diện." },
+            { id: 15, section: "sec-communication", sectionName: "Giao tiếp hằng ngày (Everyday Exchanges)", type: "choice", question: "Circle the correct letter A, B, C, or D to complete the conversation:\n\nPeter: Whose eraser is this?\nAmy: _________", options: ["I think it's David's.", "Yes, this is an eraser.", "It's in my pencil case.", "No, it isn't mine."], correctVal: "I think it's David's.", rationale: "Câu hỏi 'Whose...?' dùng để hỏi về chủ sở hữu của đồ vật (Cục tẩy này của ai?). Câu trả lời chỉ ra chủ sở hữu 'I think it's David's' (Mình nghĩ nó là của David) là chính xác nhất.", hint: "Trả lời cho câu hỏi sở hữu của một ai đó đối với đồ vật cụ thể." },
+
+            // Ads & Message (16 - 18)
+            {
+                id: 16, section: "sec-ads", sectionName: "Đọc hiểu thông tin quảng cáo & Thư tay (Advertisements & Short Message)", type: "passage_choice",
+                passage: `<div class="p-4 bg-amber-50 border-2 border-dashed border-amber-300 rounded-xl text-center max-w-sm mx-auto shadow-inner font-mono text-xs text-slate-800">
+                    <p class="font-bold text-amber-700 text-sm mb-1">🏅 Holiday Sports Club</p>
+                    <p class="font-semibold text-slate-500">27 London Road</p>
+                    <p class="text-slate-650 font-bold">July - August</p>
+                    <p class="text-blue-600 font-semibold">for young people (10 - 18 years)</p>
+                    <p class="text-[11px] text-slate-600 leading-tight mt-1">Play a different sport every day (football, basketball, volleyball, tennis and baseball)</p>
+                    <p class="font-bold text-slate-850 mt-1">Price: £25 a week</p>
+                </div>`,
+                question: "Question 16. Which statement is TRUE according to the advertisement?",
+                options: ["You will pay about £100 a month.", "The club is for people of all ages.", "You can play water sports in this club.", "This club is open only in winter."],
+                correctVal: "You will pay about £100 a month.",
+                rationale: "Quảng cáo ghi giá là £25 một tuần ('£25 a week'). Một tháng trung bình có 4 tuần nên số tiền phải trả sẽ xấp xỉ £100 một tháng ('£100 a month'). Các đáp án còn lại sai thông tin độ tuổi (chỉ cho tuổi 10-18), môn học (không có môn dưới nước) và thời gian mở (July - August là mùa hè).",
+                hint: "Làm phép nhân cơ bản từ giá trị tuần (£25/tuần) lên giá trị tháng (4 tuần)."
+            },
+            {
+                id: 17, section: "sec-ads", sectionName: "Đọc hiểu thông tin quảng cáo & Thư tay (Advertisements & Short Message)", type: "passage_choice",
+                passage: `<div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-center max-w-sm mx-auto shadow-inner font-mono text-xs text-slate-800">
+                    <p class="font-bold text-emerald-700 text-sm mb-1">🧘 YOGA CLASS</p>
+                    <p class="text-slate-700">Every Tuesday at 1.30 p.m. in Meeting room 7</p>
+                    <p class="font-bold text-slate-900">$10 for four 30-minute classes</p>
+                    <p class="text-[11px] text-slate-600 mt-1">Bring comfortable clothes. The class will provide the yoga mats.</p>
+                </div>`,
+                question: "Question 17. What do students NOT need to bring?",
+                options: ["yoga mats", "clothes", "money", "food"],
+                correctVal: "yoga mats",
+                rationale: "Dòng cuối ghi: 'The class will provide the yoga mats' (Lớp học sẽ cung cấp thảm tập yoga). Do đó, học viên KHÔNG cần mang theo thảm tập.",
+                hint: "Tìm đồ vật mà lớp học cam kết sẽ cung cấp sẵn cho học viên ('provide the...')."
+            },
+            {
+                id: 18, section: "sec-ads", sectionName: "Đọc hiểu thông tin quảng cáo & Thư tay (Advertisements & Short Message)", type: "passage_choice",
+                passage: `<div class="p-4 bg-indigo-50 border border-indigo-200 rounded-xl max-w-sm mx-auto shadow-inner text-xs text-slate-800 leading-relaxed font-sans">
+                    <p class="font-bold text-indigo-700 mb-1">📬 Hi Jane,</p>
+                    "Thank you for telling us again that Lee is moving to a new school next week. Art class is his favourite class, and I thought we could make a painting for him as a present. I do not have any paint at home, so I am going to the art store tomorrow. After that, we can work on the painting together. Lee's last day at our school is Friday, so we have to finish it before then. Let me know what you think."<br>
+                    <p class="font-bold text-indigo-700 mt-1 text-right">- David</p>
+                </div>`,
+                question: "Question 18. Why does David write to Jane?",
+                options: ["To ask her to help with a painting", "To tell her that Lee is moving", "To thank her for a painting", "To ask her to go to the art store with him"],
+                correctVal: "To ask her to help with a painting",
+                rationale: "David đề xuất: 'I thought we could make a painting for him as a present... we can work on the painting together.' Điều này cho thấy mục đích viết thư là rủ Jane cùng hợp sức vẽ tranh làm quà chia tay Lee.",
+                hint: "Ý tưởng cốt lõi của David là gì khi muốn rủ Jane thực hiện bức tranh cùng mình?"
+            },
+
+            // Reading - Cycling in London (19 - 21)
+            {
+                id: 19, section: "sec-cycling", sectionName: "Đọc hiểu văn bản - Môn xe đạp tại London (Cycling)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Cycling in London</b><br>
+                    If you enjoy cycling for pleasure, doing it in London can be a shock. There are not many lanes especially for bikes, and making your way through the traffic can be very dangerous. But if you have a great passion, cycling in London can be exciting, and it is an inexpensive way of keeping fit if you live there. Some cyclists don't mind spending a lot of money on expensive bikes. However, if you just want a basic bike, there are many cheap choices at bicycle markets. In most cases, cheap bikes still look good and are in good conditions. You should buy a cycling helmet if you want to cycle in London. Wearing a cycling helmet is not a must in Britain, but it is a good idea to wear one for protection.
+                </div>`,
+                question: "Question 19. What is the text about?",
+                options: ["cycling in London", "bicycle markets", "cycling helmets", "cheap bicycles"],
+                correctVal: "cycling in London",
+                rationale: "Toàn bộ bài viết xoay quanh trải nghiệm đi xe đạp ở London ('cycling in London'), bao gồm giao thông, lợi ích rèn luyện sức khỏe, các lựa chọn mua xe và an toàn mũ bảo hiểm.",
+                hint: "Đọc câu mở đầu và các câu tiếp theo để xác định đối tượng địa lý chính được bàn luận."
+            },
+            {
+                id: 20, section: "sec-cycling", sectionName: "Đọc hiểu văn bản - Môn xe đạp tại London (Cycling)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Cycling in London</b><br>
+                    If you enjoy cycling for pleasure, doing it in London can be a shock. There are not many lanes especially for bikes, and making your way through the traffic can be very dangerous. But if you have a great passion, cycling in London can be exciting, and it is an inexpensive way of keeping fit if you live there. Some cyclists don't mind spending a lot of money on expensive bikes. However, if you just want a basic bike, there are many cheap choices at bicycle markets. In most cases, cheap bikes still look good and are in good conditions. You should buy a cycling helmet if you want to cycle in London. Wearing a cycling helmet is not a must in Britain, but it is a good idea to wear one for protection.
+                </div>`,
+                question: "Question 20. Which statement is NOT true according to the text?",
+                options: ["People have to wear a helmet when cycling in Britain.", "There are not many lanes for bikes in London.", "You can find cheap bikes in London.", "For some cyclists, buying expensive bikes is not a problem."],
+                correctVal: "People have to wear a helmet when cycling in Britain.",
+                rationale: "Văn bản chỉ rõ: 'Wearing a cycling helmet is not a must in Britain' (Đeo mũ bảo hiểm đạp xe không phải là việc bắt buộc ở Anh). Vì thế câu khẳng định 'People have to wear a helmet' (Mọi người bắt buộc phải đeo) là sai sự thật.",
+                hint: "Đối chiếu từ khóa 'not a must' (không bắt buộc) với từ 'have to' (bắt buộc phải làm)."
+            },
+            {
+                id: 21, section: "sec-cycling", sectionName: "Đọc hiểu văn bản - Môn xe đạp tại London (Cycling)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Cycling in London</b><br>
+                    If you enjoy cycling for pleasure, doing it in London can be a shock. There are not many lanes especially for bikes, and making your way through the traffic can be very dangerous. But if you have a great passion, cycling in London can be exciting, and it is an inexpensive way of keeping fit if you live there. Some cyclists don't mind spending a lot of money on expensive bikes. However, if you just want a basic bike, there are many cheap choices at bicycle markets. In most cases, cheap bikes still look good and are in good conditions. You should buy a cycling helmet if you want to cycle in London. Wearing a cycling helmet is not a must in Britain, but it is a good idea to wear one for protection.
+                </div>`,
+                question: "Question 21. What does the word \"it\" in line 3 refer to?",
+                options: ["cycling", "passion", "excitement", "doing exercise"],
+                correctVal: "cycling",
+                rationale: "Đại từ 'it' trong cụm 'and it is an inexpensive way of keeping fit' thay thế cho hành động 'cycling in London' (hoạt động đạp xe) được nhắc đến ở vế trước.",
+                hint: "Hoạt động thể thao nào vừa thú vị lại vừa là một cách giữ dáng tiết kiệm khi sống ở đó?"
+            },
+
+            // Reading - Baby Elephant Tobi (22 - 24)
+            {
+                id: 22, section: "sec-tobi", sectionName: "Điền từ - Câu chuyện về chú voi Tobi (Reading Cloze)", type: "text",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Tobi the Baby Elephant</b><br>
+                    Jenny likes elephants very much. On Saturday and Sunday mornings, she often helps her uncle at the zoo. One Saturday, a small baby elephant called Tobi had a very bad cough. Jenny's uncle tried to give Tobi some medicine, but he couldn't. Jenny's uncle decided to take Tobi to the zoo hospital.<br><br>
+                    That week, Jenny had a holiday from school, so she helped her uncle with Tobi every day. After six days, the baby elephant was much better, so Jenny's uncle took Tobi home to his mother. Jenny was sad when she had to say goodbye to Tobi. Jenny's uncle understood the problem. "When Tobi was ill in the hospital, he liked you because you helped him. He doesn't need you now because he's with his mother. But he's happy, isn't he?" "You're right," said Jenny, "so I'll be happy, too."
+                </div>`,
+                question: "Question 22. Fill in the blank with ONE word from the text:\n\nThe baby elephant Tobi needed some medicine because of a _________.",
+                correctAnswers: ["cough"],
+                rationale: "Thông tin ở đoạn 1: 'One Saturday, a small baby elephant called Tobi had a very bad cough. Jenny's uncle tried to give Tobi some medicine...' (Tobi bị ho rất nặng nên cần uống thuốc).",
+                hint: "Chứng bệnh về đường hô hấp của chú voi con được nhắc đến ở dòng thứ ba là gì?"
+            },
+            {
+                id: 23, section: "sec-tobi", sectionName: "Điền từ - Câu chuyện về chú voi Tobi (Reading Cloze)", type: "text",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Tobi the Baby Elephant</b><br>
+                    Jenny likes elephants very much. On Saturday and Sunday mornings, she often helps her uncle at the zoo. One Saturday, a small baby elephant called Tobi had a very bad cough. Jenny's uncle tried to give Tobi some medicine, but he couldn't. Jenny's uncle decided to take Tobi to the zoo hospital.<br><br>
+                    That week, Jenny had a holiday from school, so she helped her uncle with Tobi every day. After six days, the baby elephant was much better, so Jenny's uncle took Tobi home to his mother. Jenny was sad when she had to say goodbye to Tobi. Jenny's uncle understood the problem. "When Tobi was ill in the hospital, he liked you because you helped him. He doesn't need you now because he's with his mother. But he's happy, isn't he?" "You're right," said Jenny, "so I'll be happy, too."
+                </div>`,
+                question: "Question 23. Fill in the blank with ONE word from the text:\n\nTobi returned _________ after about one week in hospital.",
+                correctAnswers: ["home"],
+                rationale: "Thông tin ở đoạn 2: 'After six days, the baby elephant was much better, so Jenny's uncle took Tobi home to his mother.' (Chú voi con khỏe lại nên được đưa về nhà với mẹ).",
+                hint: "Nơi chú voi Tobi trở về sau khi khỏi bệnh để đoàn tụ cùng voi mẹ."
+            },
+            {
+                id: 24, section: "sec-tobi", sectionName: "Điền từ - Câu chuyện về chú voi Tobi (Reading Cloze)", type: "text",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Tobi the Baby Elephant</b><br>
+                    Jenny likes elephants very much. On Saturday and Sunday mornings, she often helps her uncle at the zoo. One Saturday, a small baby elephant called Tobi had a very bad cough. Jenny's uncle tried to give Tobi some medicine, but he couldn't. Jenny's uncle decided to take Tobi to the zoo hospital.<br><br>
+                    That week, Jenny had a holiday from school, so she helped her uncle with Tobi every day. After six days, the baby elephant was much better, so Jenny's uncle took Tobi home to his mother. Jenny was sad when she had to say goodbye to Tobi. Jenny's uncle understood the problem. "When Tobi was ill in the hospital, he liked you because you helped him. He doesn't need you now because he's with his mother. But he's happy, isn't he?" "You're right," said Jenny, "so I'll be happy, too."
+                </div>`,
+                question: "Question 24. Fill in the blank with ONE word from the text:\n\nJenny felt _________ when Tobi left, but she became happy again after talking to her uncle.",
+                correctAnswers: ["sad"],
+                rationale: "Văn bản đề cập trực tiếp cảm xúc: 'Jenny was sad when she had to say goodbye to Tobi.' (Jenny cảm thấy buồn bã khi phải chào từ biệt Tobi).",
+                hint: "Cảm xúc tiêu cực tự nhiên của cô bé Jenny lúc phải nói lời tạm biệt với người bạn voi nhỏ."
+            },
+
+            // Spelling (25)
+            {
+                id: 25, section: "sec-spelling", sectionName: "Sửa lỗi chính tả & Đồng âm khác nghĩa (Spelling Correction)", type: "text_correction",
+                question: "The following sentence has ONE incorrect word. Identify the wrong word and write the CORRECT word into the box below (The correct word has the exact same pronunciation as the wrong one):\n\n\"They saw a big white hair jumping in the forest.\"",
+                correctAnswers: ["hare"],
+                wrongWord: "hair",
+                rationale: "Từ 'hair' (mái tóc) bị dùng sai hoàn toàn về ngữ nghĩa. Động từ 'jumping' (nhảy nhót) chỉ ra con vật nhảy trong rừng là chú thỏ hoang dã. Từ đồng âm phát âm giống hệt là 'hare' (thỏ rừng).",
+                hint: "Con vật nhảy nhót trong rừng có cách phát âm là /heər/ giống từ mái tóc của bạn."
+            }
+        ];
+
+        let quizData = [];
+        let userAnswers = [];
+        let scoreChartInstance = null;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function prepareQuiz() {
+            quizData = rawQuestions.map(q => {
+                if (q.type === 'choice' || q.type === 'passage_choice') {
+                    const shuffledOptions = shuffleArray([...q.options]);
+                    const newCorrectIndex = shuffledOptions.indexOf(q.correctVal);
+                    return { ...q, options: shuffledOptions, correct: newCorrectIndex };
+                }
+                return { ...q };
+            });
+            userAnswers = new Array(quizData.length).fill(null);
+        }
+
+        function initQuiz() {
+            prepareQuiz();
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = "";
+            let currentSection = "";
+
+            quizData.forEach((q, index) => {
+                if (q.section !== currentSection) {
+                    currentSection = q.section;
+                    const sectionHeader = document.createElement('div');
+                    sectionHeader.id = q.section;
+                    sectionHeader.className = "pt-6 lg:pt-8 mb-4 border-b-2 border-indigo-100";
+                    sectionHeader.innerHTML = `<h2 class="text-sm md:text-base font-extrabold text-slate-800 pb-2 flex items-center gap-2">
+                        <span class="w-2.5 h-5 bg-blue-600 rounded-full inline-block"></span>${q.sectionName}
+                    </h2>`;
+                    container.appendChild(sectionHeader);
+                }
+
+                const card = document.createElement('div');
+                card.className = "question-card bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-all";
+                
+                let passageHtml = "";
+                if (q.passage) {
+                    passageHtml = `
+                        <div class="mb-4">
+                            ${q.passage}
+                        </div>
+                    `;
+                }
+
+                let interactionHtml = "";
+                if (q.type === 'choice' || q.type === 'passage_choice') {
+                    interactionHtml = `
+                        <div id="options-${index}" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                            ${q.options.map((opt, i) => `
+                                <button onclick="selectOption(${index}, ${i})" class="option-btn text-left p-3.5 rounded-xl border-2 border-slate-100 hover:border-blue-200 hover:bg-blue-50/40 transition-all flex items-center group active:scale-[0.99] w-full">
+                                    <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-xs mr-3 group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors shrink-0">${String.fromCharCode(65 + i)}</span>
+                                    <span class="text-slate-700 text-xs md:text-sm font-medium flex-1">${opt}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    `;
+                } else if (q.type === 'text' || q.type === 'text_correction') {
+                    interactionHtml = `
+                        <div class="space-y-3">
+                            <div class="flex gap-2 max-w-md">
+                                <input type="text" id="input-${index}" placeholder="Nhập đáp án tại đây..." class="flex-1 px-4 py-3 border-2 border-slate-200 rounded-xl text-xs md:text-sm focus:border-blue-500 focus:outline-none transition-all">
+                                <button onclick="checkTextAnswer(${index})" id="btn-check-${index}" class="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs md:text-sm rounded-xl active:scale-95 transition-all">Kiểm tra</button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="bg-blue-600 text-white text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full">Câu ${q.id}</span>
+                        <button onclick="showHint(${index})" class="flex items-center gap-1 text-[11px] text-amber-600 font-bold hover:text-amber-700 active:scale-95 transition-all">
+                            <span>💡 Mẹo giải nhanh</span>
+                        </button>
+                    </div>
+                    ${passageHtml}
+                    <div class="text-xs md:text-sm font-semibold mb-5 text-slate-850 leading-relaxed whitespace-pre-line">${q.question}</div>
+                    
+                    ${interactionHtml}
+                    
+                    <div id="hint-${index}" class="hidden mt-4 p-4 bg-amber-50 text-amber-950 text-xs rounded-xl border border-amber-100 italic leading-relaxed">
+                        <strong>Gợi ý:</strong> ${q.hint}
+                    </div>
+                    
+                    <div id="feedback-${index}" class="hidden mt-4 p-4 rounded-xl border transition-all">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span id="icon-${index}" class="text-base"></span>
+                            <p id="result-text-${index}" class="font-bold text-xs md:text-sm"></p>
+                        </div>
+                        <div class="h-px bg-current opacity-10 mb-2"></div>
+                        <p class="text-xs md:text-sm leading-relaxed font-medium opacity-95">${q.rationale}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Injection for Question 26 (Paragraph writing helper for doing something good)
+            injectParagraphSection();
+
+            initCharts();
+        }
+
+        function selectOption(qIdx, oIdx) {
+            if (userAnswers[qIdx] !== null) return;
+
+            userAnswers[qIdx] = oIdx;
+            const correct = quizData[qIdx].correct;
+            const feedback = document.getElementById(`feedback-${qIdx}`);
+            const resultText = document.getElementById(`result-text-${qIdx}`);
+            const icon = document.getElementById(`icon-${qIdx}`);
+            const optionsDiv = document.getElementById(`options-${qIdx}`);
+            const buttons = optionsDiv.getElementsByTagName('button');
+
+            feedback.classList.remove('hidden');
+            
+            if (oIdx === correct) {
+                feedback.className = "mt-4 p-4 rounded-xl bg-emerald-50 text-emerald-800 border-emerald-200 border text-xs md:text-sm";
+                resultText.innerText = "Chính xác!";
+                icon.innerText = "✅";
+                buttons[oIdx].className = "option-btn text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 flex items-center shadow-sm w-full";
+                buttons[oIdx].querySelector('span').className = "w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+            } else {
+                feedback.className = "mt-4 p-4 rounded-xl bg-rose-50 text-rose-800 border-rose-200 border text-xs md:text-sm";
+                resultText.innerText = "Chưa chính xác";
+                icon.innerText = "❌";
+                buttons[oIdx].className = "option-btn text-left p-3.5 rounded-xl border-2 border-rose-500 bg-rose-50 flex items-center shadow-sm w-full";
+                buttons[oIdx].querySelector('span').className = "w-7 h-7 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+                
+                // Highlight correct
+                buttons[correct].className = "option-btn text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50/50 flex items-center w-full transition-all";
+                buttons[correct].querySelector('span').className = "w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+            }
+
+            for (let b = 0; b < buttons.length; b++) {
+                if (b !== oIdx && b !== correct) {
+                    buttons[b].classList.add('opacity-40');
+                }
+            }
+
+            updateProgress();
+            updateCharts();
+        }
+
+        function checkTextAnswer(qIdx) {
+            if (userAnswers[qIdx] !== null) return;
+
+            const inputEl = document.getElementById(`input-${qIdx}`);
+            const rawVal = inputEl.value;
+            const cleanVal = rawVal.trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"");
+            
+            const q = quizData[qIdx];
+            let isCorrect = false;
+
+            for (let i = 0; i < q.correctAnswers.length; i++) {
+                const target = q.correctAnswers[i].toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"");
+                if (cleanVal === target) {
+                    isCorrect = true;
+                    break;
+                }
+            }
+
+            userAnswers[qIdx] = isCorrect ? 1 : 0;
+
+            const feedback = document.getElementById(`feedback-${qIdx}`);
+            const resultText = document.getElementById(`result-text-${qIdx}`);
+            const icon = document.getElementById(`icon-${qIdx}`);
+            const checkBtn = document.getElementById(`btn-check-${qIdx}`);
+
+            feedback.classList.remove('hidden');
+            inputEl.disabled = true;
+            checkBtn.disabled = true;
+            checkBtn.className = "px-5 py-3 bg-slate-300 text-slate-500 font-bold text-xs md:text-sm rounded-xl cursor-not-allowed";
+
+            if (isCorrect) {
+                feedback.className = "mt-4 p-4 rounded-xl bg-emerald-50 text-emerald-800 border-emerald-200 border text-xs md:text-sm";
+                resultText.innerText = "Chính xác!";
+                icon.innerText = "✅";
+                inputEl.className = "flex-1 px-4 py-3 border-2 border-emerald-500 bg-emerald-50 rounded-xl text-xs md:text-sm text-emerald-900";
+            } else {
+                feedback.className = "mt-4 p-4 rounded-xl bg-rose-50 text-rose-800 border-rose-200 border text-xs md:text-sm";
+                resultText.innerText = `Chưa chính xác (Đáp án đúng mẫu: ${q.correctAnswers[0]})`;
+                icon.innerText = "❌";
+                inputEl.className = "flex-1 px-4 py-3 border-2 border-rose-500 bg-rose-50 rounded-xl text-xs md:text-sm text-rose-900";
+            }
+
+            updateProgress();
+            updateCharts();
+        }
+
+        function injectParagraphSection() {
+            const container = document.getElementById('quiz-container');
+            
+            const header = document.createElement('div');
+            header.id = "sec-paragraph";
+            header.className = "pt-6 lg:pt-8 mb-4 border-b-2 border-indigo-100";
+            header.innerHTML = `<h2 class="text-sm md:text-base font-extrabold text-slate-800 pb-2 flex items-center gap-2">
+                <span class="w-2.5 h-5 bg-blue-600 rounded-full inline-block"></span>Tự luận viết đoạn văn (Writing Paragraph)
+            </h2>`;
+            container.appendChild(header);
+
+            const card = document.createElement('div');
+            card.className = "question-card bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200/80";
+            card.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <span class="bg-blue-600 text-white text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full">Câu 26</span>
+                    <span class="text-xs text-blue-600 font-bold">30 - 50 từ</span>
+                </div>
+                <div class="text-xs md:text-sm font-semibold mb-5 text-slate-850 leading-relaxed">
+                    In about 30-50 words, write about something good you want to do and why you want to do it.<br><br>
+                    <strong>Gợi ý câu hỏi định dẫn:</strong><br>
+                    • Việc tốt bạn định làm là gì? (What good deed do you want to do?)<br>
+                    • Tại sao bạn lại mong muốn thực hiện việc đó? (Why do you want to do it?)
+                </div>
+                
+                <div class="space-y-2">
+                    <textarea id="essay-input" oninput="countWords()" rows="5" placeholder="Gõ đoạn văn bằng tiếng Anh của bạn tại đây..." class="w-full p-4 border-2 border-slate-200 rounded-2xl text-xs md:text-sm focus:border-blue-500 focus:outline-none transition-all"></textarea>
+                    <div class="flex justify-between items-center text-xs text-slate-400 font-semibold px-1">
+                        <span id="essay-word-count">0 từ (Yêu cầu: 30 - 50 từ)</span>
+                        <button onclick="revealSampleEssay()" class="text-blue-600 hover:text-blue-700">Xem bài mẫu gợi ý</button>
+                    </div>
+                </div>
+
+                <div id="essay-sample-box" class="hidden mt-5 p-4 bg-blue-50/50 border border-blue-150 rounded-2xl text-xs md:text-sm text-slate-700 leading-relaxed space-y-3">
+                    <p class="font-bold text-blue-800">🌟 Bài viết mẫu gợi ý (Hiến tặng đồ chơi):</p>
+                    <p class="italic font-medium">"I want to donate my old books and toys to poor children in mountainous areas. I want to do this because it can make them feel happy and help them learn better. Giving is receiving, and I feel joyful when helping others."</p>
+                    <p class="font-bold text-blue-800">🌟 Bài viết mẫu gợi ý (Trồng cây):</p>
+                    <p class="italic font-medium">"I want to plant more green trees around my neighborhood. I want to do this because trees can clean the air and provide shade on hot summer days. This small action will help protect our environment and make our community more beautiful."</p>
+                    <div class="h-px bg-blue-200 my-2"></div>
+                    <p class="text-[11px] text-slate-500 font-medium"><b>Mẹo làm bài:</b> Để đoạn văn tự luận mạch lạc, đầu tiên hãy nêu rõ việc tốt định làm (S + want to + V-inf), sau đó dùng liên từ liên kết 'because' để chỉ rõ lý do tích cực đứng đằng sau.</p>
+                </div>
+            `;
+            container.appendChild(card);
+        }
+
+        function countWords() {
+            const txt = document.getElementById('essay-input').value.trim();
+            const words = txt === "" ? 0 : txt.split(/\s+/).length;
+            const countLabel = document.getElementById('essay-word-count');
+            
+            if (words >= 30 && words <= 50) {
+                countLabel.innerHTML = `<span class="text-emerald-600 font-bold">✨ ${words} từ (Đạt yêu cầu)</span>`;
+            } else {
+                countLabel.innerHTML = `<span class="text-amber-500">${words} từ (Yêu cầu: 30 - 50 từ)</span>`;
+            }
+        }
+
+        function revealSampleEssay() {
+            document.getElementById('essay-sample-box').classList.toggle('hidden');
+        }
+
+        function showHint(index) {
+            const hintBox = document.getElementById(`hint-${index}`);
+            hintBox.classList.toggle('hidden');
+        }
+
+        function updateProgress() {
+            const total = quizData.length;
+            const answered = userAnswers.filter(a => a !== null).length;
+            const progress = Math.round((answered / total) * 100);
+            
+            // Desktop
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('progress-percent').innerText = `${progress}%`;
+            document.getElementById('progress-text').innerText = answered === 0 ? "Chưa làm câu nào" : `Đã hoàn thành ${answered}/${total} câu`;
+            
+            // Mobile
+            document.getElementById('mobile-progress-bar').style.width = `${progress}%`;
+
+            const score = userAnswers.reduce((acc, curr, idx) => {
+                if (curr === null) return acc;
+                if (quizData[idx].type === 'choice' || quizData[idx].type === 'passage_choice') {
+                    return curr === quizData[idx].correct ? acc + 1 : acc;
+                } else {
+                    return curr === 1 ? acc + 1 : acc;
+                }
+            }, 0);
+            
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('mobile-score-badge').innerText = `Đúng: ${score}/${total}`;
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                const offset = window.innerWidth < 1024 ? 120 : 20;
+                const elementPosition = el.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function initCharts() {
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+            if (scoreChartInstance) {
+                scoreChartInstance.destroy();
+            }
+            scoreChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Đúng', 'Sai', 'Chưa làm'],
+                    datasets: [{
+                        data: [0, 0, 25],
+                        backgroundColor: ['#3B82F6', '#EF4444', '#E2E8F0'],
+                        borderWidth: 0,
+                        hoverOffset: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '72%',
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                boxWidth: 10,
+                                usePointStyle: true,
+                                font: { size: 11, weight: 'bold' }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCharts() {
+            if (!scoreChartInstance) return;
+            const total = quizData.length;
+            
+            const correct = userAnswers.reduce((acc, curr, idx) => {
+                if (curr === null) return acc;
+                if (quizData[idx].type === 'choice' || quizData[idx].type === 'passage_choice') {
+                    return curr === quizData[idx].correct ? acc + 1 : acc;
+                } else {
+                    return curr === 1 ? acc + 1 : acc;
+                }
+            }, 0);
+
+            const answered = userAnswers.filter(a => a !== null).length;
+            const incorrect = answered - correct;
+            const remaining = total - answered;
+
+            scoreChartInstance.data.datasets[0].data = [correct, incorrect, remaining];
+            scoreChartInstance.update();
+        }
+
+        window.onload = function() {
+            initQuiz();
+        };
+    </script>
+</body>
+</html>
+```
