@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Luyện Thi Tiếng Anh Vào 6 - Lương Thế Vinh 2022</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+            color: #1E293B;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .question-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+        }
+        .option-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .passage-box {
+            background-color: #FDFDFD;
+            border-left: 4px solid #6366F1;
+        }
+        @media (max-width: 768px) {
+            .option-btn {
+                padding: 0.9rem 0.75rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- Mobile Sticky Navigation -->
+    <div class="lg:hidden top-0 sticky z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm w-full">
+        <div class="px-4 py-3 flex items-center justify-between border-b border-slate-100">
+            <div>
+                <h1 class="text-sm font-black text-slate-900 leading-tight">THCS&THPT Lương Thế Vinh</h1>
+                <p class="text-[10px] text-indigo-600 font-bold uppercase tracking-wider">Đề thi thử vào 6 - Đề số 1</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span id="mobile-score-badge" class="bg-indigo-50 text-indigo-700 text-xs font-black px-2.5 py-1 rounded-full border border-indigo-100">Đúng: 0/40</span>
+            </div>
+        </div>
+        <!-- Scrollable Mobile Menu -->
+        <div class="flex overflow-x-auto whitespace-nowrap px-4 py-2 gap-2 no-scrollbar scroll-smooth">
+            <button onclick="scrollToSection('sec-phonetics')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Ngữ âm & Từ khác nhóm (1-4)</button>
+            <button onclick="scrollToSection('sec-correction')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Sửa lỗi sai (5-7)</button>
+            <button onclick="scrollToSection('sec-communication')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Giao tiếp (8-9)</button>
+            <button onclick="scrollToSection('sec-grammar')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Ngữ pháp & Từ vựng (10-21)</button>
+            <button onclick="scrollToSection('sec-cloze')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Điền từ Ryan (22-26)</button>
+            <button onclick="scrollToSection('sec-reading')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Đọc hiểu Ah Seng (27-31)</button>
+            <button onclick="scrollToSection('sec-writing')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Viết lại câu & Kết hợp câu (32-40)</button>
+        </div>
+        <div class="w-full bg-slate-100 h-1">
+            <div id="mobile-progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+        </div>
+    </div>
+
+    <!-- Desktop Sidebar -->
+    <aside class="hidden lg:flex w-80 bg-white border-r border-slate-200 flex-col h-screen sticky top-0 overflow-y-auto shrink-0">
+        <div class="p-6 border-b border-slate-150">
+            <h1 class="text-base font-black text-slate-900 leading-tight">THCS&THPT Lương Thế Vinh</h1>
+            <p class="text-[10px] text-indigo-600 mt-2 font-bold uppercase tracking-widest">ĐỀ THI TUYỂN SINH - ĐỀ 1</p>
+        </div>
+        <nav class="flex-1 p-4 space-y-1">
+            <button onclick="scrollToSection('sec-phonetics')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Ngữ âm & Từ khác nhóm (1-4)</span>
+                <span class="text-xs text-slate-400">🔊</span>
+            </button>
+            <button onclick="scrollToSection('sec-correction')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Sửa lỗi sai (5-7)</span>
+                <span class="text-xs text-slate-400">🔍</span>
+            </button>
+            <button onclick="scrollToSection('sec-communication')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Giao tiếp hằng ngày (8-9)</span>
+                <span class="text-xs text-slate-400">💬</span>
+            </button>
+            <button onclick="scrollToSection('sec-grammar')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Ngữ pháp & Từ vựng (10-21)</span>
+                <span class="text-xs text-slate-400">📝</span>
+            </button>
+            <button onclick="scrollToSection('sec-cloze')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Điền từ Ryan (22-26)</span>
+                <span class="text-xs text-slate-400">🛌</span>
+            </button>
+            <button onclick="scrollToSection('sec-reading')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Đọc hiểu Ah Seng (27-31)</span>
+                <span class="text-xs text-slate-400">🏪</span>
+            </button>
+            <button onclick="scrollToSection('sec-writing')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Viết lại & Kết hợp câu (32-40)</span>
+                <span class="text-xs text-slate-400">✍️</span>
+            </button>
+        </nav>
+        <div class="p-6 bg-slate-50 border-t border-slate-150">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Tiến trình</span>
+                <span id="progress-percent" class="text-xs font-black text-indigo-600">0%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+            </div>
+            <div id="progress-text" class="text-[11px] text-slate-500 mt-2 font-medium">Chưa làm câu nào</div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-x-hidden">
+        <div class="max-w-4xl mx-auto px-4 py-6 md:p-8 space-y-6">
+            
+            <!-- Dashboard Tracker -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Doughnut Chart -->
+                <div class="md:col-span-2 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-[10px] font-black text-slate-400 mb-3 uppercase tracking-widest">Chi tiết kết quả luyện tập</h3>
+                    </div>
+                    <div class="relative w-full h-40">
+                        <canvas id="scoreChart"></canvas>
+                    </div>
+                </div>
+                <!-- Action / Reset -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col items-center justify-center text-center">
+                    <div class="mb-1">
+                        <span id="final-score" class="text-6xl font-black text-indigo-600">0</span>
+                        <span class="text-xl text-slate-300 font-bold">/40</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-5">Số câu làm đúng</p>
+                    <button onclick="window.location.reload()" class="w-full py-3 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 active:scale-95 transition-all shadow-md shadow-indigo-150">Xáo trộn & Làm lại</button>
+                </div>
+            </div>
+
+            <!-- Header Info Box -->
+            <div class="bg-indigo-50/60 p-5 rounded-2xl border border-indigo-100 shadow-inner space-y-2">
+                <h2 class="text-sm font-black text-slate-800 flex items-center gap-2">
+                    <span>💡 Hướng dẫn làm bài</span>
+                </h2>
+                <ul class="text-slate-600 text-xs space-y-1.5 leading-relaxed">
+                    <li>• Đề thi gồm <b>40 câu hỏi trắc nghiệm</b> chuẩn cấu trúc đề Lương Thế Vinh năm 2022.</li>
+                    <li>• Toàn bộ phương án lựa chọn được <b>xáo trộn ngẫu nhiên hoàn toàn</b> để đo lường năng lực thực tế.</li>
+                    <li>• Sử dụng nút <b>Mẹo giải nhanh</b> ở từng câu hỏi để thu nhận gợi ý gợi mở tư duy.</li>
+                </ul>
+            </div>
+
+            <!-- Quiz Container -->
+            <div id="quiz-container" class="space-y-6 md:space-y-8">
+                <!-- Dynamic cards injected here -->
+            </div>
+
+            <!-- Footer -->
+            <footer class="pt-10 pb-6 text-center text-slate-400 text-xs border-t border-slate-150">
+                © 2026 CLB EduNow - Ôn thi đánh giá năng lực chất lượng cao vào 6 Lương Thế Vinh
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        const rawQuestions = [
+            // Section 1: Phonetics & Odd One Out (1-4)
+            { id: 1, section: "sec-phonetics", sectionName: "Phát âm & Từ khác nhóm (Phonetics & Odd One Out)", type: "choice", question: "Choose the word whose underlined part differs from the other three in pronunciation:\n\n1. A. <u>e</u>nter\nB. m<u>e</u>mber\nC. comm<u>e</u>nt\nD. b<u>e</u>come", options: ["become", "enter", "member", "comment"], correctVal: "become", rationale: "Phần gạch chân 'e' trong từ 'become' được phát âm là /ɪ/ (hoặc /ə/ tùy giọng Anh-Mỹ). Trong khi đó, các từ 'enter', 'member', 'comment' đều được phát âm là âm /e/.", hint: "Đọc to các từ lên và tìm xem từ nào có âm 'e' phát âm là 'i' thay vì 'e'." },
+            { id: 2, section: "sec-phonetics", sectionName: "Phát âm & Từ khác nhóm (Phonetics & Odd One Out)", type: "choice", question: "Choose the word whose underlined part differs from the other three in pronunciation:\n\n2. A. cake<u>s</u>\nB. get<u>s</u>\nC. clean<u>s</u>\nD. hope<u>s</u>", options: ["cleans", "cakes", "gets", "hopes"], correctVal: "cleans", rationale: "Đuôi '-s' của từ 'cleans' được phát âm là âm /z/ vì từ gốc tận cùng là âm hữu thanh /n/. Các từ 'cakes', 'gets', 'hopes' tận cùng bằng các âm vô thanh (/k/, /t/, /p/) nên đuôi '-s' được phát âm là âm /s/.", hint: "Hãy nhớ quy tắc phát âm đuôi -s/es đi sau các âm vô thanh và hữu thanh." },
+            { id: 3, section: "sec-phonetics", sectionName: "Phát âm & Trọng âm (Phonetics & Stress)", type: "choice", question: "Choose the word that does not belong to the group:\n\n3. A. house\nB. flat\nC. live\nD. villa", options: ["live", "house", "flat", "villa"], correctVal: "live", rationale: "Từ 'live' là một động từ (sống/sinh sống). Trong khi đó, các từ 'house' (ngôi nhà), 'flat' (căn hộ), 'villa' (biệt thự) đều là danh từ chỉ các loại hình nhà ở/nơi cư trú.", hint: "Tìm từ loại khác biệt (động từ) trong nhóm các danh từ chỉ nơi ở." },
+            { id: 4, section: "sec-phonetics", sectionName: "Phát âm & Trọng âm (Phonetics & Stress)", type: "choice", question: "Choose the word that does not belong to the group:\n\n4. A. bird\nB. mice\nC. cat\nD. hen", options: ["mice", "bird", "cat", "hen"], correctVal: "mice", rationale: "Từ 'mice' là danh từ số nhiều (những con chuột - dạng số nhiều bất quy tắc của 'mouse'). Các từ 'bird' (con chim), 'cat' (con mèo), 'hen' (con gà mái) đều là danh từ số ít.", hint: "Nhận diện danh từ ở dạng số nhiều khác biệt so với các danh từ số ít còn lại." },
+
+            // Section 2: Error Correction (5-7)
+            { id: 5, section: "sec-correction", sectionName: "Tìm lỗi sai trong câu (Error Correction)", type: "choice", question: "Mark the letter A, B, C or D to indicate the underlined part that needs correction:\n\nWhen (A) my father was (B) a small child, he (C) <u>can swim</u> (D) very well.", options: ["can swim", "When", "was", "very well"], correctVal: "can swim", rationale: "Câu bắt đầu bằng mệnh đề thời gian quá khứ 'When my father was a small child' (Khi bố tôi còn là một đứa trẻ), nên động từ chỉ khả năng phải lùi về quá khứ là 'could swim' thay vì 'can swim'.", hint: "Sự việc xảy ra khi bố còn nhỏ (trong quá khứ), vậy động từ khuyết thiếu chỉ khả năng phải chuyển sang quá khứ." },
+            { id: 6, section: "sec-correction", sectionName: "Tìm lỗi sai trong câu (Error Correction)", type: "choice", question: "Mark the letter A, B, C or D to indicate the underlined part that needs correction:\n\nThe Japanese eat rice, (A) <u>so</u> they (B) <u>also</u> eat (C) <u>a lot of</u> (D) <u>fish</u>.", options: ["so", "also", "a lot of", "fish"], correctVal: "so", rationale: "Việc ăn gạo và ăn cá là hai thói quen ăn uống bổ sung thông tin cho nhau của người Nhật, nên sử dụng liên từ kết hợp 'and' (và) thay vì liên từ chỉ kết quả 'so' (vì thế).", hint: "Hai mệnh đề này có quan hệ bổ sung thông tin cho nhau, chứ không phải quan hệ nguyên nhân - kết quả." },
+            { id: 7, section: "sec-correction", sectionName: "Tìm lỗi sai trong câu (Error Correction)", type: "choice", question: "Mark the letter A, B, C or D to indicate the underlined part that needs correction:\n\nI think his new film is much (A) <u>more interesting</u> (B) <u>as</u> his (C) <u>last</u> (D) <u>one</u>.", options: ["as", "more interesting", "much", "one"], correctVal: "as", rationale: "Cấu trúc so sánh hơn của tính từ dài: 'more + adj + than'. Do đó, từ nối so sánh ở đây bắt buộc phải là 'than' chứ không dùng 'as'.", hint: "Hãy để ý tính từ so sánh hơn 'more interesting' để chọn từ nối so sánh đi kèm tương ứng." },
+
+            // Section 3: Communication (8-9)
+            { id: 8, section: "sec-communication", sectionName: "Giao tiếp hằng ngày (Everyday Exchanges)", type: "choice", question: "Choose the correct answer to complete the exchange:\n\n- \"Would you like something to eat?\"\n- \"_________ I'm not hungry now.\"", options: ["No, thanks.", "Yes, I would.", "No, no problem.", "Yes, it is."], correctVal: "No, thanks.", rationale: "Lời đề nghị mời ăn lịch sự 'Would you like something to eat?' được từ chối khéo léo và nhã nhặn bằng câu 'No, thanks' (Không, cảm ơn nhé) vì vế sau giải thích 'bây giờ mình không đói'.", hint: "Khi từ chối lời mời ăn của ai đó một cách lịch sự, ta dùng mẫu câu nào?" },
+            { id: 9, section: "sec-communication", sectionName: "Giao tiếp hằng ngày (Everyday Exchanges)", type: "choice", question: "Choose the correct answer to complete the exchange:\n\n- \"That was a boring book.\"\n- \"_________\"", options: ["It certainly was.", "No, it's very boring.", "Yes, it was exciting.", "I think it will be good."], correctVal: "It certainly was.", rationale: "Khi đồng tình với nhận định của người nói về một việc trong quá khứ ('Đó là một cuốn sách chán ngắt'), ta đáp lại: 'It certainly was.' (Nó chắc chắn là thế rồi/Công nhận chán thật).", hint: "Bày tỏ thái độ hoàn toàn đồng ý với nhận định tiêu cực của bạn mình." },
+
+            // Section 4: Grammar & Vocabulary (10-21)
+            { id: 10, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n10. She always _________ whenever we see her.", options: ["smiles", "smile", "smiled", "smiling"], correctVal: "smiles", rationale: "Từ chỉ tần suất 'always' kết hợp vế sau 'whenever we see her' chỉ thói quen hiện tại. Chủ ngữ ngôi thứ ba số ít 'She' nên động từ phải thêm '-s' thành 'smiles'.", hint: "Chia động từ ở thì Hiện tại đơn theo đúng ngôi của chủ ngữ số ít 'She'." },
+            { id: 11, section: "sec-grammar", sectionName: "Ngữ pháp & Từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n11. We need to buy _________ packets of snacks for the picnic.", options: ["many", "any", "little", "much"], correctVal: "many", rationale: "Danh từ ghép số nhiều 'packets of snacks' (những gói bim bim) là danh từ đếm được, vì thế dùng lượng từ 'many' trong câu khẳng định chỉ số lượng nhiều.", hint: "Tìm lượng từ đi với danh từ đếm được số nhiều trong câu khẳng định." },
+            { id: 12, section: "sec-grammar", sectionName: "Ngữ pháp & Từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n12. Mandy accidentally stepped on a snail in _________ school garden.", options: ["the", "a", "an", "Ø"], correctVal: "the", rationale: "Mạo từ xác định 'the' đứng trước địa điểm cụ thể, xác định mà người nói và người nghe đều biết rõ là 'the school garden' (vườn trường).", hint: "Dùng mạo từ xác định cho một địa điểm quen thuộc trong ngôi trường." },
+            { id: 13, section: "sec-grammar", sectionName: "Ngữ pháp & Từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n13. My brother _________ the storytelling competition last Tuesday.", options: ["won", "win", "wins", "is winning"], correctVal: "won", rationale: "Trạng từ thời gian quá khứ xác định 'last Tuesday' (thứ Ba tuần trước) yêu cầu sử dụng thì Quá khứ đơn. Động từ bất quy tắc của 'win' là 'won'.", hint: "Nhận diện mốc thời gian 'last Tuesday' để chia động từ ở quá khứ đơn." },
+            { id: 14, section: "sec-grammar", sectionName: "Ngữ pháp & Từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n14. Do not disturb him. He _________ a book now.", options: ["is reading", "read", "reads", "are reading"], correctVal: "is reading", rationale: "Lời cảnh báo 'Do not disturb him' (Đừng làm phiền anh ấy) kết hợp trạng từ 'now' báo hiệu hành động đang diễn ra tại thời điểm nói, do đó dùng Hiện tại tiếp diễn: 'is reading'.", hint: "Khi có từ chỉ thời gian 'now', hành động của anh ấy đang diễn ra thế nào?" },
+            { id: 15, section: "sec-grammar", sectionName: "Ngữ pháp & Từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n15. The teacher praised Luke _________ he did very well in his test.", options: ["because", "and", "but", "while"], correctVal: "because", rationale: "Cần liên từ chỉ nguyên nhân để kết nối mệnh đề kết quả (thầy giáo khen ngợi Luke) với mệnh đề nguyên nhân (cậu ấy làm bài thi rất tốt): 'because' (bởi vì).", hint: "Tìm từ dùng để chỉ lý do mà Luke được thầy giáo khen ngợi." },
+            { id: 16, section: "sec-grammar", sectionName: "Ngữ pháp & Từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n16. Trucks are not allowed to pass through this _________ road.", options: ["narrow", "thin", "wide", "thick"], correctVal: "narrow", rationale: "Xe tải lớn không được phép đi qua con đường hẹp ('narrow road'). Các tính từ khác: 'thin' (mỏng), 'wide' (rộng), 'thick' (dày).", hint: "Tìm tính từ miêu tả chiều ngang con đường bị nhỏ hẹp, khiến xe lớn không đi lọt." },
+            { id: 17, section: "sec-grammar", sectionName: "Ngữ pháp & Từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n17. Among three of them, Kelly is _________.", options: ["the smartest", "smart", "smarter", "smarter than"], correctVal: "the smartest", rationale: "Cụm từ 'Among three of them' chỉ phạm vi so sánh từ 3 đối tượng trở lên, nên ta phải sử dụng so sánh nhất: 'the smartest' (thông minh nhất).", hint: "Khi so sánh giữa ba người với nhau, chúng ta phải dùng cấu trúc so sánh gì?" },
+            { id: 18, section: "sec-grammar", sectionName: "Ngữ pháp & Từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n18. Shall we wait for the bus _________ the bus stop?", options: ["at", "in", "on", "under"], correctVal: "at", rationale: "Giới từ chỉ một địa điểm cụ thể, điểm dừng xe buýt: 'at the bus stop' (tại điểm dừng xe buýt).", hint: "Giới từ chỉ nơi chốn cụ thể thường đi kèm với cụm từ 'the bus stop'." },
+            { id: 19, section: "sec-grammar", sectionName: "Ngữ pháp & Từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n19. My father is a doctor and he works in a/an _________.", options: ["clinic", "office", "school", "food center"], correctVal: "clinic", rationale: "Bác sĩ ('doctor') làm việc tại phòng khám y tế/bệnh viện tư: 'clinic'. Các từ khác không hợp lý: 'office' (văn phòng), 'school' (trường học).", hint: "Nơi làm việc khám chữa bệnh quen thuộc của các bác sĩ." },
+            { id: 20, section: "sec-grammar", sectionName: "Ngữ pháp & Từ vựng (Grammar & Vocabulary)", type: "choice", question: "Mark the letter A, B, C, or D to indicate the word CLOSEST in meaning to the underlined word:\n\nShe won the first prize in the singing contest because she had a <u>sweet</u> voice.", options: ["beautiful", "delicious", "tasty", "loud"], correctVal: "beautiful", rationale: "Từ 'sweet voice' (giọng hát ngọt ngào) đồng nghĩa gần nhất với 'beautiful voice' (giọng hát hay/đẹp). 'delicious' và 'tasty' chỉ dùng cho món ăn ngon vị giác.", hint: "Khi miêu tả giọng hát truyền cảm, ngọt ngào, nó tương đương với một giọng hát như thế nào?" },
+            { id: 21, section: "sec-grammar", sectionName: "Ngữ pháp & Từ vựng (Grammar & Vocabulary)", type: "choice", question: "Mark the letter A, B, C, or D to indicate the word CLOSEST in meaning to the underlined word:\n\nShe never goes out late in the evening because she is <u>scared of</u> ghosts.", options: ["afraid of", "excited about", "glad with", "bored with"], correctVal: "afraid of", rationale: "Cụm từ 'scared of' nghĩa là lo sợ, khiếp sợ điều gì, đồng nghĩa hoàn toàn với 'afraid of'.", hint: "Tìm cụm từ mang nghĩa là sợ hãi một thế lực tâm linh như bóng ma." },
+
+            // Section 5: Cloze Reading (22-26)
+            {
+                id: 22, section: "sec-cloze", sectionName: "Đọc điền từ - Cậu bé Ryan bị bệnh thủy đậu (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Ryan's Illness</b><br>
+                    Ryan had a bad cough and a high fever. He was <b>(22) _______</b> in bed. His worried mother took him to the doctor the next morning. When the doctor saw Ryan, he <b>(23) _______</b> that he had not only a cough and fever, but also red spots all <b>(24) _______</b> his body. Ryan had chicken pox. The doctor gave him some <b>(25) _______</b> and told him to get enough rest. Ryan had to stay at home for two weeks. He did not want to pass the illness to <b>(26) _______</b> friends in school.
+                </div>`,
+                question: "Question 22. Choose the correct word to fill in the blank (22):",
+                options: ["resting", "playing", "learning", "tiring"],
+                correctVal: "resting",
+                rationale: "Khi bị ho và sốt cao, cơ thể mệt mỏi cần phải 'resting in bed' (nằm nghỉ ngơi trên giường) để dưỡng bệnh.",
+                hint: "Hành động tĩnh dưỡng trên giường khi cơ thể bị ốm nặng."
+            },
+            {
+                id: 23, section: "sec-cloze", sectionName: "Đọc điền từ - Cậu bé Ryan bị bệnh thủy đậu (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Ryan's Illness</b><br>
+                    Ryan had a bad cough and a high fever. He was <b>(22) _______</b> in bed. His worried mother took him to the doctor the next morning. When the doctor saw Ryan, he <b>(23) _______</b> that he had not only a cough and fever, but also red spots all <b>(24) _______</b> his body. Ryan had chicken pox. The doctor gave him some <b>(25) _______</b> and told him to get enough rest. Ryan had to stay at home for two weeks. He did not want to pass the illness to <b>(26) _______</b> friends in school.
+                </div>`,
+                question: "Question 23. Choose the correct word to fill in the blank (23):",
+                options: ["found", "find", "founded", "finds"],
+                correctVal: "found",
+                rationale: "Câu chuyện đang được kể ở thì Quá khứ đơn (had, was, took), nên hành động khám bệnh của bác sĩ phát hiện ra triệu chứng cũng chia ở quá khứ: 'found'.",
+                hint: "Chia động từ 'phát hiện ra/tìm thấy' ở dạng quá khứ đơn."
+            },
+            {
+                id: 24, section: "sec-cloze", sectionName: "Đọc điền từ - Cậu bé Ryan bị bệnh thủy đậu (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Ryan's Illness</b><br>
+                    Ryan had a bad cough and a high fever. He was <b>(22) _______</b> in bed. His worried mother took him to the doctor the next morning. When the doctor saw Ryan, he <b>(23) _______</b> that he had not only a cough and fever, but also red spots all <b>(24) _______</b> his body. Ryan had chicken pox. The doctor gave him some <b>(25) _______</b> and told him to get enough rest. Ryan had to stay at home for two weeks. He did not want to pass the illness to <b>(26) _______</b> friends in school.
+                </div>`,
+                question: "Question 24. Choose the correct word to fill in the blank (24):",
+                options: ["over", "through", "across", "into"],
+                correctVal: "over",
+                rationale: "Cụm từ cố định chỉ việc các nốt đỏ mọc lan rộng, bao phủ khắp cơ thể: 'all over his body' (khắp cơ thể cậu ấy).",
+                hint: "Giới từ đi liền sau trạng từ 'all' để nhấn mạnh trạng thái bao trùm khắp bề mặt."
+            },
+            {
+                id: 25, section: "sec-cloze", sectionName: "Đọc điền từ - Cậu bé Ryan bị bệnh thủy đậu (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Ryan's Illness</b><br>
+                    Ryan had a bad cough and a high fever. He was <b>(22) _______</b> in bed. His worried mother took him to the doctor the next morning. When the doctor saw Ryan, he <b>(23) _______</b> that he had not only a cough and fever, but also red spots all <b>(24) _______</b> his body. Ryan had chicken pox. The doctor gave him some <b>(25) _______</b> and told him to get enough rest. Ryan had to stay at home for two weeks. He did not want to pass the illness to <b>(26) _______</b> friends in school.
+                </div>`,
+                question: "Question 25. Choose the correct word to fill in the blank (25):",
+                options: ["medicine", "money", "candies", "snacks"],
+                correctVal: "medicine",
+                rationale: "Bác sĩ kê đơn thuốc cho bệnh nhân uống: 'gave him some medicine' (đưa cho cậu ấy một ít thuốc).",
+                hint: "Chất lỏng hoặc viên nén dùng để chữa trị bệnh tật do bác sĩ kê đơn."
+            },
+            {
+                id: 26, section: "sec-cloze", sectionName: "Đọc điền từ - Cậu bé Ryan bị bệnh thủy đậu (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Ryan's Illness</b><br>
+                    Ryan had a bad cough and a high fever. He was <b>(22) _______</b> in bed. His worried mother took him to the doctor the next morning. When the doctor saw Ryan, he <b>(23) _______</b> that he had not only a cough and fever, but also red spots all <b>(24) _______</b> his body. Ryan had chicken pox. The doctor gave him some <b>(25) _______</b> and told him to get enough rest. Ryan had to stay at home for two weeks. He did not want to pass the illness to <b>(26) _______</b> friends in school.
+                </div>`,
+                question: "Question 26. Choose the correct word to fill in the blank (26):",
+                options: ["his", "him", "he", "himself"],
+                correctVal: "his",
+                rationale: "Đứng trước danh từ số nhiều 'friends' (bạn bè) cần sử dụng một tính từ sở hữu để bổ nghĩa: 'his friends' (bạn bè của cậu ấy).",
+                hint: "Tìm tính từ sở hữu tương ứng với ngôi của nhân vật nam 'Ryan'."
+            },
+
+            // Section 6: Reading Comprehension (27-31)
+            {
+                id: 27, section: "sec-reading", sectionName: "Đọc hiểu - Công việc của Ah Seng ở cửa hàng (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Ah Seng's Daily Routine</b><br>
+                    There was once a man called Ah Seng. He was a shop assistant in a grocery store near the market. He was given the key to the store as he was supposed to be the first to arrive and open the shop at six in the morning. He then had to pack the groceries, sweep the floor and clean the table. By seven o'clock, he had to make sure that the five metal racks of dried goods, bread and cookies were displayed neatly outside the shop. The owner would usually come by at eight and Ah Seng had to have coffee ready for his boss. He would then have to walk to the nearby coffee shop to buy breakfast for him.<br><br>
+                    Ah Seng had to work every day except Sundays as the shop would be closed. Although Ah Seng worked very hard, he hated his job. He found it especially hard to wake up at five o'clock almost every morning and to follow the daily routine. One day, he decided to quit.
+                </div>`,
+                question: "Question 27. Ah Seng worked in the _________.",
+                options: ["grocery store", "bakery", "market", "coffee shop"],
+                correctVal: "grocery store",
+                rationale: "Thông tin ở câu thứ hai của đoạn văn: 'He was a shop assistant in a grocery store near the market.' (Anh ấy là nhân viên phụ bán hàng tại một cửa hàng tạp hóa).",
+                hint: "Đọc kỹ câu thứ hai của bài đọc để xác định chính xác địa điểm làm việc của Ah Seng."
+            },
+            {
+                id: 28, section: "sec-reading", sectionName: "Đọc hiểu - Công việc của Ah Seng ở cửa hàng (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Ah Seng's Daily Routine</b><br>
+                    There was once a man called Ah Seng. He was a shop assistant in a grocery store near the market. He was given the key to the store as he was supposed to be the first to arrive and open the shop at six in the morning. He then had to pack the groceries, sweep the floor and clean the table. By seven o'clock, he had to make sure that the five metal racks of dried goods, bread and cookies were displayed neatly outside the shop. The owner would usually come by at eight and Ah Seng had to have coffee ready for his boss. He would then have to walk to the nearby coffee shop to buy breakfast for him.<br><br>
+                    Ah Seng had to work every day except Sundays as the shop would be closed. Although Ah Seng worked very hard, he hated his job. He found it especially hard to wake up at five o'clock almost every morning and to follow the daily routine. One day, he decided to quit.
+                </div>`,
+                question: "Question 28. The shop had to be opened by _________.",
+                options: ["six o'clock", "five o'clock", "seven o'clock", "eight o'clock"],
+                correctVal: "six o'clock",
+                rationale: "Trích xuất thông tin đoạn 1: '...arrive and open the shop at six in the morning.' (đến nơi và mở cửa hàng lúc 6 giờ sáng).",
+                hint: "Tìm mốc thời gian Ah Seng mở cửa hàng được ghi nhận trong đoạn đầu."
+            },
+            {
+                id: 29, section: "sec-reading", sectionName: "Đọc hiểu - Công việc của Ah Seng ở cửa hàng (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Ah Seng's Daily Routine</b><br>
+                    There was once a man called Ah Seng. He was a shop assistant in a grocery store near the market. He was given the key to the store as he was supposed to be the first to arrive and open the shop at six in the morning. He then had to pack the groceries, sweep the floor and clean the table. By seven o'clock, he had to make sure that the five metal racks of dried goods, bread and cookies were displayed neatly outside the shop. The owner would usually come by at eight and Ah Seng had to have coffee ready for his boss. He would then have to walk to the nearby coffee shop to buy breakfast for him.<br><br>
+                    Ah Seng had to work every day except Sundays as the shop would be closed. Although Ah Seng worked very hard, he hated his job. He found it especially hard to wake up at five o'clock almost every morning and to follow the daily routine. One day, he decided to quit.
+                </div>`,
+                question: "Question 29. What were on the five metal racks?",
+                options: ["Dried goods, bread and cookies", "Dried goods.", "Bread and cookies", "Dried goods and bread."],
+                correctVal: "Dried goods, bread and cookies",
+                rationale: "Trích xuất thông tin: '...the five metal racks of dried goods, bread and cookies were displayed neatly outside the shop.' (5 kệ sắt chứa đồ khô, bánh mì và bánh quy).",
+                hint: "Xem danh sách các mặt hàng thực phẩm được xếp ngoài cửa hàng lúc 7h sáng."
+            },
+            {
+                id: 30, section: "sec-reading", sectionName: "Đọc hiểu - Công việc của Ah Seng ở cửa hàng (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Ah Seng's Daily Routine</b><br>
+                    There was once a man called Ah Seng. He was a shop assistant in a grocery store near the market. He was given the key to the store as he was supposed to be the first to arrive and open the shop at six in the morning. He then had to pack the groceries, sweep the floor and clean the table. By seven o'clock, he had to make sure that the five metal racks of dried goods, bread and cookies were displayed neatly outside the shop. The owner would usually come by at eight and Ah Seng had to have coffee ready for his boss. He would then have to walk to the nearby coffee shop to buy breakfast for him.<br><br>
+                    Ah Seng had to work every day except Sundays as the shop would be closed. Although Ah Seng worked very hard, he hated his job. He found it especially hard to wake up at five o'clock almost every morning and to follow the daily routine. One day, he decided to quit.
+                </div>`,
+                question: "Question 30. The grocery store was opened _________ days a week.",
+                options: ["six", "five", "seven", "four"],
+                correctVal: "six",
+                rationale: "Thông tin ghi nhận: 'Ah Seng had to work every day except Sundays as the shop would be closed.' Một tuần lễ có 7 ngày, cửa hàng hoạt động tất cả các ngày ngoại trừ Chủ Nhật (Sunday) tức là mở cửa 6 ngày một tuần.",
+                hint: "Lấy tổng số ngày một tuần (7) trừ đi ngày Chủ Nhật được nghỉ làm."
+            },
+            {
+                id: 31, section: "sec-reading", sectionName: "Đọc hiểu - Công việc của Ah Seng ở cửa hàng (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Ah Seng's Daily Routine</b><br>
+                    There was once a man called Ah Seng. He was a shop assistant in a grocery store near the market. He was given the key to the store as he was supposed to be the first to arrive and open the shop at six in the morning. He then had to pack the groceries, sweep the floor and clean the table. By seven o'clock, he had to make sure that the five metal racks of dried goods, bread and cookies were displayed neatly outside the shop. The owner would usually come by at eight and Ah Seng had to have coffee ready for his boss. He would then have to walk to the nearby coffee shop to buy breakfast for him.<br><br>
+                    Ah Seng had to work every day except Sundays as the shop would be closed. Although Ah Seng worked very hard, he hated his job. He found it especially hard to wake up at five o'clock almost every morning and to follow the daily routine. One day, he decided to quit.
+                </div>`,
+                question: "Question 31. Why did Ah Seng decide to quit?",
+                options: ["He found it difficult to follow the daily routine.", "He did not like his boss.", "He did not want to work hard.", "He did not like selling groceries."],
+                correctVal: "He found it difficult to follow the daily routine.",
+                rationale: "Trích xuất thông tin ở câu cuối của bài: 'He found it especially hard to wake up at five o'clock almost every morning and to follow the daily routine. One day, he decided to quit.' (Anh ấy thấy rất mệt mỏi khi phải dậy sớm lúc 5h hằng ngày và làm theo guồng quay công việc đơn điệu).",
+                hint: "Xem nguyên nhân sâu xa từ việc thức dậy lúc 5 giờ sáng hằng ngày của Ah Seng ở cuối đoạn văn thứ hai."
+            },
+
+            // Section 7: Writing & transformations (32-40)
+            {
+                id: 32, section: "sec-writing", sectionName: "Viết lại câu & Kết hợp câu (Writing & Reordering)", type: "choice",
+                question: "Choose the sentence that is closest in meaning to the given sentence:\n\nHow high is Mount Everest?",
+                options: ["What is the height of Mount Everest?", "What the height of Mount Everest is?", "What is the high of Mount Everest?", "What is height of Mount Everest?"],
+                correctVal: "What is the height of Mount Everest?",
+                rationale: "Mẫu câu hỏi chiều cao/độ cao tương đương: 'How + adj + is + S?' tương đương với 'What is the + noun + of + S?'. Danh từ tương ứng của tính từ 'high' là 'height'. Do đó cấu trúc đúng là 'What is the height of Mount Everest?'.",
+                hint: "Sử dụng công thức chuyển câu hỏi tính từ 'high' sang dạng cấu trúc danh từ 'the height'."
+            },
+            {
+                id: 33, section: "sec-writing", sectionName: "Viết lại câu & Kết hợp câu (Writing & Reordering)", type: "choice",
+                question: "Choose the sentence that is closest in meaning to the given sentence:\n\nMy sister knows more about it than I do.",
+                options: ["I don't know so much about it as my sister does.", "I don't know much about it than my sister.", "I don't know as much about it as my sister did.", "I don't know as much about it than my sister."],
+                correctVal: "I don't know so much about it as my sister does.",
+                rationale: "So sánh hơn 'My sister knows more than I do' (Chị gái tôi biết nhiều hơn tôi) tương đương với so sánh không bằng 'I don't know so/as much as my sister does' (Tôi không biết nhiều về nó bằng chị tôi). Vì vế đầu ở hiện tại 'knows' nên vế sau phải mượn trợ động từ 'does' ở hiện tại.",
+                hint: "Sử dụng cấu trúc so sánh không bằng dạng phủ định 'not so/as... as...' để diễn tả ý so sánh hơn của vế gốc."
+            },
+            {
+                id: 34, section: "sec-writing", sectionName: "Viết lại câu & Kết hợp câu (Writing & Reordering)", type: "choice",
+                question: "Choose the sentence that is closest in meaning to the given sentence:\n\nTheir trip lasted three days.",
+                options: ["They had a three-day trip.", "They spent three days lasting the trip.", "They lasted three days for their trip.", "They last went on a trip three days ago."],
+                correctVal: "They had a three-day trip.",
+                rationale: "Hành trình kéo dài 3 ngày ('trip lasted three days') tương đương với việc họ có một chuyến du ngoạn dài 3 ngày. Trong tiếng Anh, khi một danh từ ghép đóng vai trò tính từ bổ nghĩa cho danh từ chính đứng sau, ta không được thêm '-s' vào đơn vị thời gian: 'a three-day trip' (không phải three-days).",
+                hint: "Chú ý cấu trúc danh từ ghép có gạch nối 'a [number]-[singular noun] + N' bổ nghĩa chỉ thời lượng."
+            },
+            {
+                id: 35, section: "sec-writing", sectionName: "Viết lại câu & Kết hợp câu (Writing & Reordering)", type: "choice",
+                question: "Choose the sentence that best combines the pair of sentences:\n\nIt is going to rain. You should bring a raincoat or an umbrella along with you.",
+                options: [
+                    "It is going to rain, so you should bring a raincoat or an umbrella along with you.",
+                    "It is going to rain, because you should bring a raincoat or an umbrella along with you.",
+                    "It is going to rain, but you should bring a raincoat or an umbrella along with you.",
+                    "It is going to rain, or you should bring a raincoat or an umbrella along with you."
+                ],
+                correctVal: "It is going to rain, so you should bring a raincoat or an umbrella along with you.",
+                rationale: "Trời sắp mưa là nguyên nhân, hành động mang áo mưa/ô đi kèm là kết quả hợp logic, vì thế ta sử dụng liên từ chỉ kết quả 'so' (vì thế/cho nên) để kết hợp hai câu.",
+                hint: "Hai mệnh đề này chỉ mối quan hệ nguyên nhân - kết quả trực tiếp."
+            },
+            {
+                id: 36, section: "sec-writing", sectionName: "Viết lại câu & Kết hợp câu (Writing & Reordering)", type: "choice",
+                question: "Choose the sentence that best combines the pair of sentences:\n\nIt may be sunny this weekend. We want to go camping then.",
+                options: [
+                    "If it is sunny this weekend, we will go camping.",
+                    "If it may sunny this weekend, we will go camping then.",
+                    "If it will be sunny this weekend, we will go camping.",
+                    "If it is sunny this weekend, we go camping."
+                ],
+                correctVal: "If it is sunny this weekend, we will go camping.",
+                rationale: "Để kết hợp tình huống giả định có khả năng xảy ra ở tương lai ('may be sunny'), ta sử dụng câu điều kiện loại 1: 'If + S + V(hiện tại đơn), S + will + V-inf'. Mệnh đề IF chia hiện tại đơn 'it is', mệnh đề chính chia tương lai 'we will go'.",
+                hint: "Cấu trúc chuẩn xác của câu điều kiện loại 1 diễn tả một giả định thực tế ở tương lai gần."
+            },
+            {
+                id: 37, section: "sec-writing", sectionName: "Viết lại câu & Kết hợp câu (Writing & Reordering)", type: "choice",
+                question: "Choose the sentence that best combines the pair of sentences:\n\nIt was cold yesterday. We couldn't go swimming.",
+                options: [
+                    "It was too cold for us to go swimming yesterday.",
+                    "It was too cold for us going swimming yesterday.",
+                    "It was too cold with us to go swimming yesterday.",
+                    "It was too cold with us going swimming yesterday."
+                ],
+                correctVal: "It was too cold for us to go swimming yesterday.",
+                rationale: "Sử dụng cấu trúc 'quá... cho ai để làm gì': 'S + be + too + adj + (for sb) + to-V'. Hành động 'go swimming' ở quá khứ do trời quá lạnh đổi thành: 'It was too cold for us to go swimming yesterday'.",
+                hint: "Nhớ công thức đi cùng 'too + tính từ': 'too + adj + for somebody + to + động từ nguyên thể'."
+            },
+            {
+                id: 38, section: "sec-writing", sectionName: "Viết lại câu & Kết hợp câu (Writing & Reordering)", type: "choice",
+                question: "Choose the meaningful sentence written by using the words given:\n\nSchool / close / Saturdays / Sundays / so / Nam / stay / home / now.",
+                options: [
+                    "His school is closed on Saturdays and Sundays so Nam is staying at home now.",
+                    "The school closes on Saturdays and Sundays so Nam stays at home now.",
+                    "School is closed on Saturdays and Sundays so Nam is staying in home now.",
+                    "The school is closed in Saturdays and Sundays so Nam is staying at home now."
+                ],
+                correctVal: "His school is closed on Saturdays and Sundays so Nam is staying at home now.",
+                rationale: "Trường học bị đóng cửa sử dụng thể bị động ở hiện tại: 'His school is closed on Saturdays and Sundays'. Hành động ở vế sau có từ chỉ thời điểm hiện tại 'now' nên phải chia ở thì Hiện tại tiếp diễn: 'so Nam is staying at home now'. Giới từ đi với thứ là 'on', giới từ đi với nhà là 'at home'.",
+                hint: "Chú ý chia động từ vế sau ở thì Hiện tại tiếp diễn vì có từ trạng ngữ 'now'."
+            },
+            {
+                id: 39, section: "sec-writing", sectionName: "Viết lại câu & Kết hợp câu (Writing & Reordering)", type: "choice",
+                question: "Choose the meaningful sentence written by using the words given:\n\nShe / read / comic book / light.",
+                options: [
+                    "She is reading the comic book under the light.",
+                    "She is reading a comic book on the light.",
+                    "She is reading a comic book ahead the light.",
+                    "She is reading the comic book above the light."
+                ],
+                correctVal: "She is reading the comic book under the light.",
+                rationale: "Hành động đọc sách dưới ánh đèn sử dụng giới từ chỉ không gian 'under the light' (dưới ánh sáng của ngọn đèn) là hoàn toàn tự nhiên và chuẩn xác về mặt ngữ nghĩa.",
+                hint: "Chúng ta thường ngồi đọc sách ở vị trí như thế nào so với ánh đèn điện chiếu xuống?"
+            },
+            {
+                id: 40, section: "sec-writing", sectionName: "Viết lại câu & Kết hợp câu (Writing & Reordering)", type: "choice",
+                question: "Choose the meaningful sentence written by using the words given:\n\nSarah / not / come / party / if / not / invite.",
+                options: [
+                    "Sarah won't come to the party if she isn't invited.",
+                    "Sarah won't come to the party if she doesn't invite.",
+                    "Sarah doesn't come to a party if she isn't invited to.",
+                    "Sarah won't come to a party if she not invited."
+                ],
+                correctVal: "Sarah won't come to the party if she isn't invited.",
+                rationale: "Cấu trúc câu điều kiện loại 1 với mệnh đề IF mang nghĩa phủ định và bị động (nếu cô ấy không được mời): 'if she isn't invited' (thể bị động của hiện tại đơn). Mệnh đề chính chia tương lai phủ định: 'Sarah won't come'.",
+                hint: "Vế chứa IF mang tính chất bị động 'nếu cô ấy không ĐƯỢC mời đến bữa tiệc'."
+            }
+        ];
+
+        let quizData = [];
+        let userAnswers = [];
+        let scoreChartInstance = null;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function prepareQuiz() {
+            quizData = rawQuestions.map(q => {
+                const shuffledOptions = shuffleArray([...q.options]);
+                const newCorrectIndex = shuffledOptions.indexOf(q.correctVal);
+                return { ...q, options: shuffledOptions, correct: newCorrectIndex };
+            });
+            userAnswers = new Array(quizData.length).fill(null);
+        }
+
+        function initQuiz() {
+            prepareQuiz();
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = "";
+            let currentSection = "";
+
+            quizData.forEach((q, index) => {
+                if (q.section !== currentSection) {
+                    currentSection = q.section;
+                    const sectionHeader = document.createElement('div');
+                    sectionHeader.id = q.section;
+                    sectionHeader.className = "pt-6 lg:pt-8 mb-4 border-b-2 border-indigo-100";
+                    sectionHeader.innerHTML = `<h2 class="text-sm md:text-base font-extrabold text-slate-800 pb-2 flex items-center gap-2">
+                        <span class="w-2.5 h-5 bg-indigo-600 rounded-full inline-block"></span>${q.sectionName}
+                    </h2>`;
+                    container.appendChild(sectionHeader);
+                }
+
+                const card = document.createElement('div');
+                card.className = "question-card bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-all";
+
+                let passageHtml = "";
+                if (q.passage) {
+                    passageHtml = `
+                        <div class="mb-4">
+                            ${q.passage}
+                        </div>
+                    `;
+                }
+
+                const interactionHtml = `
+                    <div id="options-${index}" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                        ${q.options.map((opt, i) => `
+                            <button onclick="selectOption(${index}, ${i})" class="option-btn text-left p-3.5 rounded-xl border-2 border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/40 transition-all flex items-center group active:scale-[0.99] w-full">
+                                <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-xs mr-3 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors shrink-0">${String.fromCharCode(65 + i)}</span>
+                                <span class="text-slate-700 text-xs md:text-sm font-medium flex-1">${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="bg-indigo-600 text-white text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full">Câu ${q.id}</span>
+                        <button onclick="showHint(${index})" class="flex items-center gap-1 text-[11px] text-amber-600 font-bold hover:text-amber-700 active:scale-95 transition-all">
+                            <span>💡 Mẹo giải nhanh</span>
+                        </button>
+                    </div>
+                    ${passageHtml}
+                    <div class="text-xs md:text-sm font-semibold mb-5 text-slate-850 leading-relaxed whitespace-pre-line">${q.question}</div>
+                    
+                    ${interactionHtml}
+                    
+                    <div id="hint-${index}" class="hidden mt-4 p-4 bg-amber-50 text-amber-950 text-xs rounded-xl border border-amber-100 italic leading-relaxed">
+                        <strong>Gợi ý:</strong> ${q.hint}
+                    </div>
+                    
+                    <div id="feedback-${index}" class="hidden mt-4 p-4 rounded-xl border transition-all">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span id="icon-${index}" class="text-base"></span>
+                            <p id="result-text-${index}" class="font-bold text-xs md:text-sm"></p>
+                        </div>
+                        <div class="h-px bg-current opacity-10 mb-2"></div>
+                        <p class="text-xs md:text-sm leading-relaxed font-medium opacity-95">${q.rationale}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Extra Section 7: Writing Paragraph Helper (Optional Interactive Writing Area)
+            injectParagraphSection();
+
+            initCharts();
+        }
+
+        function selectOption(qIdx, oIdx) {
+            if (userAnswers[qIdx] !== null) return;
+
+            userAnswers[qIdx] = oIdx;
+            const correct = quizData[qIdx].correct;
+            const feedback = document.getElementById(`feedback-${qIdx}`);
+            const resultText = document.getElementById(`result-text-${qIdx}`);
+            const icon = document.getElementById(`icon-${qIdx}`);
+            const optionsDiv = document.getElementById(`options-${qIdx}`);
+            const buttons = optionsDiv.getElementsByTagName('button');
+
+            feedback.classList.remove('hidden');
+            
+            if (oIdx === correct) {
+                feedback.className = "mt-4 p-4 rounded-xl bg-emerald-50 text-emerald-800 border-emerald-200 border text-xs md:text-sm";
+                resultText.innerText = "Chính xác!";
+                icon.innerText = "✅";
+                buttons[oIdx].className = "option-btn text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 flex items-center shadow-sm w-full";
+                buttons[oIdx].querySelector('span').className = "w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+            } else {
+                feedback.className = "mt-4 p-4 rounded-xl bg-rose-50 text-rose-800 border-rose-200 border text-xs md:text-sm";
+                resultText.innerText = "Chưa chính xác";
+                icon.innerText = "❌";
+                buttons[oIdx].className = "option-btn text-left p-3.5 rounded-xl border-2 border-rose-500 bg-rose-50 flex items-center shadow-sm w-full";
+                buttons[oIdx].querySelector('span').className = "w-7 h-7 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+                
+                // Highlight correct
+                buttons[correct].className = "option-btn text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50/50 flex items-center w-full transition-all";
+                buttons[correct].querySelector('span').className = "w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+            }
+
+            for (let b = 0; b < buttons.length; b++) {
+                if (b !== oIdx && b !== correct) {
+                    buttons[b].classList.add('opacity-40');
+                }
+            }
+
+            updateProgress();
+            updateCharts();
+        }
+
+        function injectParagraphSection() {
+            const container = document.getElementById('quiz-container');
+            
+            const header = document.createElement('div');
+            header.id = "sec-paragraph";
+            header.className = "pt-6 lg:pt-8 mb-4 border-b-2 border-indigo-100";
+            header.innerHTML = `<h2 class="text-sm md:text-base font-extrabold text-slate-800 pb-2 flex items-center gap-2">
+                <span class="w-2.5 h-5 bg-indigo-600 rounded-full inline-block"></span>Tự luận viết đoạn văn ngắn (Writing Section)
+            </h2>`;
+            container.appendChild(header);
+
+            const card = document.createElement('div');
+            card.className = "question-card bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200/80";
+            card.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <span class="bg-indigo-600 text-white text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full">Tự luận</span>
+                    <span class="text-xs text-indigo-600 font-bold">30 - 50 từ</span>
+                </div>
+                <div class="text-xs md:text-sm font-semibold mb-5 text-slate-850 leading-relaxed">
+                    Write about something good you want to do and why you want to do it (30-50 words).
+                </div>
+                
+                <div class="space-y-2">
+                    <textarea id="essay-input" oninput="countWords()" rows="5" placeholder="Gõ câu trả lời tự luận của con bằng tiếng Anh..." class="w-full p-4 border-2 border-slate-200 rounded-2xl text-xs md:text-sm focus:border-indigo-500 focus:outline-none transition-all"></textarea>
+                    <div class="flex justify-between items-center text-xs text-slate-400 font-semibold px-1">
+                        <span id="essay-word-count">0 từ (Yêu cầu: 30 - 50 từ)</span>
+                        <button onclick="revealSampleEssay()" class="text-indigo-600 hover:text-indigo-700">Xem bài mẫu gợi ý</button>
+                    </div>
+                </div>
+
+                <div id="essay-sample-box" class="hidden mt-5 p-4 bg-indigo-50/50 border border-indigo-150 rounded-2xl text-xs md:text-sm text-slate-700 leading-relaxed space-y-3">
+                    <p class="font-bold text-indigo-800">🌟 Bài viết gợi ý tham khảo (Bảo vệ môi trường):</p>
+                    <p class="italic font-medium">"I want to plant more green trees around my school. I want to do this because trees can clean the air and provide shade for students during recess. It will make our school look more beautiful and help protect the environment."</p>
+                    <div class="h-px bg-indigo-200 my-2"></div>
+                    <p class="text-[11px] text-slate-500 font-medium"><b>Mẹo ghi điểm:</b> Con hãy sử dụng cấu trúc: "I want to + V-inf..." để kể về việc định làm, và nối tiếp bằng "I want to do this because..." để giải thích cụ thể lý do tích cực đứng đằng sau nhé!</p>
+                </div>
+            `;
+            container.appendChild(card);
+        }
+
+        function countWords() {
+            const txt = document.getElementById('essay-input').value.trim();
+            const words = txt === "" ? 0 : txt.split(/\s+/).length;
+            const countLabel = document.getElementById('essay-word-count');
+            
+            if (words >= 30 && words <= 50) {
+                countLabel.innerHTML = `<span class="text-emerald-600 font-bold">✨ ${words} từ (Đạt yêu cầu)</span>`;
+            } else {
+                countLabel.innerHTML = `<span class="text-amber-500">${words} từ (Yêu cầu: 30 - 50 từ)</span>`;
+            }
+        }
+
+        function revealSampleEssay() {
+            document.getElementById('essay-sample-box').classList.toggle('hidden');
+        }
+
+        function showHint(index) {
+            const hintBox = document.getElementById(`hint-${index}`);
+            hintBox.classList.toggle('hidden');
+        }
+
+        function updateProgress() {
+            const total = quizData.length;
+            const answered = userAnswers.filter(a => a !== null).length;
+            const progress = Math.round((answered / total) * 100);
+            
+            // Desktop
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('progress-percent').innerText = `${progress}%`;
+            document.getElementById('progress-text').innerText = answered === 0 ? "Chưa làm câu nào" : `Đã hoàn thành ${answered}/${total} câu`;
+            
+            // Mobile
+            document.getElementById('mobile-progress-bar').style.width = `${progress}%`;
+
+            const score = userAnswers.reduce((acc, curr, idx) => {
+                if (curr === null) return acc;
+                return curr === quizData[idx].correct ? acc + 1 : acc;
+            }, 0);
+            
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('mobile-score-badge').innerText = `Đúng: ${score}/${total}`;
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                const offset = window.innerWidth < 1024 ? 120 : 20;
+                const elementPosition = el.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function initCharts() {
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+            if (scoreChartInstance) {
+                scoreChartInstance.destroy();
+            }
+            scoreChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Đúng', 'Sai', 'Chưa làm'],
+                    datasets: [{
+                        data: [0, 0, 40],
+                        backgroundColor: ['#10B981', '#EF4444', '#E2E8F0'],
+                        borderWidth: 0,
+                        hoverOffset: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '72%',
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                boxWidth: 10,
+                                usePointStyle: true,
+                                font: { size: 11, weight: 'bold' }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCharts() {
+            if (!scoreChartInstance) return;
+            const total = quizData.length;
+            
+            const correct = userAnswers.reduce((acc, curr, idx) => {
+                if (curr === null) return acc;
+                return curr === quizData[idx].correct ? acc + 1 : acc;
+            }, 0);
+
+            const answered = userAnswers.filter(a => a !== null).length;
+            const incorrect = answered - correct;
+            const remaining = total - answered;
+
+            scoreChartInstance.data.datasets[0].data = [correct, incorrect, remaining];
+            scoreChartInstance.update();
+        }
+
+        window.onload = function() {
+            initQuiz();
+        };
+    </script>
+</body>
+</html>
+```
