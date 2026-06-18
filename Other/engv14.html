@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Luyện Thi Tiếng Anh Vào 6 - Lương Thế Vinh Đề 2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+            color: #1E293B;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .question-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+        }
+        .option-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .passage-box {
+            background-color: #FDFDFD;
+            border-left: 4px solid #6366F1;
+        }
+        @media (max-width: 768px) {
+            .option-btn {
+                padding: 0.9rem 0.75rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- Mobile Sticky Navigation -->
+    <div class="lg:hidden top-0 sticky z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm w-full">
+        <div class="px-4 py-3 flex items-center justify-between border-b border-slate-100">
+            <div>
+                <h1 class="text-sm font-black text-slate-900 leading-tight">THCS&THPT Lương Thế Vinh</h1>
+                <p class="text-[10px] text-indigo-600 font-bold uppercase tracking-wider">Đề tuyển sinh vào 6 - Đề số 2</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span id="mobile-score-badge" class="bg-indigo-50 text-indigo-700 text-xs font-black px-2.5 py-1 rounded-full border border-indigo-100">Đúng: 0/40</span>
+            </div>
+        </div>
+        <!-- Scrollable Mobile Menu -->
+        <div class="flex overflow-x-auto whitespace-nowrap px-4 py-2 gap-2 no-scrollbar scroll-smooth">
+            <button onclick="scrollToSection('sec-phonetics')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Ngữ âm & Khác nhóm (1-4)</button>
+            <button onclick="scrollToSection('sec-correction')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Sửa lỗi sai (5-7)</button>
+            <button onclick="scrollToSection('sec-communication')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Giao tiếp (8-9)</button>
+            <button onclick="scrollToSection('sec-grammar')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Ngữ pháp & Từ vựng (10-21)</button>
+            <button onclick="scrollToSection('sec-cloze')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Điền từ Tokyo (22-26)</button>
+            <button onclick="scrollToSection('sec-reading')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Đọc hiểu Hamlet (27-31)</button>
+            <button onclick="scrollToSection('sec-writing')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Viết lại câu & Kết hợp câu (32-40)</button>
+        </div>
+        <div class="w-full bg-slate-100 h-1">
+            <div id="mobile-progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+        </div>
+    </div>
+
+    <!-- Desktop Sidebar -->
+    <aside class="hidden lg:flex w-80 bg-white border-r border-slate-200 flex-col h-screen sticky top-0 overflow-y-auto shrink-0">
+        <div class="p-6 border-b border-slate-150">
+            <h1 class="text-base font-black text-slate-900 leading-tight">THCS&THPT Lương Thế Vinh</h1>
+            <p class="text-[10px] text-indigo-600 mt-2 font-bold uppercase tracking-widest">ĐỀ TUYỂN SINH LỚP 6 - ĐỀ 2</p>
+        </div>
+        <nav class="flex-1 p-4 space-y-1">
+            <button onclick="scrollToSection('sec-phonetics')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Ngữ âm & Khác nhóm (1-4)</span>
+                <span class="text-xs text-slate-400">🔊</span>
+            </button>
+            <button onclick="scrollToSection('sec-correction')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Sửa lỗi sai (5-7)</span>
+                <span class="text-xs text-slate-400">🔍</span>
+            </button>
+            <button onclick="scrollToSection('sec-communication')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Giao tiếp hằng ngày (8-9)</span>
+                <span class="text-xs text-slate-400">💬</span>
+            </button>
+            <button onclick="scrollToSection('sec-grammar')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Ngữ pháp & Từ vựng (10-21)</span>
+                <span class="text-xs text-slate-400">📝</span>
+            </button>
+            <button onclick="scrollToSection('sec-cloze')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Điền từ Tokyo (22-26)</span>
+                <span class="text-xs text-slate-400">🗼</span>
+            </button>
+            <button onclick="scrollToSection('sec-reading')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Đọc hiểu Hamlet (27-31)</span>
+                <span class="text-xs text-slate-400">🐕</span>
+            </button>
+            <button onclick="scrollToSection('sec-writing')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Viết lại câu & Từ gợi ý (32-40)</span>
+                <span class="text-xs text-slate-400">✍️</span>
+            </button>
+        </nav>
+        <div class="p-6 bg-slate-50 border-t border-slate-150">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Tiến trình</span>
+                <span id="progress-percent" class="text-xs font-black text-indigo-600">0%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+            </div>
+            <div id="progress-text" class="text-[11px] text-slate-500 mt-2 font-medium">Chưa làm câu nào</div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-x-hidden">
+        <div class="max-w-4xl mx-auto px-4 py-6 md:p-8 space-y-6">
+            
+            <!-- Dashboard Tracker -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Doughnut Chart -->
+                <div class="md:col-span-2 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-[10px] font-black text-slate-400 mb-3 uppercase tracking-widest">Phân tích kết quả luyện tập</h3>
+                    </div>
+                    <div class="relative w-full h-40">
+                        <canvas id="scoreChart"></canvas>
+                    </div>
+                </div>
+                <!-- Action / Reset -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col items-center justify-center text-center">
+                    <div class="mb-1">
+                        <span id="final-score" class="text-6xl font-black text-indigo-600">0</span>
+                        <span class="text-xl text-slate-300 font-bold">/40</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-5">Số câu làm đúng</p>
+                    <button onclick="window.location.reload()" class="w-full py-3 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 active:scale-95 transition-all shadow-md shadow-indigo-150">Xáo trộn & Làm lại</button>
+                </div>
+            </div>
+
+            <!-- Header Info Box -->
+            <div class="bg-indigo-50/60 p-5 rounded-2xl border border-indigo-100 shadow-inner space-y-2">
+                <h2 class="text-sm font-black text-slate-800 flex items-center gap-2">
+                    <span>💡 Hướng dẫn làm bài</span>
+                </h2>
+                <ul class="text-slate-600 text-xs space-y-1.5 leading-relaxed">
+                    <li>• Đề thi gồm có <b>40 câu hỏi trắc nghiệm</b> chuẩn cấu trúc đề số 2 Lương Thế Vinh năm 2022.</li>
+                    <li>• Toàn bộ các phương án lựa chọn được <b>xáo trộn ngẫu nhiên hoàn toàn</b> để đo lường năng lực thực chất.</li>
+                    <li>• Sử dụng nút <b>Mẹo giải nhanh</b> ở từng câu hỏi để nhận gợi ý chỉ dẫn lý thuyết hữu ích.</li>
+                </ul>
+            </div>
+
+            <!-- Quiz Container -->
+            <div id="quiz-container" class="space-y-6 md:space-y-8">
+                <!-- Dynamic cards injected here -->
+            </div>
+
+            <!-- Footer -->
+            <footer class="pt-10 pb-6 text-center text-slate-400 text-xs border-t border-slate-150">
+                © 2026 CLB EduNow - Ôn thi đánh giá năng lực chất lượng cao vào 6 Lương Thế Vinh
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        const rawQuestions = [
+            // Section 1: Phonetics (1-4)
+            { id: 1, section: "sec-phonetics", sectionName: "Phát âm & Từ khác nhóm (Phonetics & Odd One Out)", type: "choice", question: "Choose the word whose underlined part differs from the other three in pronunciation:\n\n1. A. m<u>o</u>ther\nB. t<u>o</u>ngue\nC. s<u>o</u>me\nD. t<u>o</u>day", options: ["today", "mother", "tongue", "some"], correctVal: "today", rationale: "Phần gạch chân 'o' trong từ 'today' phát âm là âm /ə/ (nguyên âm yếu), trong khi đó các từ 'mother', 'tongue', 'some' đều phát âm là âm /ʌ/.", hint: "Hãy đọc to các từ lên và tìm xem từ nào có âm 'o' được phát âm nhẹ như tiếng Việt phát âm chữ 'ơ'." },
+            { id: 2, section: "sec-phonetics", sectionName: "Phát âm & Từ khác nhóm (Phonetics & Odd One Out)", type: "choice", question: "Choose the word whose underlined part differs from the other three in pronunciation:\n\n2. A. pr<u>e</u>tty\nB. th<u>e</u>ater\nC. diff<u>e</u>rent\nD. stud<u>e</u>nt", options: ["pretty", "theater", "different", "student"], correctVal: "pretty", rationale: "Phần gạch chân 'e' trong từ 'pretty' được phát âm là /ɪ/ (âm 'i' ngắn: /ˈprɪt.i/), các từ còn lại phát âm là âm /ɪə/ trong 'theater' hoặc âm /ə/ yếu trong 'different' và 'student'.", hint: "Tìm từ đặc biệt có âm 'e' phát âm thành 'i' ngắn rất độc đáo." },
+            { id: 3, section: "sec-phonetics", sectionName: "Phát âm & Từ khác nhóm (Phonetics & Odd One Out)", type: "choice", question: "Choose the word that does not belong to the group:\n\n3. A. two\nB. third\nC. fourth\nD. first", options: ["two", "third", "fourth", "first"], correctVal: "two", rationale: "Từ 'two' (số hai) là số đếm (cardinal number). Các từ còn lại: 'third' (thứ ba), 'fourth' (thứ tư), 'first' (thứ nhất) đều là số thứ tự (ordinal numbers).", hint: "Nhận diện từ chỉ số lượng thuần túy (số đếm) so với các số thứ tự dùng để xếp hạng." },
+            { id: 4, section: "sec-phonetics", sectionName: "Phát âm & Từ khác nhóm (Phonetics & Odd One Out)", type: "choice", question: "Choose the word that does not belong to the group:\n\n4. A. stove\nB. fridge\nC. bridge\nD. cooker", options: ["bridge", "stove", "fridge", "cooker"], correctVal: "bridge", rationale: "Từ 'bridge' có nghĩa là chiếc cầu (công trình xây dựng). Các từ còn lại: 'stove' (bếp nấu), 'fridge' (tủ lạnh), 'cooker' (nồi cơm điện/bếp nấu) đều là thiết bị đồ gia dụng trong nhà bếp.", hint: "Tìm từ không chỉ thiết bị/dụng cụ gia đình trong phòng bếp." },
+
+            // Section 2: Error Correction (5-7)
+            { id: 5, section: "sec-correction", sectionName: "Tìm lỗi sai trong câu (Error Correction)", type: "choice", question: "Mark the letter A, B, C or D to indicate the underlined part that needs correction:\n\nLinda prefers (A) <u>reading</u> books to (B) <u>play</u> (C) <u>video</u> (D) <u>games</u>.", options: ["play", "prefers", "reading", "video"], correctVal: "play", rationale: "Cấu trúc so sánh sở thích: 'prefer + V-ing + to + V-ing' (thích làm việc gì hơn việc gì). Do đó, động từ 'play' phải chuyển thành dạng danh động từ 'playing' mới chính xác.", hint: "Nhớ cấu trúc chuẩn của động từ 'prefer' khi đi kèm giới từ 'to' so sánh sở thích." },
+            { id: 6, section: "sec-correction", sectionName: "Tìm lỗi sai trong câu (Error Correction)", type: "choice", question: "Mark the letter A, B, C or D to indicate the underlined part that needs correction:\n\nSarah participates (A) <u>on</u> a lot of (B) <u>competitions</u> and often (C) <u>plays</u> very (D) <u>well</u> in them.", options: ["on", "competitions", "plays", "well"], correctVal: "on", rationale: "Động từ 'participate' đi kèm với giới từ 'in' để tạo thành cụm từ 'participate in something' (tham gia vào việc gì/cuộc thi nào). Sử dụng giới từ 'on' là sai cấu trúc.", hint: "Hãy kiểm tra xem giới từ đi kèm động từ tham gia 'participate' đã dùng đúng chưa." },
+            { id: 7, section: "sec-correction", sectionName: "Tìm lỗi sai trong câu (Error Correction)", type: "choice", question: "Mark the letter A, B, C or D to indicate the underlined part that needs correction:\n\nIf you climb (A) <u>the</u> mountain, you will (B) <u>sees</u> a lot (C) <u>of</u> (D) <u>flowers</u>.", options: ["sees", "the", "will", "flowers"], correctVal: "sees", rationale: "Trong câu điều kiện loại 1, sau động từ khuyết thiếu 'will', động từ chính bắt buộc phải ở dạng nguyên mẫu không chia (V-infinitive). Vì vậy, 'sees' phải được sửa thành 'see'.", hint: "Sau động từ khuyết thiếu 'will', chúng ta có được phép thêm đuôi '-es' vào động từ không?" },
+
+            // Section 3: Communication (8-9)
+            { id: 8, section: "sec-communication", sectionName: "Giao tiếp hằng ngày (Everyday Exchanges)", type: "choice", question: "Choose the correct answer to complete the exchange:\n\n- Tim: \"Make yourself at home.\"\n- Mai: \"_________\"", options: ["That's very kind. Thank you.", "Yes, Can I help you?", "Not at all. Don't mention it.", "Thanks! Same to you."], correctVal: "That's very kind. Thank you.", rationale: "Lời mời hiếu khách 'Make yourself at home' (Cứ tự nhiên như ở nhà nhé) được chủ nhà nói khi đón khách. Khách đáp lại lời đón tiếp nhã nhặn đó bằng câu: 'That's very kind. Thank you.' (Bạn thật tử tế. Cảm ơn nhé!).", hint: "Lời đáp lại thân thiện khi chủ nhà niềm nở mời bạn cứ tự nhiên và thoải mái." },
+            { id: 9, section: "sec-communication", sectionName: "Giao tiếp hằng ngày (Everyday Exchanges)", type: "choice", question: "Choose the correct answer to complete the exchange:\n\n- \"Where's the book?\"\n- \"_________\"", options: ["It's over there. It's on the table.", "Oh, I see nothing", "Really? I don't remember it.", "It's not my problem."], correctVal: "It's over there. It's on the table.", rationale: "Câu hỏi 'Where...?' dùng để hỏi địa điểm, nơi chốn của đồ vật. Câu trả lời chỉ địa điểm 'It's over there. It's on the table' (Nó ở đằng kia kìa. Nó ở trên bàn ấy) là phù hợp nhất về ngữ nghĩa.", hint: "Tìm câu trả lời mô tả trực tiếp vị trí địa lý của cuốn sách." },
+
+            // Section 4: Grammar & Vocabulary (10-21)
+            { id: 10, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n10. I think she _________ agree with this idea.", options: ["doesn't", "is", "isn't", "don't"], correctVal: "doesn't", rationale: "Động từ chính 'agree' (đồng ý) là một động từ thường. Để phủ định ở thì Hiện tại đơn với chủ ngữ ngôi thứ ba số ít 'she', ta bắt buộc phải sử dụng trợ động từ phủ định 'doesn't'.", hint: "agree là động từ thường nên khi ở thể phủ định ta mượn trợ động từ gì đi với 'she'?" },
+            { id: 11, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n11. She bought a _________ of bread so we can make sandwiches.", options: ["loaf", "bar", "bowl", "slide"], correctVal: "loaf", rationale: "Lượng từ kết hợp cố định (collocation) với bánh mì nguyên ổ là 'a loaf of bread' (một ổ bánh mì). 'slide' ở đây viết sai chính tả của 'slice' (lát mỏng).", hint: "Khi đi mua bánh mì chưa cắt lát ở cửa tiệm, đơn vị đo lường đếm được của nó là gì?" },
+            { id: 12, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n12. Sports like riding a bicycle _________ running use a lot of calories.", options: ["and", "but", "or", "so"], correctVal: "and", rationale: "Liên từ kết hợp đồng đẳng 'and' (và) dùng để nối hai hoạt động thể thao cùng tính chất song song đóng vai trò chủ ngữ: 'riding a bicycle and running' (đạp xe và chạy bộ).", hint: "Nối hai bộ môn thể thao có vai trò tương đương nhau làm chủ ngữ cho câu." },
+            { id: 13, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n13. We always need more players. Why don't you come _________?", options: ["along", "on", "with", "after"], correctVal: "along", rationale: "Cụm động từ 'come along' mang ý nghĩa đi cùng, tham gia cùng. Câu rủ rê 'Why don't you come along?' mang nghĩa 'Sao bạn không tham gia cùng chúng tôi nhỉ?'.", hint: "Tìm giới từ đi với 'come' tạo thành cụm từ mang ý nghĩa rủ đi cùng, tham gia cùng." },
+            { id: 14, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n14. What _________ you on your last birthday?", options: ["did your father give", "does your father give", "is your father giving", "will your father give"], correctVal: "did your father give", rationale: "Trạng từ thời gian quá khứ 'on your last birthday' (vào dịp sinh nhật trước của bạn) chỉ một hành động đã xảy ra và kết thúc trong quá khứ, do đó dùng câu hỏi của thì Quá khứ đơn: 'What did your father give you...?'", hint: "Tìm cấu trúc câu hỏi của thì Quá khứ đơn do có từ chỉ thời gian 'last birthday'." },
+            { id: 15, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n15. Mr. Brown is _________ for an apartment for his family now.", options: ["looking", "look", "to look", "looked"], correctVal: "looking", rationale: "Từ nhận biết 'now' chỉ hành động đang diễn ra tại thời điểm nói, kết hợp động từ tobe 'is' tạo cấu trúc thì Hiện tại tiếp diễn: 'is looking for' (đang tìm kiếm).", hint: "Dựa vào trạng từ nhận biết 'now' ở cuối câu để chia đúng thì tiếp diễn." },
+            { id: 16, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n16. You should always keep your bedroom _________.", options: ["tidy", "tidily", "untidy", "more tidy"], correctVal: "tidy", rationale: "Cấu trúc ngữ pháp: 'keep + something + adjective' (giữ cái gì ở trạng thái như thế nào). Do đó ta dùng tính từ giữ nguyên 'tidy' (gọn gàng, sạch sẽ). 'tidily' là trạng từ nên không dùng được ở vị trí này.", hint: "Đứng sau bổ ngữ cho cấu trúc động từ 'keep' phải là một tính từ." },
+            { id: 17, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n17. How _________ is it from your house to your school?", options: ["far", "long", "old", "much"], correctVal: "far", rationale: "Để hỏi về khoảng cách địa lý (Từ nhà con đến trường bao xa?), ta sử dụng cấu trúc hỏi quen thuộc: 'How far is it from... to...?'", hint: "Cụm từ hỏi khoảng cách địa lý giữa hai địa điểm." },
+            { id: 18, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n18. What's your village _________?", options: ["like", "be", "being", "alike"], correctVal: "like", rationale: "Cấu trúc câu hỏi miêu tả tính chất, đặc điểm của sự vật/nơi chốn: 'What + be + S + like?' (Nơi đó trông thế nào / ra sao?). Do đó điền 'like' để hoàn thành 'What's your village like?'.", hint: "Cụm câu hỏi dùng để yêu cầu ai đó miêu tả đặc điểm nơi chốn quê hương của họ." },
+            { id: 19, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n19. _________ does your family live? – In Nam Dinh province.", options: ["Where", "What", "When", "Why"], correctVal: "Where", rationale: "Câu trả lời là một địa điểm cụ thể 'In Nam Dinh province' (Ở tỉnh Nam Định), nên câu hỏi bắt buộc phải dùng từ để hỏi về nơi chốn là 'Where' (Ở đâu).", hint: "Hãy quan sát câu trả lời chỉ địa điểm nơi ở để chọn từ để hỏi cho phù hợp." },
+            { id: 20, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Mark the letter A, B, C, or D to indicate the word CLOSEST in meaning to the underlined word:\n\nI don't think I can ever live <u>on my own</u> in a big city.", options: ["alone", "poorly", "freely", "hungry"], correctVal: "alone", rationale: "Thành ngữ 'on my own' có nghĩa là tự lực, một mình, đồng nghĩa gần nhất với từ 'alone' (cô độc/một mình).", hint: "Cụm từ diễn tả trạng thái tự sinh sống một mình không có ai bên cạnh giúp đỡ." },
+            { id: 21, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Mark the letter A, B, C, or D to indicate the word CLOSEST in meaning to the underlined word:\n\nThe city of Hue is very <u>famous for</u> its Royal Tombs.", options: ["well-known", "infamous", "little-known", "unpopular"], correctVal: "well-known", rationale: "Tính từ 'famous for' có nghĩa là nổi tiếng về cái gì đó, đồng nghĩa hoàn toàn với 'well-known' (được biết đến rộng rãi/nổi tiếng). Các từ còn lại trái nghĩa: 'little-known' (ít ai biết), 'unpopular' (không được yêu mến).", hint: "Tìm một tính từ chỉ sự nổi tiếng được nhiều người biết đến về vẻ đẹp của cố đô Huế." },
+
+            // Section 5: Cloze Reading - Tokyo (22-26)
+            {
+                id: 22, section: "sec-cloze", sectionName: "Đọc điền từ - Thủ đô Tokyo nước Nhật (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Tokyo - The Capital of Japan</b><br>
+                    Tokyo, which is the <b>(22) _______</b> city of Japan, is one of the three largest cities in the world. <b>(23) _______</b> the twelfth century, Japan's capital was an island city named Kyoto. Six hundred years later, many people <b>(24) _______</b> Kyoto moved east to a city called Yedo, renamed it Tokyo, and <b>(25) _______</b> this city the capital of Japan. Today, Tokyo is a <b>(26) _______</b> place. It is a center for business and education. It is also a center for religion.
+                </div>`,
+                question: "Question 22. Choose the correct word to fill in the blank (22):",
+                options: ["capital", "town", "country", "street"],
+                correctVal: "capital",
+                rationale: "Tokyo được định nghĩa là thành phố thủ đô của nước Nhật: 'capital city' (thành phố thủ đô).",
+                hint: "Danh từ chỉ cơ quan hành chính đầu não, trung tâm của một quốc gia."
+            },
+            {
+                id: 23, section: "sec-cloze", sectionName: "Đọc điền từ - Thủ đô Tokyo nước Nhật (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Tokyo - The Capital of Japan</b><br>
+                    Tokyo, which is the <b>(22) _______</b> city of Japan, is one of the three largest cities in the world. <b>(23) _______</b> the twelfth century, Japan's capital was an island city named Kyoto. Six hundred years later, many people <b>(24) _______</b> Kyoto moved east to a city called Yedo, renamed it Tokyo, and <b>(25) _______</b> this city the capital of Japan. Today, Tokyo is a <b>(26) _______</b> place. It is a center for business and education. It is also a center for religion.
+                </div>`,
+                question: "Question 23. Choose the correct word to fill in the blank (23):",
+                options: ["In", "On", "At", "Under"],
+                correctVal: "In",
+                rationale: "Để chỉ thời gian mốc thế kỷ cụ thể 'the twelfth century' (thế kỷ thứ 12), ta bắt buộc phải sử dụng giới từ 'In': 'In the twelfth century'.",
+                hint: "Giới từ chỉ thời gian đứng trước các mốc thế kỷ dài dằng dặc."
+            },
+            {
+                id: 24, section: "sec-cloze", sectionName: "Đọc điền từ - Thủ đô Tokyo nước Nhật (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Tokyo - The Capital of Japan</b><br>
+                    Tokyo, which is the <b>(22) _______</b> city of Japan, is one of the three largest cities in the world. <b>(23) _______</b> the twelfth century, Japan's capital was an island city named Kyoto. Six hundred years later, many people <b>(24) _______</b> Kyoto moved east to a city called Yedo, renamed it Tokyo, and <b>(25) _______</b> this city the capital of Japan. Today, Tokyo is a <b>(26) _______</b> place. It is a center for business and education. It is also a center for religion.
+                </div>`,
+                question: "Question 24. Choose the correct word to fill in the blank (24):",
+                options: ["from", "of", "to", "off"],
+                correctVal: "from",
+                rationale: "Diễn tả hành động di cư từ nơi này sang nơi khác: 'moved from Kyoto to a city called Yedo' (di chuyển từ Kyoto đến Yedo).",
+                hint: "Giới từ chỉ điểm khởi hành đi cùng với động từ di chuyển 'moved'."
+            },
+            {
+                id: 25, section: "sec-cloze", sectionName: "Đọc điền từ - Thủ đô Tokyo nước Nhật (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Tokyo - The Capital of Japan</b><br>
+                    Tokyo, which is the <b>(22) _______</b> city of Japan, is one of the three largest cities in the world. <b>(23) _______</b> the twelfth century, Japan's capital was an island city named Kyoto. Six hundred years later, many people <b>(24) _______</b> Kyoto moved east to a city called Yedo, renamed it Tokyo, and <b>(25) _______</b> this city the capital of Japan. Today, Tokyo is a <b>(26) _______</b> place. It is a center for business and education. It is also a center for religion.
+                </div>`,
+                question: "Question 25. Choose the correct word to fill in the blank (25):",
+                options: ["made", "making", "makes", "cause"],
+                correctVal: "made",
+                rationale: "Mạch văn kể sự kiện lịch sử xảy ra trong quá khứ 'renamed', nên hành động biến nơi này thành thủ đô cũng chia quá khứ đơn: 'made this city the capital'.",
+                hint: "Sử dụng động từ 'make' chia ở thì quá khứ đơn để duy trì sự nhất quán của mạch truyện kể lịch sử."
+            },
+            {
+                id: 26, section: "sec-cloze", sectionName: "Đọc điền từ - Thủ đô Tokyo nước Nhật (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Tokyo - The Capital of Japan</b><br>
+                    Tokyo, which is the <b>(22) _______</b> city of Japan, is one of the three largest cities in the world. <b>(23) _______</b> the twelfth century, Japan's capital was an island city named Kyoto. Six hundred years later, many people <b>(24) _______</b> Kyoto moved east to a city called Yedo, renamed it Tokyo, and <b>(25) _______</b> this city the capital of Japan. Today, Tokyo is a <b>(26) _______</b> place. It is a center for business and education. It is also a center for religion.
+                </div>`,
+                question: "Question 26. Choose the correct word to fill in the blank (26):",
+                options: ["busy", "quite", "busily", "noise"],
+                correctVal: "busy",
+                rationale: "Đứng trước danh từ chỉ địa điểm 'place' cần điền một tính từ bổ nghĩa: 'busy place' (một địa danh bận rộn/nhộn nhịp). 'busily' là trạng từ, 'noise' là danh từ nên loại.",
+                hint: "Chọn loại từ tính từ phù hợp đứng trước bổ trợ cho danh từ chỉ địa danh 'place'."
+            },
+
+            // Section 6: Reading Comprehension (27-31)
+            {
+                id: 27, section: "sec-reading", sectionName: "Đọc hiểu - Chú chó Hamlet khổng lồ (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Trevor and Hamlet the Great Dane</b><br>
+                    Some people like small dogs. Some people like big dogs. Trevor likes huge dogs. The bigger the dog, the better, as far as Trevor was concerned. A lot of people are afraid of big dogs. But Trevor was not. When Trevor was six, the family across the street got a Great Dane. It was the biggest dog that Trevor had ever seen. He couldn't believe how huge it was. The dog stood almost three feet tall, and its head was bigger than a toaster. Its nose was the size of a big, brown, wet baseball. The dog's name was Hamlet. Trevor loved Hamlet as if it was his own dog. Trevor was happy when the neighbors let him take care of Hamlet when they went away for a weekend. When Trevor's parents saw what a good job he did, they decided that he was ready for a dog of his own.
+                </div>`,
+                question: "Question 27. How old was Trevor when the family across the street got a Great Dane?",
+                options: ["6", "3", "4", "5"],
+                correctVal: "6",
+                rationale: "Chi tiết có sẵn ở giữa bài đọc: 'When Trevor was six, the family across the street got a Great Dane.' (Khi Trevor lên 6 tuổi, nhà hàng xóm đối diện mua chú chó giống Great Dane).",
+                hint: "Đọc kỹ các câu văn ở giữa đoạn để tìm mốc tuổi tác của Trevor."
+            },
+            {
+                id: 28, section: "sec-reading", sectionName: "Đọc hiểu - Chú chó Hamlet khổng lồ (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Trevor and Hamlet the Great Dane</b><br>
+                    Some people like small dogs. Some people like big dogs. Trevor likes huge dogs. The bigger the dog, the better, as far as Trevor was concerned. A lot of people are afraid of big dogs. But Trevor was not. When Trevor was six, the family across the street got a Great Dane. It was the biggest dog that Trevor had ever seen. He couldn't believe how huge it was. The dog stood almost three feet tall, and its head was bigger than a toaster. Its nose was the size of a big, brown, wet baseball. The dog's name was Hamlet. Trevor loved Hamlet as if it was his own dog. Trevor was happy when the neighbors let him take care of Hamlet when they went away for a weekend. When Trevor's parents saw what a good job he did, they decided that he was ready for a dog of his own.
+                </div>`,
+                question: "Question 28. The dog's head was bigger than a _________.",
+                options: ["toaster", "ball", "box", "egg"],
+                correctVal: "toaster",
+                rationale: "Trích xuất thông tin: '...and its head was bigger than a toaster.' (và đầu của chú chó to hơn cả chiếc lò nướng bánh mì lát).",
+                hint: "Tìm thiết bị làm nóng đồ ăn sáng được dùng để so sánh kích thước đầu của chú chó Hamlet."
+            },
+            {
+                id: 29, section: "sec-reading", sectionName: "Đọc hiểu - Chú chó Hamlet khổng lồ (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Trevor and Hamlet the Great Dane</b><br>
+                    Some people like small dogs. Some people like big dogs. Trevor likes huge dogs. The bigger the dog, the better, as far as Trevor was concerned. A lot of people are afraid of big dogs. But Trevor was not. When Trevor was six, the family across the street got a Great Dane. It was the biggest dog that Trevor had ever seen. He couldn't believe how huge it was. The dog stood almost three feet tall, and its head was bigger than a toaster. Its nose was the size of a big, brown, wet baseball. The dog's name was Hamlet. Trevor loved Hamlet as if it was his own dog. Trevor was happy when the neighbors let him take care of Hamlet when they went away for a weekend. When Trevor's parents saw what a good job he did, they decided that he was ready for a dog of his own.
+                </div>`,
+                question: "Question 29. Which of the following is TRUE?",
+                options: ["Some people like small dogs. Some people like big dogs.", "Everyone likes small dogs.", "Everyone likes big dogs.", "No one likes big dogs."],
+                correctVal: "Some people like small dogs. Some people like big dogs.",
+                rationale: "Hai câu mở đầu bài đọc viết: 'Some people like small dogs. Some people like big dogs.' (Có người thích chó nhỏ. Có người thích chó to). Đây là nhận định chính xác.",
+                hint: "Kiểm tra hai câu đầu tiên của văn bản đọc hiểu để tìm phát biểu chuẩn xác nhất."
+            },
+            {
+                id: 30, section: "sec-reading", sectionName: "Đọc hiểu - Chú chó Hamlet khổng lồ (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Trevor and Hamlet the Great Dane</b><br>
+                    Some people like small dogs. Some people like big dogs. Trevor likes huge dogs. The bigger the dog, the better, as far as Trevor was concerned. A lot of people are afraid of big dogs. But Trevor was not. When Trevor was six, the family across the street got a Great Dane. It was the biggest dog that Trevor had ever seen. He couldn't believe how huge it was. The dog stood almost three feet tall, and its head was bigger than a toaster. Its nose was the size of a big, brown, wet baseball. The dog's name was Hamlet. Trevor loved Hamlet as if it was his own dog. Trevor was happy when the neighbors let him take care of Hamlet when they went away for a weekend. When Trevor's parents saw what a good job he did, they decided that he was ready for a dog of his own.
+                </div>`,
+                question: "Question 30. How did Trevor feel when the neighbors let him take care of the dog?",
+                options: ["happy", "scared", "worried", "sad"],
+                correctVal: "happy",
+                rationale: "Trích xuất thông tin: 'Trevor was happy when the neighbors let him take care of Hamlet...' (Trevor cảm thấy vô cùng hạnh phúc khi được hàng xóm tin tưởng giao chăm sóc Hamlet hộ).",
+                hint: "Đọc đoạn áp chót để tìm tính từ miêu tả cảm xúc vui sướng của cậu bé Trevor."
+            },
+            {
+                id: 31, section: "sec-reading", sectionName: "Đọc hiểu - Chú chó Hamlet khổng lồ (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Trevor and Hamlet the Great Dane</b><br>
+                    Some people like small dogs. Some people like big dogs. Trevor likes huge dogs. The bigger the dog, the better, as far as Trevor was concerned. A lot of people are afraid of big dogs. But Trevor was not. When Trevor was six, the family across the street got a Great Dane. It was the biggest dog that Trevor had ever seen. He couldn't believe how huge it was. The dog stood almost three feet tall, and its head was bigger than a toaster. Its nose was the size of a big, brown, wet baseball. The dog's name was Hamlet. Trevor loved Hamlet as if it was his own dog. Trevor was happy when the neighbors let him take care of Hamlet when they went away for a weekend. When Trevor's parents saw what a good job he did, they decided that he was ready for a dog of his own.
+                </div>`,
+                question: "Question 31. According to Trevor's parents, he was _________ for a dog of his own.",
+                options: ["ready", "unavailable", "available", "unready"],
+                correctVal: "ready",
+                rationale: "Trích xuất thông tin câu kết bài: 'When Trevor's parents saw what a good job he did, they decided that he was ready for a dog of his own.' (Bố mẹ cậu quyết định cậu đã sẵn sàng sở hữu một chú chó riêng).",
+                hint: "Đọc câu kết luận cuối cùng của đoạn văn để tìm tính từ chỉ trạng thái sẵn sàng."
+            },
+
+            // Section 7: Writing & Transformations (32-40)
+            {
+                id: 32, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the sentence that is closest in meaning to the given sentence:\n\nNo one in my team is more careful than him.",
+                options: [
+                    "He is the most careful in my team.",
+                    "He is the best careful in my team.",
+                    "He is the carefuliest in my team.",
+                    "He is most careful in my team."
+                ],
+                correctVal: "He is the most careful in my team.",
+                rationale: "So sánh hơn 'No one is more careful than him' (Không ai cẩn thận hơn cậu ấy) tương đương với so sánh nhất của tính từ dài 'careful': 'He is the most careful in my team' (Cậu ấy là người cẩn thận nhất đội).",
+                hint: "Áp dụng công thức so sánh nhất với tính từ dài 'careful' bắt buộc phải có mạo từ 'the'."
+            },
+            {
+                id: 33, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the sentence that is closest in meaning to the given sentence:\n\nWe are used to travelling by bus.",
+                options: [
+                    "We are accustomed to travelling by bus.",
+                    "We like travelling by bus.",
+                    "We are interested in travelling by bus.",
+                    "We are fond of travelling by bus."
+                ],
+                correctVal: "We are accustomed to travelling by bus.",
+                rationale: "Cấu trúc chỉ thói quen quen thuộc: 'be used to + V-ing' hoàn toàn đồng nghĩa với 'be accustomed to + V-ing' (quen với việc làm gì).",
+                hint: "Tìm cụm từ mang ý nghĩa học thuật đồng nghĩa hoàn hảo với cấu trúc quen làm gì 'be used to'."
+            },
+            {
+                id: 34, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the sentence that is closest in meaning to the given sentence:\n\nIt's necessary for children to learn to swim.",
+                options: [
+                    "Learning to swim is necessary for children.",
+                    "Learning to swim necessary for children.",
+                    "Learn to swim is necessary for children.",
+                    "Children need learning to swim."
+                ],
+                correctVal: "Learning to swim is necessary for children.",
+                rationale: "Biến đổi tương đương cấu trúc chủ ngữ giả 'It + be + adj + for somebody + to V' chuyển thành dạng danh động từ (Gerund) làm chủ ngữ: 'V-ing + be + adj + for somebody'.",
+                hint: "Biến đổi hành động học bơi 'learn to swim' thành danh động từ đứng đầu làm chủ ngữ cho cả câu."
+            },
+            {
+                id: 35, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the sentence that best combines the pair of sentences:\n\nHe got up late. He missed the school bus.",
+                options: [
+                    "He got up late, so he missed the school bus.",
+                    "Because he got up late, so he missed the school bus.",
+                    "Because he missed the school bus, he got up late.",
+                    "Both A & B are correct."
+                ],
+                correctVal: "He got up late, so he missed the school bus.",
+                rationale: "Việc ngủ dậy muộn là nguyên nhân dẫn đến kết quả lỡ xe buýt học đường, liên từ 'so' (vì vậy) đặt giữa hai câu là chính xác: 'He got up late, so he missed...'. (Lưu ý: Không dùng đồng thời 'Because' và 'so' trong cùng một câu như phương án B).",
+                hint: "Hai hành động có mối liên hệ nhân quả, tuyệt đối tránh lỗi dùng đồng thời cả 'Because' và 'so'."
+            },
+            {
+                id: 36, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the sentence that best combines the pair of sentences:\n\nThe box is very heavy. You can't carry it.",
+                options: [
+                    "The box is too heavy for you to carry.",
+                    "The box is so heavy for you to carry.",
+                    "You are not strong enough to carry the box.",
+                    "Both B & C are correct."
+                ],
+                correctVal: "The box is too heavy for you to carry.",
+                rationale: "Cấu trúc kết hợp câu mang ý nghĩa quá... để ai đó làm gì: 'S + be + too + adjective + for somebody + to-infinitive'. Lưu ý không giữ lại đại từ tân ngữ 'it' ở cuối.",
+                hint: "Sử dụng cấu trúc 'too... for somebody + to...' để chỉ việc chiếc hộp quá nặng không bưng nổi."
+            },
+            {
+                id: 37, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the sentence that best combines the pair of sentences:\n\nHoa doesn't like fish. Her mum also doesn't like fish.",
+                options: [
+                    "Hoa and her mum don't like fish.",
+                    "Hoa and her mum doesn't like fish.",
+                    "Hoa and her mum like fish.",
+                    "Hoa and her mum likes fish."
+                ],
+                correctVal: "Hoa and her mum don't like fish.",
+                rationale: "Khi gộp hai chủ ngữ số ít bằng liên từ 'and' tạo thành chủ ngữ số nhiều 'Hoa and her mum' (Hoa và mẹ cô ấy). Động từ phủ định số nhiều tương ứng là 'don't like'.",
+                hint: "Chủ ngữ ghép hai người tương đương chủ ngữ số nhiều ngôi thứ ba, hãy dùng đúng trợ động từ phủ định số nhiều."
+            },
+            {
+                id: 38, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the meaningful sentence written by using the words given:\n\nIt / be / interesting / read / comics / free time.",
+                options: [
+                    "It's interesting to read comics in your free time.",
+                    "It's interesting reading comics in your free time.",
+                    "It's interesting to read comics at your free time.",
+                    "It's interesting when read comics in your free time."
+                ],
+                correctVal: "It's interesting to read comics in your free time.",
+                rationale: "Cấu trúc tính từ nhận định: 'It + be + adjective + to-V + in one's free time'. Do đó tạo thành câu: 'It's interesting to read comics in your free time.'",
+                hint: "Nhớ công thức 'Thật thú vị để làm gì đó': 'It is + adj + to + động từ'."
+            },
+            {
+                id: 39, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the meaningful sentence written by using the words given:\n\nLast night / they / decide / have / party / their friends.",
+                options: [
+                    "Last night, they decided to have a party with their friends.",
+                    "Last night, they decide having a party with their friends.",
+                    "Last night, they decide to have a party with their friends.",
+                    "Last night, they decided to having a party with their friends."
+                ],
+                correctVal: "Last night, they decided to have a party with their friends.",
+                rationale: "Trạng từ chỉ thời gian quá khứ 'Last night' đòi hỏi động từ chính phải chia quá khứ đơn 'decided'. Ta có cấu trúc: 'decide + to-infinitive' (quyết định làm gì).",
+                hint: "Mốc thời gian 'tối hôm qua' yêu cầu động từ chia quá khứ và chú ý động từ đi sau 'decide'."
+            },
+            {
+                id: 40, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the meaningful sentence written by using the words given:\n\nWhat / you / have / breakfast / this morning?",
+                options: [
+                    "What did you have for breakfast this morning?",
+                    "What did you have for breakfast in this morning?",
+                    "What do you have for breakfast in this morning?",
+                    "What do you have for breakfast this morning?"
+                ],
+                correctVal: "What did you have for breakfast this morning?",
+                rationale: "Thời gian 'this morning' (sáng nay - thời điểm đã trôi qua khi nói câu này) yêu cầu câu hỏi dùng ở thì Quá khứ đơn mượn trợ động từ 'did'. Giới từ đi với bữa ăn là 'for breakfast' và không dùng giới từ trước trạng từ 'this morning'.",
+                hint: "Mượn trợ động từ quá khứ chỉ hành động ăn sáng đã diễn ra vào sáng ngày hôm nay."
+            }
+        ];
+
+        let quizData = [];
+        let userAnswers = [];
+        let scoreChartInstance = null;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function prepareQuiz() {
+            quizData = rawQuestions.map(q => {
+                const shuffledOptions = shuffleArray([...q.options]);
+                const newCorrectIndex = shuffledOptions.indexOf(q.correctVal);
+                return { ...q, options: shuffledOptions, correct: newCorrectIndex };
+            });
+            userAnswers = new Array(quizData.length).fill(null);
+        }
+
+        function initQuiz() {
+            prepareQuiz();
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = "";
+            let currentSection = "";
+
+            quizData.forEach((q, index) => {
+                if (q.section !== currentSection) {
+                    currentSection = q.section;
+                    const sectionHeader = document.createElement('div');
+                    sectionHeader.id = q.section;
+                    sectionHeader.className = "pt-6 lg:pt-8 mb-4 border-b-2 border-indigo-100";
+                    sectionHeader.innerHTML = `<h2 class="text-sm md:text-base font-extrabold text-slate-800 pb-2 flex items-center gap-2">
+                        <span class="w-2.5 h-5 bg-indigo-600 rounded-full inline-block"></span>${q.sectionName}
+                    </h2>`;
+                    container.appendChild(sectionHeader);
+                }
+
+                const card = document.createElement('div');
+                card.className = "question-card bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-all";
+
+                let passageHtml = "";
+                if (q.passage) {
+                    passageHtml = `
+                        <div class="mb-4">
+                            ${q.passage}
+                        </div>
+                    `;
+                }
+
+                const interactionHtml = `
+                    <div id="options-${index}" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                        ${q.options.map((opt, i) => `
+                            <button onclick="selectOption(${index}, ${i})" class="option-btn text-left p-3.5 rounded-xl border-2 border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/40 transition-all flex items-center group active:scale-[0.99] w-full">
+                                <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-xs mr-3 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors shrink-0">${String.fromCharCode(65 + i)}</span>
+                                <span class="text-slate-700 text-xs md:text-sm font-medium flex-1">${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="bg-indigo-600 text-white text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full">Câu ${q.id}</span>
+                        <button onclick="showHint(${index})" class="flex items-center gap-1 text-[11px] text-amber-600 font-bold hover:text-amber-700 active:scale-95 transition-all">
+                            <span>💡 Mẹo giải nhanh</span>
+                        </button>
+                    </div>
+                    ${passageHtml}
+                    <div class="text-xs md:text-sm font-semibold mb-5 text-slate-850 leading-relaxed whitespace-pre-line">${q.question}</div>
+                    
+                    ${interactionHtml}
+                    
+                    <div id="hint-${index}" class="hidden mt-4 p-4 bg-amber-50 text-amber-950 text-xs rounded-xl border border-amber-100 italic leading-relaxed">
+                        <strong>Gợi ý:</strong> ${q.hint}
+                    </div>
+                    
+                    <div id="feedback-${index}" class="hidden mt-4 p-4 rounded-xl border transition-all">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span id="icon-${index}" class="text-base"></span>
+                            <p id="result-text-${index}" class="font-bold text-xs md:text-sm"></p>
+                        </div>
+                        <div class="h-px bg-current opacity-10 mb-2"></div>
+                        <p class="text-xs md:text-sm leading-relaxed font-medium opacity-95">${q.rationale}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Section 7: Writing Paragraph Helper (Interactive essay area)
+            injectParagraphSection();
+
+            initCharts();
+        }
+
+        function selectOption(qIdx, oIdx) {
+            if (userAnswers[qIdx] !== null) return;
+
+            userAnswers[qIdx] = oIdx;
+            const correct = quizData[qIdx].correct;
+            const feedback = document.getElementById(`feedback-${qIdx}`);
+            const resultText = document.getElementById(`result-text-${qIdx}`);
+            const icon = document.getElementById(`icon-${qIdx}`);
+            const optionsDiv = document.getElementById(`options-${qIdx}`);
+            const buttons = optionsDiv.getElementsByTagName('button');
+
+            feedback.classList.remove('hidden');
+            
+            if (oIdx === correct) {
+                feedback.className = "mt-4 p-4 rounded-xl bg-emerald-50 text-emerald-800 border-emerald-200 border text-xs md:text-sm";
+                resultText.innerText = "Chính xác!";
+                icon.innerText = "✅";
+                buttons[oIdx].className = "option-btn text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 flex items-center shadow-sm w-full";
+                buttons[oIdx].querySelector('span').className = "w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+            } else {
+                feedback.className = "mt-4 p-4 rounded-xl bg-rose-50 text-rose-800 border-rose-200 border text-xs md:text-sm";
+                resultText.innerText = "Chưa chính xác";
+                icon.innerText = "❌";
+                buttons[oIdx].className = "option-btn text-left p-3.5 rounded-xl border-2 border-rose-500 bg-rose-50 flex items-center shadow-sm w-full";
+                buttons[oIdx].querySelector('span').className = "w-7 h-7 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+                
+                // Highlight correct
+                buttons[correct].className = "option-btn text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50/50 flex items-center w-full transition-all";
+                buttons[correct].querySelector('span').className = "w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+            }
+
+            for (let b = 0; b < buttons.length; b++) {
+                if (b !== oIdx && b !== correct) {
+                    buttons[b].classList.add('opacity-40');
+                }
+            }
+
+            updateProgress();
+            updateCharts();
+        }
+
+        function injectParagraphSection() {
+            const container = document.getElementById('quiz-container');
+            
+            const header = document.createElement('div');
+            header.id = "sec-paragraph";
+            header.className = "pt-6 lg:pt-8 mb-4 border-b-2 border-indigo-100";
+            header.innerHTML = `<h2 class="text-sm md:text-base font-extrabold text-slate-800 pb-2 flex items-center gap-2">
+                <span class="w-2.5 h-5 bg-indigo-600 rounded-full inline-block"></span>Tự luận viết đoạn văn ngắn (Writing Section)
+            </h2>`;
+            container.appendChild(header);
+
+            const card = document.createElement('div');
+            card.className = "question-card bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200/80";
+            card.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <span class="bg-indigo-600 text-white text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full">Tự luận</span>
+                    <span class="text-xs text-indigo-600 font-bold">30 - 50 từ</span>
+                </div>
+                <div class="text-xs md:text-sm font-semibold mb-5 text-slate-850 leading-relaxed">
+                    Write about something good you want to do and why you want to do it (30-50 words).
+                </div>
+                
+                <div class="space-y-2">
+                    <textarea id="essay-input" oninput="countWords()" rows="5" placeholder="Gõ câu trả lời tự luận của con bằng tiếng Anh..." class="w-full p-4 border-2 border-slate-200 rounded-2xl text-xs md:text-sm focus:border-indigo-500 focus:outline-none transition-all"></textarea>
+                    <div class="flex justify-between items-center text-xs text-slate-400 font-semibold px-1">
+                        <span id="essay-word-count">0 từ (Yêu cầu: 30 - 50 từ)</span>
+                        <button onclick="revealSampleEssay()" class="text-indigo-600 hover:text-indigo-700">Xem bài mẫu gợi ý</button>
+                    </div>
+                </div>
+
+                <div id="essay-sample-box" class="hidden mt-5 p-4 bg-indigo-50/50 border border-indigo-150 rounded-2xl text-xs md:text-sm text-slate-700 leading-relaxed space-y-3">
+                    <p class="font-bold text-indigo-800">🌟 Bài viết gợi ý tham khảo (Bảo vệ môi trường):</p>
+                    <p class="italic font-medium">"I want to plant more green trees around my school. I want to do this because trees can clean the air and provide shade for students during recess. It will make our school look more beautiful and help protect the environment."</p>
+                    <div class="h-px bg-indigo-200 my-2"></div>
+                    <p class="text-[11px] text-slate-500 font-medium"><b>Mẹo ghi điểm:</b> Con hãy sử dụng cấu trúc: "I want to + V-inf..." để kể về việc định làm, và nối tiếp bằng "I want to do this because..." để giải thích cụ thể lý do tích cực đứng đằng sau nhé!</p>
+                </div>
+            `;
+            container.appendChild(card);
+        }
+
+        function countWords() {
+            const txt = document.getElementById('essay-input').value.trim();
+            const words = txt === "" ? 0 : txt.split(/\s+/).length;
+            const countLabel = document.getElementById('essay-word-count');
+            
+            if (words >= 30 && words <= 50) {
+                countLabel.innerHTML = `<span class="text-emerald-600 font-bold">✨ ${words} từ (Đạt yêu cầu)</span>`;
+            } else {
+                countLabel.innerHTML = `<span class="text-amber-500">${words} từ (Yêu cầu: 30 - 50 từ)</span>`;
+            }
+        }
+
+        function revealSampleEssay() {
+            document.getElementById('essay-sample-box').classList.toggle('hidden');
+        }
+
+        function showHint(index) {
+            const hintBox = document.getElementById(`hint-${index}`);
+            hintBox.classList.toggle('hidden');
+        }
+
+        function updateProgress() {
+            const total = quizData.length;
+            const answered = userAnswers.filter(a => a !== null).length;
+            const progress = Math.round((answered / total) * 100);
+            
+            // Desktop
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('progress-percent').innerText = `${progress}%`;
+            document.getElementById('progress-text').innerText = answered === 0 ? "Chưa làm câu nào" : `Đã hoàn thành ${answered}/${total} câu`;
+            
+            // Mobile
+            document.getElementById('mobile-progress-bar').style.width = `${progress}%`;
+
+            const score = userAnswers.reduce((acc, curr, idx) => {
+                if (curr === null) return acc;
+                return curr === quizData[idx].correct ? acc + 1 : acc;
+            }, 0);
+            
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('mobile-score-badge').innerText = `Đúng: ${score}/${total}`;
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                const offset = window.innerWidth < 1024 ? 120 : 20;
+                const elementPosition = el.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function initCharts() {
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+            if (scoreChartInstance) {
+                scoreChartInstance.destroy();
+            }
+            scoreChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Đúng', 'Sai', 'Chưa làm'],
+                    datasets: [{
+                        data: [0, 0, 40],
+                        backgroundColor: ['#6366F1', '#EF4444', '#E2E8F0'],
+                        borderWidth: 0,
+                        hoverOffset: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '72%',
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                boxWidth: 10,
+                                usePointStyle: true,
+                                font: { size: 11, weight: 'bold' }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCharts() {
+            if (!scoreChartInstance) return;
+            const total = quizData.length;
+            
+            const correct = userAnswers.reduce((acc, curr, idx) => {
+                if (curr === null) return acc;
+                return curr === quizData[idx].correct ? acc + 1 : acc;
+            }, 0);
+
+            const answered = userAnswers.filter(a => a !== null).length;
+            const incorrect = answered - correct;
+            const remaining = total - answered;
+
+            scoreChartInstance.data.datasets[0].data = [correct, incorrect, remaining];
+            scoreChartInstance.update();
+        }
+
+        window.onload = function() {
+            initQuiz();
+        };
+    </script>
+</body>
+</html>
+```
