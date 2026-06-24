@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Luyện Thi Tiếng Anh Vào 6 - Lương Thế Vinh Đề 3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+            color: #1E293B;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .question-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+        }
+        .option-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .passage-box {
+            background-color: #FDFDFD;
+            border-left: 4px solid #4F46E5;
+        }
+        @media (max-width: 768px) {
+            .option-btn {
+                padding: 0.9rem 0.75rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- Mobile Sticky Navigation -->
+    <div class="lg:hidden top-0 sticky z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm w-full">
+        <div class="px-4 py-3 flex items-center justify-between border-b border-slate-100">
+            <div>
+                <h1 class="text-sm font-black text-slate-900 leading-tight">THCS&THPT Lương Thế Vinh</h1>
+                <p class="text-[10px] text-indigo-650 font-bold uppercase tracking-wider">Đề tuyển sinh vào 6 - Đề số 3</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span id="mobile-score-badge" class="bg-indigo-50 text-indigo-700 text-xs font-black px-2.5 py-1 rounded-full border border-indigo-100">Đúng: 0/40</span>
+            </div>
+        </div>
+        <!-- Scrollable Mobile Menu -->
+        <div class="flex overflow-x-auto whitespace-nowrap px-4 py-2 gap-2 no-scrollbar scroll-smooth">
+            <button onclick="scrollToSection('sec-phonetics')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Phát âm & Khác nhóm (1-4)</button>
+            <button onclick="scrollToSection('sec-correction')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Sửa lỗi sai (5-7)</button>
+            <button onclick="scrollToSection('sec-communication')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Giao tiếp (8-9)</button>
+            <button onclick="scrollToSection('sec-grammar')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Ngữ pháp & Từ vựng (10-21)</button>
+            <button onclick="scrollToSection('sec-cloze')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Điền từ Aimi (22-26)</button>
+            <button onclick="scrollToSection('sec-reading')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Đọc hiểu Nam (27-31)</button>
+            <button onclick="scrollToSection('sec-writing')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Viết lại câu & Từ gợi ý (32-40)</button>
+        </div>
+        <div class="w-full bg-slate-100 h-1">
+            <div id="mobile-progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+        </div>
+    </div>
+
+    <!-- Desktop Sidebar -->
+    <aside class="hidden lg:flex w-80 bg-white border-r border-slate-200 flex-col h-screen sticky top-0 overflow-y-auto shrink-0">
+        <div class="p-6 border-b border-slate-150">
+            <h1 class="text-base font-black text-slate-900 leading-tight">THCS&THPT Lương Thế Vinh</h1>
+            <p class="text-[10px] text-indigo-600 mt-2 font-bold uppercase tracking-widest">ĐỀ TUYỂN SINH LỚP 6 - ĐỀ 3</p>
+        </div>
+        <nav class="flex-1 p-4 space-y-1">
+            <button onclick="scrollToSection('sec-phonetics')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Phát âm & Khác nhóm (1-4)</span>
+                <span class="text-xs text-slate-400">🔊</span>
+            </button>
+            <button onclick="scrollToSection('sec-correction')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Sửa lỗi sai (5-7)</span>
+                <span class="text-xs text-slate-400">🔍</span>
+            </button>
+            <button onclick="scrollToSection('sec-communication')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Giao tiếp hằng ngày (8-9)</span>
+                <span class="text-xs text-slate-400">💬</span>
+            </button>
+            <button onclick="scrollToSection('sec-grammar')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Ngữ pháp & Từ vựng (10-21)</span>
+                <span class="text-xs text-slate-400">📝</span>
+            </button>
+            <button onclick="scrollToSection('sec-cloze')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Điền từ Aimi (22-26)</span>
+                <span class="text-xs text-slate-400">🇯🇵</span>
+            </button>
+            <button onclick="scrollToSection('sec-reading')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Đọc hiểu Nam (27-31)</span>
+                <span class="text-xs text-slate-400">🎒</span>
+            </button>
+            <button onclick="scrollToSection('sec-writing')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Viết lại câu & Từ gợi ý (32-40)</span>
+                <span class="text-xs text-slate-400">✍️</span>
+            </button>
+        </nav>
+        <div class="p-6 bg-slate-50 border-t border-slate-150">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Tiến trình</span>
+                <span id="progress-percent" class="text-xs font-black text-indigo-600">0%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+            </div>
+            <div id="progress-text" class="text-[11px] text-slate-500 mt-2 font-medium">Chưa làm câu nào</div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-x-hidden">
+        <div class="max-w-4xl mx-auto px-4 py-6 md:p-8 space-y-6">
+            
+            <!-- Dashboard Tracker -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Doughnut Chart -->
+                <div class="md:col-span-2 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-[10px] font-black text-slate-400 mb-3 uppercase tracking-widest">Phân tích kết quả luyện tập</h3>
+                    </div>
+                    <div class="relative w-full h-40">
+                        <canvas id="scoreChart"></canvas>
+                    </div>
+                </div>
+                <!-- Action / Reset -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col items-center justify-center text-center">
+                    <div class="mb-1">
+                        <span id="final-score" class="text-6xl font-black text-indigo-600">0</span>
+                        <span class="text-xl text-slate-300 font-bold">/40</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-5">Số câu làm đúng</p>
+                    <button onclick="window.location.reload()" class="w-full py-3 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 active:scale-95 transition-all shadow-md shadow-indigo-150">Xáo trộn & Làm lại</button>
+                </div>
+            </div>
+
+            <!-- Header Info Box -->
+            <div class="bg-indigo-50/60 p-5 rounded-2xl border border-indigo-100 shadow-inner space-y-2">
+                <h2 class="text-sm font-black text-slate-800 flex items-center gap-2">
+                    <span>💡 Hướng dẫn làm bài</span>
+                </h2>
+                <ul class="text-slate-600 text-xs space-y-1.5 leading-relaxed">
+                    <li>• Đề thi gồm có <b>40 câu hỏi trắc nghiệm</b> chuẩn cấu trúc đề số 3 Lương Thế Vinh năm 2022.</li>
+                    <li>• Toàn bộ các phương án lựa chọn được <b>xáo trộn ngẫu nhiên hoàn toàn</b> để đo lường năng lực thực chất.</li>
+                    <li>• Sử dụng nút <b>Mẹo giải nhanh</b> ở từng câu hỏi để nhận gợi ý chỉ dẫn lý thuyết hữu ích.</li>
+                </ul>
+            </div>
+
+            <!-- Quiz Container -->
+            <div id="quiz-container" class="space-y-6 md:space-y-8">
+                <!-- Dynamic cards injected here -->
+            </div>
+
+            <!-- Footer -->
+            <footer class="pt-10 pb-6 text-center text-slate-400 text-xs border-t border-slate-150">
+                © 2026 CLB EduNow - Ôn thi đánh giá năng lực chất lượng cao vào 6 Lương Thế Vinh
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        const rawQuestions = [
+            // Section 1: Phonetics (1-4)
+            { id: 1, section: "sec-phonetics", sectionName: "Phát âm & Từ khác nhóm (Phonetics & Odd One Out)", type: "choice", question: "Choose the word whose underlined part differs from the other three in pronunciation:\n\n1. A. l<u>a</u>zy\nB. c<u>a</u>r\nC. h<u>a</u>te\nD. d<u>a</u>te", options: ["car", "lazy", "hate", "date"], correctVal: "car", rationale: "Phần gạch chân 'a' trong từ 'car' phát âm là âm /ɑː/ (nguyên âm dài). Trong khi đó, ở các từ còn lại phát âm là âm /eɪ/ (nguyên âm đôi).", hint: "Đọc to các từ lên và tìm xem từ nào có âm 'a' phát âm rộng miệng, trầm ấm hơn các từ còn lại." },
+            { id: 2, section: "sec-phonetics", sectionName: "Phát âm & Từ khác nhóm (Phonetics & Odd One Out)", type: "choice", question: "Choose the word whose underlined part differs from the other three in pronunciation:\n\n2. A. bis<u>c</u>uit\nB. <u>c</u>amera\nC. o<u>ce</u>an\nD. <u>c</u>lever", options: ["ocean", "biscuit", "camera", "clever"], correctVal: "ocean", rationale: "Phần gạch chân của từ 'ocean' phát âm là âm /ʃ/ nặng. Ở các từ 'biscuit', 'camera', 'clever' đều phát âm là âm /k/.", hint: "Hãy tìm từ có âm 'c' phát âm nhẹ hoặc biến đổi thành âm s nặng (/ʃ/)." },
+            { id: 3, section: "sec-phonetics", sectionName: "Phát âm & Từ khác nhóm (Phonetics & Odd One Out)", type: "choice", question: "Choose the word that does not belong to the group:\n\n3. A. intelligent\nB. brave\nC. helpful\nD. character", options: ["character", "intelligent", "brave", "helpful"], correctVal: "character", rationale: "Từ 'character' (tính cách/nhân vật) là một danh từ. Các từ còn lại: 'intelligent' (thông minh), 'brave' (dũng cảm), 'helpful' (hay giúp đỡ) đều là các tính từ miêu tả tính chất con người.", hint: "Tìm từ loại khác biệt (danh từ) trong nhóm các tính từ chỉ phẩm chất con người." },
+            { id: 4, section: "sec-phonetics", sectionName: "Phát âm & Từ khác nhóm (Phonetics & Odd One Out)", type: "choice", question: "Choose the word that does not belong to the group:\n\n4. A. rubber\nB. ruler\nC. engineer\nD. pencil", options: ["engineer", "rubber", "ruler", "pencil"], correctVal: "engineer", rationale: "Từ 'engineer' (kỹ sư) là danh từ chỉ nghề nghiệp. Các từ còn lại: 'rubber' (cục tẩy), 'ruler' (thước kẻ), 'pencil' (bút chì) đều là các danh từ chỉ đồ dùng học tập học sinh.", hint: "Tìm từ không thuộc nhóm đồ dùng học tập dụng cụ học sinh." },
+
+            // Section 2: Error Correction (5-7)
+            { id: 5, section: "sec-correction", sectionName: "Tìm lỗi sai trong câu (Error Correction)", type: "choice", question: "Mark the letter A, B, C or D to indicate the underlined part that needs correction:\n\nWhen (A) <u>I was</u> (B) <u>small</u>, I usually (C) <u>play</u> chess (D) <u>with</u> my father.", options: ["play", "When", "was", "with"], correctVal: "play", rationale: "Vế trước 'When I was small' (Khi tôi còn nhỏ) chỉ một khoảng thời gian trong quá khứ, nên thói quen chơi cờ trong quá khứ phải chia ở thì Quá khứ đơn: 'played' thay vì 'play'.", hint: "Cần đổi động từ chỉ thói quen thường làm về dạng quá khứ để tương thích với mốc thời gian thơ ấu." },
+            { id: 6, section: "sec-correction", sectionName: "Tìm lỗi sai trong câu (Error Correction)", type: "choice", question: "Mark the letter A, B, C or D to indicate the underlined part that needs correction:\n\nMy parents always (A) <u>give</u> a lot of (B) <u>present</u> to me (C) <u>on</u> my (D) <u>birthday</u>.", options: ["present", "give", "on", "birthday"], correctVal: "present", rationale: "Cấu trúc định lượng chỉ số lượng nhiều: 'a lot of + danh từ đếm được số nhiều'. Do đó, từ 'present' bắt buộc phải thêm '-s' thành 'presents'.", hint: "Đằng sau cụm từ 'a lot of' đi kèm danh từ đếm được thì danh từ đó có được ở dạng số ít không?" },
+            { id: 7, section: "sec-correction", sectionName: "Tìm lỗi sai trong câu (Error Correction)", type: "choice", question: "Mark the letter A, B, C or D to indicate the underlined part that needs correction:\n\nTam is good (A) <u>at</u> sports, and he (B) <u>can</u> (C) <u>play</u> football very (D) <u>good</u>.", options: ["good", "at", "can", "play"], correctVal: "good", rationale: "Để bổ nghĩa cho động từ thường 'play' (chơi bóng đá), ta phải dùng trạng từ chỉ cách thức là 'well' chứ không sử dụng tính từ 'good'.", hint: "Muốn mô tả việc chơi bóng đá một cách xuất sắc, ta dùng tính từ 'good' hay trạng từ tương ứng?" },
+
+            // Section 3: Communication (8-9)
+            { id: 8, section: "sec-communication", sectionName: "Giao tiếp hằng ngày (Everyday Exchanges)", type: "choice", question: "Choose the correct answer to complete the exchange:\n\n- \"Thanks for the nice gift you brought to us!\"\n- \"_________\"", options: ["You're welcome. I'm glad you like it.", "Actually I don't like it.", "All right. Do you know how much it costs?", "Not at all. Don't say it again."], correctVal: "You're welcome. I'm glad you like it.", rationale: "Khi nhận được lời cảm ơn về món quà đã mang đến tặng ('Thanks for the nice gift...'), lời đáp lại lịch sự và hiếu khách nhất là: 'You're welcome. I'm glad you like it.' (Không có gì đâu. Mình rất vui vì bạn thích nó).", hint: "Đáp lại lời cảm ơn một cách hào hứng và chia sẻ niềm vui khi người khác thích quà tặng của mình." },
+            { id: 9, section: "sec-communication", sectionName: "Giao tiếp hằng ngày (Everyday Exchanges)", type: "choice", question: "Choose the correct answer to complete the exchange:\n\n- \"Could you bring me some water?\"\n- \"_________\"", options: ["Certainly, sir.", "No, I can't.", "Yes, I can.", "I don't want to."], correctVal: "Certainly, sir.", rationale: "Lời yêu cầu lịch sự mang tính phục vụ 'Could you bring me...?' được phản hồi trang trọng, lịch thiệp và đồng ý phục vụ bằng câu: 'Certainly, sir.' (Chắc chắn rồi ạ, thưa ngài).", hint: "Tìm câu đáp lại lời thỉnh cầu lịch sự thể hiện sự đồng ý phục vụ chu đáo." },
+
+            // Section 4: Grammar & Vocabulary (10-21)
+            { id: 10, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n10. Someone _________ at the door. Can you open it?", options: ["is knocking", "knocks", "knocked", "knock"], correctVal: "is knocking", rationale: "Câu mệnh lệnh khẩn khoản tiếp theo 'Can you open it?' (Bạn mở hộ cửa được không?) chứng tỏ hành động gõ cửa đang diễn ra ngay tại thời điểm nói. Vì vậy ta sử dụng thì Hiện tại tiếp diễn: 'is knocking'.", hint: "Hành động gõ cửa phải đang diễn ra thì người nói mới nhờ ra mở cửa giúp." },
+            { id: 11, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n11. There is a big photo of her family _________ her room's wall.", options: ["on", "in", "between", "among"], correctVal: "on", rationale: "Giới từ chỉ vị trí áp sát lên bề mặt thẳng đứng như bức tường là 'on': 'on her room's wall' (trên bức tường phòng cô ấy).", hint: "Tìm giới từ chỉ vị trí tiếp xúc của bức ảnh treo sát trên mặt tường phòng ngủ." },
+            { id: 12, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n12. Are there _________ pictures in your bedroom, David?", options: ["any", "some", "a", "an"], correctVal: "any", rationale: "Trong câu hỏi nghi vấn có đảo ngữ 'Are there...?' với danh từ đếm được số nhiều 'pictures', ta phải sử dụng lượng từ 'any'.", hint: "Lượng từ dùng trong câu hỏi nghi vấn và câu phủ định đi với danh từ số nhiều." },
+            { id: 13, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n13. The film is very _________ and we can't see all of it.", options: ["boring", "excited", "bored", "exciting"], correctVal: "boring", rationale: "Vì vế sau ghi nhận 'can't see all of it' (không thể xem hết bộ phim nổi), chứng tỏ bộ phim mang tính chất tẻ nhạt. Để miêu tả tính chất của bộ phim, ta dùng tính từ đuôi '-ing': 'boring'.", hint: "Tính chất của bộ phim dở đến mức khiến chúng tôi không xem hết nổi." },
+            { id: 14, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n14. I think the pink flower is _________ than the yellow one.", options: ["more beautiful", "beautiful", "most beautiful", "beautifuller"], correctVal: "more beautiful", rationale: "Câu có từ 'than' là dấu hiệu của so sánh hơn. Vì 'beautiful' là tính từ dài nên cấu trúc so sánh hơn đúng là 'more beautiful than'.", hint: "Dựa vào liên từ so sánh 'than' để áp dụng đúng cấu trúc so sánh hơn của tính từ dài." },
+            { id: 15, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n15. My sister can't swim _________ she's afraid of water.", options: ["because", "and", "but", "so"], correctVal: "because", rationale: "Mệnh đề sau chỉ nguyên nhân (cô ấy sợ nước) của việc không biết bơi ở vế trước, do đó ta dùng liên từ chỉ nguyên nhân: 'because' (bởi vì).", hint: "Tìm từ nối mang nghĩa chỉ nguyên nhân, lý giải vì sao em gái không biết bơi." },
+            { id: 16, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n16. _________ are you going to invite to your birthday party next week? - Alice and Jane - my best friends.", options: ["Who", "What", "Whose", "When"], correctVal: "Who", rationale: "Câu trả lời là những con người cụ thể 'Alice and Jane', vì thế câu hỏi tìm kiếm thông tin về đối tượng người được mời phải dùng từ hỏi: 'Who' (Ai).", hint: "Hãy quan sát câu trả lời chỉ tên người để chọn từ để hỏi cho phù hợp." },
+            { id: 17, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n17. What's your _________ TV programme?", options: ["favourite", "best", "good", "like"], correctVal: "favourite", rationale: "Cụm danh từ dùng để hỏi về sở thích yêu thích nhất: 'favourite TV programme' (chương trình truyền hình yêu thích nhất).", hint: "Từ dùng để chỉ món đồ, hoạt động hoặc chương trình mà bạn cảm thấy yêu mến, thích nhất." },
+            { id: 18, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n18. Pele was born _________ October 23rd, 1940.", options: ["on", "by", "at", "in"], correctVal: "on", rationale: "Đối với mốc thời gian có ngày cụ thể đầy đủ trong tháng ('October 23rd'), ta bắt buộc phải sử dụng giới từ 'on'.", hint: "Giới từ đứng trước cụm thời gian chỉ chính xác ngày trong tháng." },
+            { id: 19, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Choose the correct answer to complete the sentence:\n\n19. Stop _________ about what I'm doing and focus on your own work.", options: ["caring", "to care", "care", "to caring"], correctVal: "caring", rationale: "Cấu trúc dừng hẳn một việc đang làm: 'Stop + V-ing'. Câu khuyên răn 'Stop caring' nghĩa là 'Hãy thôi quan tâm/bận tâm' về việc tôi đang làm đi.", hint: "Nhớ cấu trúc của động từ 'Stop' khi mang ý nghĩa dừng hẳn, từ bỏ một hành động đang làm." },
+            { id: 20, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Mark the letter A, B, C, or D to indicate the word CLOSEST in meaning to the underlined word:\n\nToday, young people are <u>fond of</u> wearing jeans.", options: ["like", "hate", "dislike", "want"], correctVal: "like", rationale: "Cụm tính từ cố định 'be fond of' nghĩa là yêu mến, thích cái gì, đồng nghĩa hoàn toàn với động từ 'like'.", hint: "Tìm động từ có ý nghĩa tích cực, thể hiện niềm yêu quý, ưa thích đối với trang phục quần bò." },
+            { id: 21, section: "sec-grammar", sectionName: "Trắc nghiệm ngữ pháp & từ vựng (Grammar & Vocabulary)", type: "choice", question: "Mark the letter A, B, C, or D to indicate the word CLOSEST in meaning to the underlined word:\n\nHa Long Bay is <u>well-known</u> for its beauty. Many tourists visit the place every year.", options: ["famous", "perfect", "unimportant", "unknown"], correctVal: "famous", rationale: "Tính từ 'well-known' nghĩa là nổi tiếng, được biết đến rộng rãi, đồng nghĩa với 'famous'. Các từ trái nghĩa: 'unknown' (không ai biết), 'unimportant' (không quan trọng).", hint: "Tìm tính từ miêu tả sự nổi danh của Vịnh Hạ Long đối với khách du lịch trong và ngoài nước." },
+
+            // Section 5: Cloze Reading - Aimi (22-26)
+            {
+                id: 22, section: "sec-cloze", sectionName: "Đọc điền từ - Bạn học Aimi ở Tokyo (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>My Name is Aimi</b><br>
+                    My name is Aimi. I'm in the sixth grade at a secondary school in Tokyo. I like learning Mathematics because it <b>(22) _______</b> me to develop my thinking. I spend much of my time <b>(23) _______</b> Maths exercises. I often get marks 9 and 10 in Maths tests. I don't like English because remembering English words and structures <b>(24) _______</b> very difficult for me. But I think I have to work <b>(25) _______</b> at English. My teacher encourages me a lot. She gives me some English books, and she shows me how <b>(26) _______</b> words better. I hope that my English will be better in the second semester.
+                </div>`,
+                question: "Question 22. Choose the correct word to fill in the blank (22):",
+                options: ["helps", "makes", "causes", "gives"],
+                correctVal: "helps",
+                rationale: "Động từ 'helps' đi kèm với cấu trúc 'help somebody to do/do something' (giúp đỡ ai đó phát triển tư duy) là phù hợp nhất về mặt ngữ nghĩa và ngữ pháp.",
+                hint: "Tìm động từ mang ý nghĩa tích cực giúp ích cho việc phát triển tư duy toán học."
+            },
+            {
+                id: 23, section: "sec-cloze", sectionName: "Đọc điền từ - Bạn học Aimi ở Tokyo (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>My Name is Aimi</b><br>
+                    My name is Aimi. I'm in the sixth grade at a secondary school in Tokyo. I like learning Mathematics because it <b>(22) _______</b> me to develop my thinking. I spend much of my time <b>(23) _______</b> Maths exercises. I often get marks 9 and 10 in Maths tests. I don't like English because remembering English words and structures <b>(24) _______</b> very difficult for me. But I think I have to work <b>(25) _______</b> at English. My teacher encourages me a lot. She gives me some English books, and she shows me how <b>(26) _______</b> words better. I hope that my English will be better in the second semester.
+                </div>`,
+                question: "Question 23. Choose the correct word to fill in the blank (23):",
+                options: ["doing", "to do", "to doing", "do"],
+                correctVal: "doing",
+                rationale: "Ta có cấu trúc cố định với lượng thời gian tiêu tốn: 'spend time + V-ing' (dành thời gian làm việc gì đó). Ở đây động từ 'do' đổi thành danh động từ 'doing'.",
+                hint: "Nhớ cấu trúc chia động từ đứng đằng sau động từ tiêu tốn thời gian 'spend'."
+            },
+            {
+                id: 24, section: "sec-cloze", sectionName: "Đọc điền từ - Bạn học Aimi ở Tokyo (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>My Name is Aimi</b><br>
+                    My name is Aimi. I'm in the sixth grade at a secondary school in Tokyo. I like learning Mathematics because it <b>(22) _______</b> me to develop my thinking. I spend much of my time <b>(23) _______</b> Maths exercises. I often get marks 9 and 10 in Maths tests. I don't like English because remembering English words and structures <b>(24) _______</b> very difficult for me. But I think I have to work <b>(25) _______</b> at English. My teacher encourages me a lot. She gives me some English books, and she shows me how <b>(26) _______</b> words better. I hope that my English will be better in the second semester.
+                </div>`,
+                question: "Question 24. Choose the correct word to fill in the blank (24):",
+                options: ["is", "was", "are", "were"],
+                correctVal: "is",
+                rationale: "Chủ ngữ của mệnh đề này là danh động từ 'remembering...' (việc ghi nhớ từ vựng và cấu trúc). Danh động từ làm chủ ngữ luôn được xem là danh từ số ít, do đó hệ từ tobe chia ở hiện tại phải là 'is'.",
+                hint: "Dù có từ 'words and structures' dạng số nhiều ở sau, nhưng chủ ngữ chính lại là hành động ghi nhớ 'remembering'."
+            },
+            {
+                id: 25, section: "sec-cloze", sectionName: "Đọc điền từ - Bạn học Aimi ở Tokyo (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>My Name is Aimi</b><br>
+                    My name is Aimi. I'm in the sixth grade at a secondary school in Tokyo. I like learning Mathematics because it <b>(22) _______</b> me to develop my thinking. I spend much of my time <b>(23) _______</b> Maths exercises. I often get marks 9 and 10 in Maths tests. I don't like English because remembering English words and structures <b>(24) _______</b> very difficult for me. But I think I have to work <b>(25) _______</b> at English. My teacher encourages me a lot. She gives me some English books, and she shows me how <b>(26) _______</b> words better. I hope that my English will be better in the second semester.
+                </div>`,
+                question: "Question 25. Choose the correct word to fill in the blank (25):",
+                options: ["harder", "the hardest", "more hardly", "hardly"],
+                correctVal: "harder",
+                rationale: "Cụm từ rèn luyện, học tập chăm chỉ hơn: 'work harder'. 'hardly' mang nghĩa phủ định là 'hầu như không', sai hoàn toàn về ngữ cảnh quyết tâm học tốt tiếng Anh của Aimi.",
+                hint: "Aimi tự nhủ bản thân phải cố gắng học tập chăm chỉ, nỗ lực nhiều hơn nữa."
+            },
+            {
+                id: 26, section: "sec-cloze", sectionName: "Đọc điền từ - Bạn học Aimi ở Tokyo (Cloze Test)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>My Name is Aimi</b><br>
+                    My name is Aimi. I'm in the sixth grade at a secondary school in Tokyo. I like learning Mathematics because it <b>(22) _______</b> me to develop my thinking. I spend much of my time <b>(23) _______</b> Maths exercises. I often get marks 9 and 10 in Maths tests. I don't like English because remembering English words and structures <b>(24) _______</b> very difficult for me. But I think I have to work <b>(25) _______</b> at English. My teacher encourages me a lot. She gives me some English books, and she shows me how <b>(26) _______</b> words better. I hope that my English will be better in the second semester.
+                </div>`,
+                question: "Question 26. Choose the correct word to fill in the blank (26):",
+                options: ["to remember", "remembering", "remember", "remembered"],
+                correctVal: "to remember",
+                rationale: "Cấu trúc chỉ cách thức thực hiện hành động: 'how + to-infinitive' (làm thế nào để ghi nhớ từ vựng hiệu quả hơn).",
+                hint: "Sau từ để hỏi 'how' chỉ phương thức, ta dùng cấu trúc động từ dạng gì?"
+            },
+
+            // Section 6: Reading Comprehension - Nam (27-31)
+            {
+                id: 27, section: "sec-reading", sectionName: "Đọc hiểu - Chuyến nghỉ hè ở Hà Nội của Nam (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Nam's Summer Vacation</b><br>
+                    Nam had a wonderful holiday last summer. At first, his parents wanted him to visit his aunt in Da Lat. After that, he decided to visit his uncle in Ha Noi - the capital of Vietnam. He stayed in his uncle's house for three weeks. His uncle took him to a lot of interesting places such as Ho Chi Minh Mausoleum, Ba Dinh Square, West Lake, Lenin Park. He bought some gifts for his friends in Ho Chi Minh City. He went out with his uncle all day, but he wasn't tired. He felt very happy. When he returned to Ho Chi Minh City, he told his friends about his vacation.
+                </div>`,
+                question: "Question 27. Where was Nam on his last summer vacation?",
+                options: ["Ha Noi", "Ho Chi Minh City", "Da Lat", "Vung Tau"],
+                correctVal: "Ha Noi",
+                rationale: "Trích xuất thông tin đoạn 1: 'After that, he decided to visit his uncle in Ha Noi - the capital of Vietnam.' (Cậu quyết định đến thăm người chú ở Hà Nội).",
+                hint: "Dù bố mẹ muốn Nam đi Đà Lạt, nhưng cuối cùng Nam đã quyết định đi du lịch ở đâu?"
+            },
+            {
+                id: 28, section: "sec-reading", sectionName: "Đọc hiểu - Chuyến nghỉ hè ở Hà Nội của Nam (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Nam's Summer Vacation</b><br>
+                    Nam had a wonderful holiday last summer. At first, his parents wanted him to visit his aunt in Da Lat. After that, he decided to visit his uncle in Ha Noi - the capital of Vietnam. He stayed in his uncle's house for three weeks. His uncle took him to a lot of interesting places such as Ho Chi Minh Mausoleum, Ba Dinh Square, West Lake, Lenin Park. He bought some gifts for his friends in Ho Chi Minh City. He went out with his uncle all day, but he wasn't tired. He felt very happy. When he returned to Ho Chi Minh City, he told his friends about his vacation.
+                </div>`,
+                question: "Question 28. How long did he stay in Hanoi?",
+                options: ["3 weeks", "1 week", "2 weeks", "4 weeks"],
+                correctVal: "3 weeks",
+                rationale: "Thông tin có sẵn trong bài đọc: 'He stayed in his uncle's house for three weeks.' (Cậu ở lại nhà chú trong vòng 3 tuần lễ).",
+                hint: "Tìm thông tin chỉ số lượng tuần lễ di chuyển và lưu trú tại nhà chú của Nam."
+            },
+            {
+                id: 29, section: "sec-reading", sectionName: "Đọc hiểu - Chuyến nghỉ hè ở Hà Nội của Nam (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Nam's Summer Vacation</b><br>
+                    Nam had a wonderful holiday last summer. At first, his parents wanted him to visit his aunt in Da Lat. After that, he decided to visit his uncle in Ha Noi - the capital of Vietnam. He stayed in his uncle's house for three weeks. His uncle took him to a lot of interesting places such as Ho Chi Minh Mausoleum, Ba Dinh Square, West Lake, Lenin Park. He bought some gifts for his friends in Ho Chi Minh City. He went out with his uncle all day, but he wasn't tired. He felt very happy. When he returned to Ho Chi Minh City, he told his friends about his vacation.
+                </div>`,
+                question: "Question 29. Which place didn't he visit in Hanoi?",
+                options: ["The Old Quarter", "Ho Chi Minh Mausoleum", "Ba Dinh Square", "Lenin Park"],
+                correctVal: "The Old Quarter",
+                rationale: "Trong bài chỉ nhắc đến lăng Bác, quảng trường Ba Đình, Hồ Tây và công viên Lê-nin. 'The Old Quarter' (Phố cổ Hà Nội) không được nhắc đến trong văn bản.",
+                hint: "Đọc kỹ danh sách các địa điểm chú dắt Nam đi chơi và dùng phép loại trừ."
+            },
+            {
+                id: 30, section: "sec-reading", sectionName: "Đọc hiểu - Chuyến nghỉ hè ở Hà Nội của Nam (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Nam's Summer Vacation</b><br>
+                    Nam had a wonderful holiday last summer. At first, his parents wanted him to visit his aunt in Da Lat. After that, he decided to visit his uncle in Ha Noi - the capital of Vietnam. He stayed in his uncle's house for three weeks. His uncle took him to a lot of interesting places such as Ho Chi Minh Mausoleum, Ba Dinh Square, West Lake, Lenin Park. He bought some gifts for his friends in Ho Chi Minh City. He went out with his uncle all day, but he wasn't tired. He felt very happy. When he returned to Ho Chi Minh City, he told his friends about his vacation.
+                </div>`,
+                question: "Question 30. How did he feel?",
+                options: ["happy", "tired", "bored", "unhappy"],
+                correctVal: "happy",
+                rationale: "Dòng cuối ghi rõ cảm xúc của Nam: 'He felt very happy.' (Cậu ấy cảm thấy vô cùng hạnh phúc sau chuyến đi).",
+                hint: "Kiểm tra tính từ mô tả tâm trạng của Nam ở gần cuối bài đọc."
+            },
+            {
+                id: 31, section: "sec-reading", sectionName: "Đọc hiểu - Chuyến nghỉ hè ở Hà Nội của Nam (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Nam's Summer Vacation</b><br>
+                    Nam had a wonderful holiday last summer. At first, his parents wanted him to visit his aunt in Da Lat. After that, he decided to visit his uncle in Ha Noi - the capital of Vietnam. He stayed in his uncle's house for three weeks. His uncle took him to a lot of interesting places such as Ho Chi Minh Mausoleum, Ba Dinh Square, West Lake, Lenin Park. He bought some gifts for his friends in Ho Chi Minh City. He went out with his uncle all day, but he wasn't tired. He felt very happy. When he returned to Ho Chi Minh City, he told his friends about his vacation.
+                </div>`,
+                question: "Question 31. Who did he talk to about his vacation?",
+                options: ["his friends", "his parents", "his aunt", "his uncle"],
+                correctVal: "his friends",
+                rationale: "Trích xuất câu cuối cùng: 'When he returned to Ho Chi Minh City, he told his friends about his vacation.' (khi về thành phố Hồ Chí Minh, cậu đã kể cho bạn bè nghe).",
+                hint: "Đọc câu văn cuối cùng của bài để biết Nam đã tâm sự chuyến đi này với ai."
+            },
+
+            // Section 7: Writing & transformations (32-40)
+            {
+                id: 32, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the sentence that is closest in meaning to the given sentence:\n\nWatching TV is more interesting than reading books.",
+                options: [
+                    "Reading books is not as interesting as watching TV.",
+                    "Watching TV is not as boring than reading books.",
+                    "Reading books is more boring as watching TV.",
+                    "Watching TV and reading books are both interesting."
+                ],
+                correctVal: "Reading books is not as interesting as watching TV.",
+                rationale: "Cấu trúc so sánh hơn 'Watching TV is more interesting than reading books' (Xem tivi thú vị hơn đọc sách) tương đương với so sánh không bằng dạng phủ định: 'Reading books is not as/so interesting as watching TV' (Đọc sách không thú vị bằng xem tivi).",
+                hint: "Sử dụng cấu trúc so sánh không bằng để diễn đạt lại ý so sánh hơn của câu gốc."
+            },
+            {
+                id: 33, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the sentence that is closest in meaning to the given sentence:\n\nIt's important for you to finish your homework at home.",
+                options: [
+                    "You must finish your homework at home.",
+                    "You should finish your homework at home.",
+                    "You can finish your homework at home.",
+                    "You don't need to finish your homework at home."
+                ],
+                correctVal: "You must finish your homework at home.",
+                rationale: "Cấu trúc 'It is important for you to...' chỉ tính chất bắt buộc, tối quan trọng nên tương đương với động từ khuyết thiếu mang ý nghĩa bắt buộc: 'must' (bắt buộc phải làm).",
+                hint: "Việc hoàn thành bài tập về nhà là vô cùng quan trọng, bắt buộc phải hoàn thành."
+            },
+            {
+                id: 34, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the sentence that is closest in meaning to the given sentence:\n\nHue's house is near the river.",
+                options: [
+                    "Hue's house is not far from the river.",
+                    "The river is not close to Hue's house.",
+                    "The river is near to Hue's house.",
+                    "Hue's house is behind the river."
+                ],
+                correctVal: "Hue's house is not far from the river.",
+                rationale: "Tính từ 'near' (gần) tương đương với cụm trạng từ phủ định 'not far from' (không xa nơi nào đó). Do đó câu 'Hue's house is not far from the river' là đúng nghĩa nhất.",
+                hint: "Nhà ở vị trí gần bờ sông thì đồng nghĩa là nó không nằm ở quá xa bờ sông."
+            },
+            {
+                id: 35, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the sentence that best combines the pair of sentences:\n\nWe will plant more trees. The air will be fresher.",
+                options: [
+                    "If we plant more trees, the air will be fresher.",
+                    "The air will be fresher if we will plant more trees.",
+                    "If we don't plant more trees, the air will be fresher.",
+                    "The air won't be fresher if we plant more trees."
+                ],
+                correctVal: "If we plant more trees, the air will be fresher.",
+                rationale: "Đây là câu điều kiện loại 1 diễn đạt giả định thực tế ở tương lai: 'If + S + V(hiện tại đơn), S + will + V-inf'. Mệnh đề IF chia hiện tại đơn 'plant', mệnh đề chính chia tương lai đơn 'will be'.",
+                hint: "Sử dụng cấu trúc câu điều kiện loại 1 để thể hiện giả định gieo trồng cây xanh giúp làm sạch không khí."
+            },
+            {
+                id: 36, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the sentence that best combines the pair of sentences:\n\nWe're watching a comedy. We're laughing happily.",
+                options: [
+                    "We're watching a comedy, so we're laughing happily.",
+                    "We're watching a comedy, but we're laughing happily.",
+                    "We're watching a comedy, or we're laughing happily.",
+                    "We're watching a comedy although we're laughing happily."
+                ],
+                correctVal: "We're watching a comedy, so we're laughing happily.",
+                rationale: "Việc xem một vở kịch hài hước là nguyên nhân trực tiếp dẫn tới kết quả cười đùa vui vẻ, do đó sử dụng liên từ chỉ kết quả 'so' (vì vậy) để liên kết.",
+                hint: "Tìm liên từ thể hiện mối quan hệ nguyên nhân - kết quả logic giữa việc xem hài kịch và tiếng cười."
+            },
+            {
+                id: 37, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the sentence that best combines the pair of sentences:\n\nMy sister got a low mark in the test. She was hard-working.",
+                options: [
+                    "My sister was hard-working, but she got a low mark in the test.",
+                    "My sister got a low mark in the test, so she was hard-working.",
+                    "My sister got a low mark in the test because she was hard-working.",
+                    "My sister was hard-working, and she got a low mark in the test."
+                ],
+                correctVal: "My sister was hard-working, but she got a low mark in the test.",
+                rationale: "Hai hành động mang tính chất tương phản, mâu thuẫn (chăm chỉ nhưng lại bị điểm thấp), do đó sử dụng liên từ chỉ sự đối lập 'but' (nhưng) để nối kết.",
+                hint: "Sử dụng liên từ chỉ sự tương phản để nhấn mạnh nghịch lý điểm thi thấp dù đã học hành rất chăm chỉ."
+            },
+            {
+                id: 38, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the meaningful sentence written by using the words given:\n\nMy / brother / I / go / see / football match / between / Eagles / Hawks team / last night /.",
+                options: [
+                    "My brother and I went to see the football match between the Eagles and Hawks team last night.",
+                    "My brother and I go to see the football match among the Eagles and Hawks team last night.",
+                    "My brother and I went seeing the football match between the Eagles or Hawks team last night.",
+                    "My brother and I go seeing the football match between the Eagles to Hawks team last night."
+                ],
+                correctVal: "My brother and I went to see the football match between the Eagles and Hawks team last night.",
+                rationale: "Trạng từ thời gian quá khứ 'last night' yêu cầu động từ chính chia quá khứ đơn 'went'. Cấu trúc 'go to do something' chuyển thành 'went to see'. Giới từ chỉ trận đấu giữa hai đội bóng là 'between... and...'.",
+                hint: "Mốc thời gian 'tối hôm qua' yêu cầu động từ chia quá khứ và chú ý giới từ so sánh giữa hai đội bóng."
+            },
+            {
+                id: 39, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the meaningful sentence written by using the words given:\n\nThere / not / many trees / my neighbourhood /",
+                options: [
+                    "There are not many trees in my neighbourhood.",
+                    "There is not many trees in my neighrbouhood.",
+                    "There are not many trees at my neighbourhood.",
+                    "There is not many trees at my neighbourhood."
+                ],
+                correctVal: "There are not many trees in my neighbourhood.",
+                rationale: "Chủ ngữ số nhiều 'many trees' yêu cầu sử dụng cấu trúc 'There are'. Trạng từ phủ định đi kèm là 'are not'. Giới từ đi với danh từ khu lân cận/hàng xóm là 'in my neighbourhood'.",
+                hint: "Sử dụng đúng hệ từ cho danh từ đếm được số nhiều và giới từ đi kèm với khu vực sinh sống."
+            },
+            {
+                id: 40, section: "sec-writing", sectionName: "Viết lại câu & Tạo câu hoàn chỉnh (Writing & Transformation)", type: "choice",
+                question: "Choose the meaningful sentence written by using the words given:\n\nI / live / my uncle and aunt / a big house / the countryside /.",
+                options: [
+                    "I live with my uncle and aunt in a big house in the countryside.",
+                    "I lives with my uncle and aunt in a big house on the countryside.",
+                    "I lives with my uncle and aunt at a big house in the countryside.",
+                    "I live with my uncle and aunt at a big house at the countryside."
+                ],
+                correctVal: "I live with my uncle and aunt in a big house in the countryside.",
+                rationale: "Chủ ngữ ngôi thứ nhất 'I' đi với động từ nguyên thể không chia 'live'. Các cụm giới từ đi kèm đúng cấu trúc là: 'live with somebody' (sống cùng ai), 'in a big house' (trong ngôi nhà lớn) và 'in the countryside' (ở miền quê).",
+                hint: "Chú ý chia động từ nguyên thể phù hợp với ngôi thứ nhất và cách sử dụng các giới từ chỉ nơi chốn đi kèm."
+            }
+        ];
+
+        let quizData = [];
+        let userAnswers = [];
+        let scoreChartInstance = null;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function prepareQuiz() {
+            quizData = rawQuestions.map(q => {
+                const shuffledOptions = shuffleArray([...q.options]);
+                const newCorrectIndex = shuffledOptions.indexOf(q.correctVal);
+                return { ...q, options: shuffledOptions, correct: newCorrectIndex };
+            });
+            userAnswers = new Array(quizData.length).fill(null);
+        }
+
+        function initQuiz() {
+            prepareQuiz();
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = "";
+            let currentSection = "";
+
+            quizData.forEach((q, index) => {
+                if (q.section !== currentSection) {
+                    currentSection = q.section;
+                    const sectionHeader = document.createElement('div');
+                    sectionHeader.id = q.section;
+                    sectionHeader.className = "pt-6 lg:pt-8 mb-4 border-b-2 border-indigo-100";
+                    sectionHeader.innerHTML = `<h2 class="text-sm md:text-base font-extrabold text-slate-800 pb-2 flex items-center gap-2">
+                        <span class="w-2.5 h-5 bg-indigo-600 rounded-full inline-block"></span>${q.sectionName}
+                    </h2>`;
+                    container.appendChild(sectionHeader);
+                }
+
+                const card = document.createElement('div');
+                card.className = "question-card bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-all";
+
+                let passageHtml = "";
+                if (q.passage) {
+                    passageHtml = `
+                        <div class="mb-4">
+                            ${q.passage}
+                        </div>
+                    `;
+                }
+
+                const interactionHtml = `
+                    <div id="options-${index}" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                        ${q.options.map((opt, i) => `
+                            <button onclick="selectOption(${index}, ${i})" class="option-btn text-left p-3.5 rounded-xl border-2 border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/40 transition-all flex items-center group active:scale-[0.99] w-full">
+                                <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-xs mr-3 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors shrink-0">${String.fromCharCode(65 + i)}</span>
+                                <span class="text-slate-700 text-xs md:text-sm font-medium flex-1">${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="bg-indigo-600 text-white text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full">Câu ${q.id}</span>
+                        <button onclick="showHint(${index})" class="flex items-center gap-1 text-[11px] text-amber-600 font-bold hover:text-amber-700 active:scale-95 transition-all">
+                            <span>💡 Mẹo giải nhanh</span>
+                        </button>
+                    </div>
+                    ${passageHtml}
+                    <div class="text-xs md:text-sm font-semibold mb-5 text-slate-850 leading-relaxed whitespace-pre-line">${q.question}</div>
+                    
+                    ${interactionHtml}
+                    
+                    <div id="hint-${index}" class="hidden mt-4 p-4 bg-amber-50 text-amber-950 text-xs rounded-xl border border-amber-100 italic leading-relaxed">
+                        <strong>Gợi ý:</strong> ${q.hint}
+                    </div>
+                    
+                    <div id="feedback-${index}" class="hidden mt-4 p-4 rounded-xl border transition-all">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span id="icon-${index}" class="text-base"></span>
+                            <p id="result-text-${index}" class="font-bold text-xs md:text-sm"></p>
+                        </div>
+                        <div class="h-px bg-current opacity-10 mb-2"></div>
+                        <p class="text-xs md:text-sm leading-relaxed font-medium opacity-95">${q.rationale}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Extra Section 7: Writing Paragraph Helper (Optional Interactive Writing Area)
+            injectParagraphSection();
+
+            initCharts();
+        }
+
+        function selectOption(qIdx, oIdx) {
+            if (userAnswers[qIdx] !== null) return;
+
+            userAnswers[qIdx] = oIdx;
+            const correct = quizData[qIdx].correct;
+            const feedback = document.getElementById(`feedback-${qIdx}`);
+            const resultText = document.getElementById(`result-text-${qIdx}`);
+            const icon = document.getElementById(`icon-${qIdx}`);
+            const optionsDiv = document.getElementById(`options-${qIdx}`);
+            const buttons = optionsDiv.getElementsByTagName('button');
+
+            feedback.classList.remove('hidden');
+            
+            if (oIdx === correct) {
+                feedback.className = "mt-4 p-4 rounded-xl bg-emerald-50 text-emerald-800 border-emerald-200 border text-xs md:text-sm";
+                resultText.innerText = "Chính xác!";
+                icon.innerText = "✅";
+                buttons[oIdx].className = "option-btn text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 flex items-center shadow-sm w-full";
+                buttons[oIdx].querySelector('span').className = "w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+            } else {
+                feedback.className = "mt-4 p-4 rounded-xl bg-rose-50 text-rose-800 border-rose-200 border text-xs md:text-sm";
+                resultText.innerText = "Chưa chính xác";
+                icon.innerText = "❌";
+                buttons[oIdx].className = "option-btn text-left p-3.5 rounded-xl border-2 border-rose-500 bg-rose-50 flex items-center shadow-sm w-full";
+                buttons[oIdx].querySelector('span').className = "w-7 h-7 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+                
+                // Highlight correct
+                buttons[correct].className = "option-btn text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50/50 flex items-center w-full transition-all";
+                buttons[correct].querySelector('span').className = "w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+            }
+
+            for (let b = 0; b < buttons.length; b++) {
+                if (b !== oIdx && b !== correct) {
+                    buttons[b].classList.add('opacity-40');
+                }
+            }
+
+            updateProgress();
+            updateCharts();
+        }
+
+        function injectParagraphSection() {
+            const container = document.getElementById('quiz-container');
+            
+            const header = document.createElement('div');
+            header.id = "sec-paragraph";
+            header.className = "pt-6 lg:pt-8 mb-4 border-b-2 border-indigo-100";
+            header.innerHTML = `<h2 class="text-sm md:text-base font-extrabold text-slate-800 pb-2 flex items-center gap-2">
+                <span class="w-2.5 h-5 bg-indigo-600 rounded-full inline-block"></span>Tự luận viết đoạn văn ngắn (Writing Section)
+            </h2>`;
+            container.appendChild(header);
+
+            const card = document.createElement('div');
+            card.className = "question-card bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200/80";
+            card.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <span class="bg-indigo-600 text-white text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full">Tự luận</span>
+                    <span class="text-xs text-indigo-600 font-bold">30 - 50 từ</span>
+                </div>
+                <div class="text-xs md:text-sm font-semibold mb-5 text-slate-850 leading-relaxed font-sans">
+                    Write about your last summer vacation (inspired by Nam's vacation). Where did you go and what did you do? (30-50 words).
+                </div>
+                
+                <div class="space-y-2">
+                    <textarea id="essay-input" oninput="countWords()" rows="5" placeholder="Gõ câu trả lời tự luận của con bằng tiếng Anh..." class="w-full p-4 border-2 border-slate-200 rounded-2xl text-xs md:text-sm focus:border-indigo-500 focus:outline-none transition-all"></textarea>
+                    <div class="flex justify-between items-center text-xs text-slate-400 font-semibold px-1">
+                        <span id="essay-word-count">0 từ (Yêu cầu: 30 - 50 từ)</span>
+                        <button onclick="revealSampleEssay()" class="text-indigo-600 hover:text-indigo-700">Xem bài mẫu gợi ý</button>
+                    </div>
+                </div>
+
+                <div id="essay-sample-box" class="hidden mt-5 p-4 bg-indigo-50/50 border border-indigo-150 rounded-2xl text-xs md:text-sm text-slate-700 leading-relaxed space-y-3">
+                    <p class="font-bold text-indigo-800">🌟 Bài viết gợi ý tham khảo (Kỳ nghỉ hè của em):</p>
+                    <p class="italic font-medium">"Last summer vacation, I visited my grandparents in the countryside. I stayed there for two weeks. I enjoyed swimming in the river and flying kites with my cousins. It was an exciting and wonderful vacation, and I felt extremely happy."</p>
+                    <div class="h-px bg-indigo-200 my-2"></div>
+                    <p class="text-[11px] text-slate-500 font-medium"><b>Mẹo ghi điểm:</b> Con hãy sử dụng các động từ ở thì Quá khứ đơn (visited, stayed, enjoyed, was, felt) khi kể về một chuyến đi đã diễn ra trong quá khứ để đúng ngữ pháp nhé!</p>
+                </div>
+            `;
+            container.appendChild(card);
+        }
+
+        function countWords() {
+            const txt = document.getElementById('essay-input').value.trim();
+            const words = txt === "" ? 0 : txt.split(/\s+/).length;
+            const countLabel = document.getElementById('essay-word-count');
+            
+            if (words >= 30 && words <= 50) {
+                countLabel.innerHTML = `<span class="text-emerald-600 font-bold">✨ ${words} từ (Đạt yêu cầu)</span>`;
+            } else {
+                countLabel.innerHTML = `<span class="text-amber-500">${words} từ (Yêu cầu: 30 - 50 từ)</span>`;
+            }
+        }
+
+        function revealSampleEssay() {
+            document.getElementById('essay-sample-box').classList.toggle('hidden');
+        }
+
+        function showHint(index) {
+            const hintBox = document.getElementById(`hint-${index}`);
+            hintBox.classList.toggle('hidden');
+        }
+
+        function updateProgress() {
+            const total = quizData.length;
+            const answered = userAnswers.filter(a => a !== null).length;
+            const progress = Math.round((answered / total) * 100);
+            
+            // Desktop
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('progress-percent').innerText = `${progress}%`;
+            document.getElementById('progress-text').innerText = answered === 0 ? "Chưa làm câu nào" : `Đã hoàn thành ${answered}/${total} câu`;
+            
+            // Mobile
+            document.getElementById('mobile-progress-bar').style.width = `${progress}%`;
+
+            const score = userAnswers.reduce((acc, curr, idx) => {
+                if (curr === null) return acc;
+                return curr === quizData[idx].correct ? acc + 1 : acc;
+            }, 0);
+            
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('mobile-score-badge').innerText = `Đúng: ${score}/${total}`;
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                const offset = window.innerWidth < 1024 ? 120 : 20;
+                const elementPosition = el.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function initCharts() {
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+            if (scoreChartInstance) {
+                scoreChartInstance.destroy();
+            }
+            scoreChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Đúng', 'Sai', 'Chưa làm'],
+                    datasets: [{
+                        data: [0, 0, 40],
+                        backgroundColor: ['#4F46E5', '#EF4444', '#E2E8F0'],
+                        borderWidth: 0,
+                        hoverOffset: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '72%',
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                boxWidth: 10,
+                                usePointStyle: true,
+                                font: { size: 11, weight: 'bold' }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCharts() {
+            if (!scoreChartInstance) return;
+            const total = quizData.length;
+            
+            const correct = userAnswers.reduce((acc, curr, idx) => {
+                if (curr === null) return acc;
+                return curr === quizData[idx].correct ? acc + 1 : acc;
+            }, 0);
+
+            const answered = userAnswers.filter(a => a !== null).length;
+            const incorrect = answered - correct;
+            const remaining = total - answered;
+
+            scoreChartInstance.data.datasets[0].data = [correct, incorrect, remaining];
+            scoreChartInstance.update();
+        }
+
+        window.onload = function() {
+            initQuiz();
+        };
+    </script>
+</body>
+</html>
+```
