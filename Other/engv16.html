@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>UMS English Prep 2025 - Mock Test 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+            color: #1E293B;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .question-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
+        }
+        .option-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .passage-box {
+            background-color: #FDFDFD;
+            border-left: 4px solid #4F46E5;
+        }
+        @media (max-width: 768px) {
+            .option-btn {
+                padding: 0.9rem 0.75rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- Mobile Sticky Navigation -->
+    <div class="lg:hidden top-0 sticky z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm w-full">
+        <div class="px-4 py-3 flex items-center justify-between border-b border-slate-100">
+            <div>
+                <h1 class="text-sm font-black text-slate-900 leading-tight">THCS Ngoại Ngữ - UMS</h1>
+                <p class="text-[10px] text-indigo-650 font-bold uppercase tracking-wider">Đề luyện thi đánh giá năng lực 2025</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span id="mobile-score-badge" class="bg-indigo-50 text-indigo-700 text-xs font-black px-2.5 py-1 rounded-full border border-indigo-100">Đúng: 0/20</span>
+            </div>
+        </div>
+        <!-- Scrollable Mobile Menu -->
+        <div class="flex overflow-x-auto whitespace-nowrap px-4 py-2 gap-2 no-scrollbar scroll-smooth">
+            <button onclick="scrollToSection('sec-vocab')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Từ vựng (1-4)</button>
+            <button onclick="scrollToSection('sec-dialogue')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Hội thoại (5-7)</button>
+            <button onclick="scrollToSection('sec-cloze')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Điền từ Bảo tàng (8-12)</button>
+            <button onclick="scrollToSection('sec-reading')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Đọc hiểu Nuôi thú (13-17)</button>
+            <button onclick="scrollToSection('sec-passive')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Bị động (18)</button>
+            <button onclick="scrollToSection('sec-picture')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Tự luận Tranh (19)</button>
+            <button onclick="scrollToSection('sec-essay')" class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 active:scale-95 transition-all">Tự luận Bạn tốt (20)</button>
+        </div>
+        <div class="w-full bg-slate-100 h-1">
+            <div id="mobile-progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+        </div>
+    </div>
+
+    <!-- Desktop Sidebar -->
+    <aside class="hidden lg:flex w-80 bg-white border-r border-slate-200 flex-col h-screen sticky top-0 overflow-y-auto shrink-0">
+        <div class="p-6 border-b border-slate-150">
+            <h1 class="text-base font-black text-slate-900 leading-tight">THCS Ngoại Ngữ - UMS</h1>
+            <p class="text-[10px] text-indigo-600 mt-2 font-bold uppercase tracking-widest">ĐỀ LUYỆN THI ĐÁNH GIÁ NĂNG LỰC</p>
+        </div>
+        <nav class="flex-1 p-4 space-y-1">
+            <button onclick="scrollToSection('sec-vocab')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Từ vựng & Ngữ pháp (1-4)</span>
+                <span class="text-xs text-slate-400">📝</span>
+            </button>
+            <button onclick="scrollToSection('sec-dialogue')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Hoàn thành hội thoại (5-7)</span>
+                <span class="text-xs text-slate-400">💬</span>
+            </button>
+            <button onclick="scrollToSection('sec-cloze')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Điền từ Chuyến đi (8-12)</span>
+                <span class="text-xs text-slate-400">🦕</span>
+            </button>
+            <button onclick="scrollToSection('sec-reading')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Đọc hiểu Nuôi thú cưng (13-17)</span>
+                <span class="text-xs text-slate-400">🐕</span>
+            </button>
+            <button onclick="scrollToSection('sec-passive')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Chuyển câu Bị động (18)</span>
+                <span class="text-xs text-slate-400">🔄</span>
+            </button>
+            <button onclick="scrollToSection('sec-picture')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Tự luận Miêu tả tranh (19)</span>
+                <span class="text-xs text-slate-400">🎨</span>
+            </button>
+            <button onclick="scrollToSection('sec-essay')" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 text-xs font-bold transition-all flex items-center justify-between">
+                <span>Tự luận về Bạn tốt (20)</span>
+                <span class="text-xs text-slate-400">💖</span>
+            </button>
+        </nav>
+        <div class="p-6 bg-slate-50 border-t border-slate-150">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Tiến trình làm bài</span>
+                <span id="progress-percent" class="text-xs font-black text-indigo-600">0%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+            </div>
+            <div id="progress-text" class="text-[11px] text-slate-500 mt-2 font-medium">Chưa hoàn thành câu nào</div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-x-hidden">
+        <div class="max-w-4xl mx-auto px-4 py-6 md:p-8 space-y-6">
+            
+            <!-- Dashboard Tracker -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Doughnut Chart -->
+                <div class="md:col-span-2 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-[10px] font-black text-slate-400 mb-3 uppercase tracking-widest">Biểu đồ đánh giá kết quả</h3>
+                    </div>
+                    <div class="relative w-full h-40">
+                        <canvas id="scoreChart"></canvas>
+                    </div>
+                </div>
+                <!-- Action / Reset -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col items-center justify-center text-center">
+                    <div class="mb-1">
+                        <span id="final-score" class="text-6xl font-black text-indigo-600">0</span>
+                        <span class="text-xl text-slate-300 font-bold">/18</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 font-bold uppercase tracking-wider mb-5">Số câu trắc nghiệm làm đúng</p>
+                    <button onclick="window.location.reload()" class="w-full py-3 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 active:scale-95 transition-all shadow-md shadow-indigo-150">Xáo trộn & Làm lại</button>
+                </div>
+            </div>
+
+            <!-- Header Info Box -->
+            <div class="bg-indigo-50/60 p-5 rounded-2xl border border-indigo-100 shadow-inner space-y-2">
+                <h2 class="text-sm font-black text-slate-800 flex items-center gap-2">
+                    <span>💡 Hướng dẫn ôn thi</span>
+                </h2>
+                <ul class="text-slate-600 text-xs space-y-1.5 leading-relaxed">
+                    <li>• Đề thi được thiết kế bám sát 100% theo chuẩn cấu trúc Đánh giá năng lực của trường Ngoại ngữ UMS.</li>
+                    <li>• Các đáp án của câu trắc nghiệm sẽ tự động <b>đảo thứ tự ngẫu nhiên</b> mỗi lần bạn truy cập hoặc làm lại đề.</li>
+                    <li>• Hai câu hỏi tự luận miêu tả tranh và viết đoạn văn nghị luận có kèm sẵn <b>khung đếm từ tự động</b> và <b>dàn ý/bài mẫu gợi ý</b> chất lượng cao.</li>
+                </ul>
+            </div>
+
+            <!-- Quiz Container -->
+            <div id="quiz-container" class="space-y-6 md:space-y-8">
+                <!-- Dynamic cards injected here -->
+            </div>
+
+            <!-- Footer -->
+            <footer class="pt-10 pb-6 text-center text-slate-400 text-xs border-t border-slate-150">
+                © 2026 CLB EduNow - Ôn thi đánh giá năng lực chất lượng cao vào THCS Ngoại Ngữ (UMS)
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        const rawQuestions = [
+            // Vocabulary & Grammar (1-4)
+            { id: 1, section: "sec-vocab", sectionName: "Từ vựng & Ngữ pháp (Grammar & Vocabulary)", type: "choice", question: "Choose the best answer A, B, C or D to complete the sentence:\n\n1. I need to _________ this package to my grandmother next weekend.", options: ["deliver", "pick", "include", "charge"], correctVal: "deliver", rationale: "Động từ 'deliver' mang nghĩa giao, chuyển phát (hàng hóa, bưu kiện). Ở đây là 'deliver this package' (giao bưu kiện này tới bà tôi).", hint: "Từ chỉ hoạt động giao/vận chuyển bưu kiện tới địa chỉ của người nhận." },
+            { id: 2, section: "sec-vocab", sectionName: "Từ vựng & Ngữ pháp (Grammar & Vocabulary)", type: "choice", question: "Choose the best answer A, B, C or D to complete the sentence:\n\n2. The recipe needs two main _________ to make a delicious dish, including noodles and tomatoes.", options: ["ingredients", "parts", "flavour", "equipments"], correctVal: "ingredients", rationale: "Từ 'ingredients' nghĩa là thành phần, nguyên liệu nấu ăn (trong công thức làm bánh hay nấu mì).", hint: "Để làm nên một món ăn ngon, chúng ta cần chuẩn bị đầy đủ các loại nguyên liệu nấu bếp." },
+            { id: 3, section: "sec-vocab", sectionName: "Từ vựng & Ngữ pháp (Grammar & Vocabulary)", type: "choice", question: "Choose the best answer A, B, C or D to complete the sentence:\n\n3. The homework was so difficult that _________ students were forced to ask for help.", options: ["many", "few", "much", "lot of"], correctVal: "many", rationale: "Dựa vào mối quan hệ nguyên nhân - kết quả: Bài tập quá khó nên kết quả là có 'nhiều' (many) học sinh phải nhờ sự giúp đỡ. 'many' đi kèm danh từ đếm được số nhiều 'students'.", hint: "Bài tập quá khó thì sẽ dẫn đến việc có ít hay nhiều bạn học sinh cần hỗ trợ làm bài?" },
+            { id: 4, section: "sec-vocab", sectionName: "Từ vựng & Ngữ pháp (Grammar & Vocabulary)", type: "choice", question: "Choose the best answer A, B, C or D to complete the sentence:\n\n4. The _________ in the race trained hard to win the first prize.", options: ["competitors", "judges", "referees", "supporters"], correctVal: "competitors", rationale: "Người tham gia trực tiếp chạy đua, cạnh tranh trong giải đấu để tranh giải nhất được gọi là 'competitors' (đối thủ/người cạnh tranh). 'judges' (giám khảo), 'referees' (trọng tài), 'supporters' (cổ động viên).", hint: "Ai là người phải rèn luyện khổ cực hằng ngày để giành chiến thắng trong một cuộc đua?" },
+
+            // Dialogue (5-7)
+            {
+                id: 5, section: "sec-dialogue", sectionName: "Hoàn thành đoạn hội thoại (Dialogue Completion)", type: "choice",
+                passage: `<div class="p-4 bg-slate-50 border border-slate-200 rounded-xl max-w-md mx-auto shadow-inner text-xs font-mono text-slate-800 leading-relaxed">
+                    <p class="font-bold text-indigo-700 text-center mb-2">💬 WEEKEND PLANS DIALOGUE</p>
+                    <p class="mb-1"><b class="text-indigo-600">Mia:</b> <span class="bg-indigo-100 px-1 py-0.5 rounded font-bold text-indigo-700">(5) _________</span></p>
+                    <p class="mb-1"><b class="text-slate-600">Tom:</b> "Yes, I'm going to the park with my family."</p>
+                    <p class="mb-1"><b class="text-indigo-600">Mia:</b> "(6) _________ What will you do there?"</p>
+                    <p class="mb-1"><b class="text-slate-600">Tom:</b> "We'll have a picnic and play some games."</p>
+                    <p class="mb-1"><b class="text-indigo-650">Mia:</b> "Nice! (7) _________"</p>
+                    <p><b class="text-slate-600">Tom:</b> "That sounds great! What movie are you going to see?"</p>
+                </div>`,
+                question: "Question 5. Choose the best answer to complete gap (5):",
+                options: ["Do you have any plans for the weekend?", "I agree!", "I might go to the movies with my friends.", "That sounds fun!"],
+                correctVal: "Do you have any plans for the weekend?",
+                rationale: "Tom trả lời 'Yes, I'm going to...', do đó câu hỏi đầu tiên của Mia phải là một câu hỏi Yes/No để khơi gợi kế hoạch cuối tuần: 'Do you have any plans for the weekend?' (Bạn có dự định gì cho cuối tuần chưa?).",
+                hint: "Nhìn vào câu trả lời của Tom có từ 'Yes' để đoán xem Mia đã hỏi gì ở câu trước."
+            },
+            {
+                id: 6, section: "sec-dialogue", sectionName: "Hoàn thành đoạn hội thoại (Dialogue Completion)", type: "choice",
+                passage: `<div class="p-4 bg-slate-50 border border-slate-200 rounded-xl max-w-md mx-auto shadow-inner text-xs font-mono text-slate-800 leading-relaxed">
+                    <p class="font-bold text-indigo-700 text-center mb-2">💬 WEEKEND PLANS DIALOGUE</p>
+                    <p class="mb-1"><b class="text-indigo-600">Mia:</b> "Do you have any plans for the weekend?"</p>
+                    <p class="mb-1"><b class="text-slate-600">Tom:</b> "Yes, I'm going to the park with my family."</p>
+                    <p class="mb-1"><b class="text-indigo-600">Mia:</b> <span class="bg-indigo-100 px-1 py-0.5 rounded font-bold text-indigo-700">(6) _________</span> What will you do there?"</p>
+                    <p class="mb-1"><b class="text-slate-600">Tom:</b> "We'll have a picnic and play some games."</p>
+                    <p class="mb-1"><b class="text-indigo-650">Mia:</b> "Nice! (7) _________"</p>
+                    <p><b class="text-slate-600">Tom:</b> "That sounds great! What movie are you going to see?"</p>
+                </div>`,
+                question: "Question 6. Choose the best answer to complete gap (6):",
+                options: ["That sounds fun!", "I agree!", "Do you have any plans for the weekend?", "I might go to the movies with my friends."],
+                correctVal: "That sounds fun!",
+                rationale: "Khi nghe Tom bảo đi dã ngoại ở công viên, phản ứng biểu lộ cảm xúc hào hứng tự nhiên của Mia là: 'That sounds fun!' (Nghe vui thế nhỉ!).",
+                hint: "Tìm câu bày tỏ cảm xúc hào hứng, thích thú trước ý định đi chơi công viên cùng gia đình của bạn bè."
+            },
+            {
+                id: 7, section: "sec-dialogue", sectionName: "Hoàn thành đoạn hội thoại (Dialogue Completion)", type: "choice",
+                passage: `<div class="p-4 bg-slate-50 border border-slate-200 rounded-xl max-w-md mx-auto shadow-inner text-xs font-mono text-slate-800 leading-relaxed">
+                    <p class="font-bold text-indigo-700 text-center mb-2">💬 WEEKEND PLANS DIALOGUE</p>
+                    <p class="mb-1"><b class="text-indigo-600">Mia:</b> "Do you have any plans for the weekend?"</p>
+                    <p class="mb-1"><b class="text-slate-600">Tom:</b> "Yes, I'm going to the park with my family."</p>
+                    <p class="mb-1"><b class="text-indigo-600">Mia:</b> "That sounds fun! What will you do there?"</p>
+                    <p class="mb-1"><b class="text-slate-600">Tom:</b> "We'll have a picnic and play some games."</p>
+                    <p class="mb-1"><b class="text-indigo-650">Mia:</b> "Nice! <span class="bg-indigo-100 px-1 py-0.5 rounded font-bold text-indigo-700">(7) _________</span>"</p>
+                    <p><b class="text-slate-600">Tom:</b> "That sounds great! What movie are you going to see?"</p>
+                </div>`,
+                question: "Question 7. Choose the best answer to complete gap (7):",
+                options: ["I might go to the movies with my friends.", "I agree!", "Do you have any plans for the weekend?", "That sounds fun!"],
+                correctVal: "I might go to the movies with my friends.",
+                rationale: "Mệnh đề tiếp theo của Tom ở cuối cuộc đối thoại là: 'What movie are you going to see?' (Bạn định đi xem phim gì thế?). Điều này cho thấy câu nói trước đó của Mia phải nói về việc đi rạp chiếu phim: 'I might go to the movies with my friends.'",
+                hint: "Dựa vào từ khóa 'movie' (bộ phim) ở dòng cuối cùng của Tom để chọn câu Mia chia sẻ về kế hoạch của mình."
+            },
+
+            // Cloze Reading (8-12)
+            {
+                id: 8, section: "sec-cloze", sectionName: "Đọc điền từ - Chuyến dã ngoại bảo tàng (Cloze Reading)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>A Trip to the Science Museum</b><br>
+                    Last Friday, our class went on a school trip to a science museum. I and my classmates were very excited! The bus <b>(8) _______</b> was really fun, and we sang fun songs together. When we arrived at the museum, we saw a lot of interesting <b>(9) _______</b>. My favourite was the dinosaur section because we were provided information about <b>(10) _______</b> types of dinosaurs and their fossils. We also watched a cool 3D movie about <b>(11) _______</b> space. After lunch, we had time to explore the museum with our friends. It was a great day <b>(12) _______</b> with learning and laughter.
+                </div>`,
+                question: "Question 8. Choose the correct word to fill in the blank (8):",
+                options: ["ride", "flight", "drive", "run"],
+                correctVal: "ride",
+                rationale: "Cụm từ để chỉ hành trình di chuyển bằng xe buýt là 'bus ride' (chuyến đi xe buýt). 'flight' dùng cho máy bay, 'drive' là tự lái xe, 'run' là chạy bộ.",
+                hint: "Hành trình ngồi thư giãn trên ghế xe buýt đi tham quan thường được gọi là gì?"
+            },
+            {
+                id: 9, section: "sec-cloze", sectionName: "Đọc điền từ - Chuyến dã ngoại bảo tàng (Cloze Reading)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>A Trip to the Science Museum</b><br>
+                    Last Friday, our class went on a school trip to a science museum. I and my classmates were very excited! The bus <b>(8) _______</b> was really fun, and we sang fun songs together. When we arrived at the museum, we saw a lot of interesting <b>(9) _______</b>. My favourite was the dinosaur section because we were provided information about <b>(10) _______</b> types of dinosaurs and their fossils. We also watched a cool 3D movie about <b>(11) _______</b> space. After lunch, we had time to explore the museum with our friends. It was a great day <b>(12) _______</b> with learning and laughter.
+                </div>`,
+                question: "Question 9. Choose the correct word to fill in the blank (9):",
+                options: ["exhibits", "concerts", "speeches", "competitions"],
+                correctVal: "exhibits",
+                rationale: "Trong bảo tàng khoa học, chúng ta sẽ được chiêm ngưỡng các hiện vật trưng bày học thuật, tiếng Anh gọi là 'exhibits' (vật trưng bày/mẫu vật).",
+                hint: "Thứ được bày biện trưng bày trong các bảo tàng khoa học cho khách tham quan tìm hiểu."
+            },
+            {
+                id: 10, section: "sec-cloze", sectionName: "Đọc điền từ - Chuyến dã ngoại bảo tàng (Cloze Reading)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>A Trip to the Science Museum</b><br>
+                    Last Friday, our class went on a school trip to a science museum. I and my classmates were very excited! The bus <b>(8) _______</b> was really fun, and we sang fun songs together. When we arrived at the museum, we saw a lot of interesting <b>(9) _______</b>. My favourite was the dinosaur section because we were provided information about <b>(10) _______</b> types of dinosaurs and their fossils. We also watched a cool 3D movie about <b>(11) _______</b> space. After lunch, we had time to explore the museum with our friends. It was a great day <b>(12) _______</b> with learning and laughter.
+                </div>`,
+                question: "Question 10. Choose the correct word to fill in the blank (10):",
+                options: ["different", "differ", "difference", "differently"],
+                correctVal: "different",
+                rationale: "Đứng trước danh từ số nhiều 'types' (các chủng loại) cần điền một tính từ bổ trợ: 'different types of dinosaurs' (nhiều loài khủng long khác nhau).",
+                hint: "Chọn loại từ tính từ phù hợp đứng bổ nghĩa cho danh từ chỉ thể loại đứng ngay phía sau."
+            },
+            {
+                id: 11, section: "sec-cloze", sectionName: "Đọc điền từ - Chuyến dã ngoại bảo tàng (Cloze Reading)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>A Trip to the Science Museum</b><br>
+                    Last Friday, our class went on a school trip to a science museum. I and my classmates were very excited! The bus <b>(8) _______</b> was really fun, and we sang fun songs together. When we arrived at the museum, we saw a lot of interesting <b>(9) _______</b>. My favourite was the dinosaur section because we were provided information about <b>(10) _______</b> types of dinosaurs and their fossils. We also watched a cool 3D movie about <b>(11) _______</b> space. After lunch, we had time to explore the museum with our friends. It was a great day <b>(12) _______</b> with learning and laughter.
+                </div>`,
+                question: "Question 11. Choose the correct word to fill in the blank (11):",
+                options: ["Ø", "a", "an", "the"],
+                correctVal: "Ø",
+                rationale: "Trong tiếng Anh học thuật, khi nói về không gian vũ trụ bao la nói chung ('space'), ta không sử dụng mạo từ đứng trước: 'about space'. (Dùng 'the space' khi nói về một khoảng trống cụ thể).",
+                hint: "Không gian vũ trụ bao la ngoài Trái Đất có cần mạo từ đứng trước không?"
+            },
+            {
+                id: 12, section: "sec-cloze", sectionName: "Đọc điền từ - Chuyến dã ngoại bảo tàng (Cloze Reading)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-750 shadow-inner max-h-56 overflow-y-auto">
+                    <b>A Trip to the Science Museum</b><br>
+                    Last Friday, our class went on a school trip to a science museum. I and my classmates were very excited! The bus <b>(8) _______</b> was really fun, and we sang fun songs together. When we arrived at the museum, we saw a lot of interesting <b>(9) _______</b>. My favourite was the dinosaur section because we were provided information about <b>(10) _______</b> types of dinosaurs and their fossils. We also watched a cool 3D movie about <b>(11) _______</b> space. After lunch, we had time to explore the museum with our friends. It was a great day <b>(12) _______</b> with learning and laughter.
+                </div>`,
+                question: "Question 12. Choose the correct word to fill in the blank (12):",
+                options: ["filled", "full", "plenty", "covered"],
+                correctVal: "filled",
+                rationale: "Cụm từ diễn tả ngập tràn, đong đầy niềm vui: 'filled with learning and laughter' (tràn ngập bài học bổ ích và tiếng cười đùa vui vẻ). Cụm tương tự là 'full of'.",
+                hint: "Nhận diện giới từ 'with' đứng đằng sau từ cần điền để lựa chọn cụm từ đồng nghĩa mang tính chất bao trùm."
+            },
+
+            // Reading Comprehension (13-17)
+            {
+                id: 13, section: "sec-reading", sectionName: "Đọc hiểu - Trách nhiệm nuôi thú cưng (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Raising a Pet</b><br>
+                    Raising a pet can be a fun and rewarding experience! However, it comes with responsibilities. First, choose the right pet for your lifestyle. Dogs and cats need a lot of attention, while fish or hamsters might be easier to care for. Once you have your pet, make sure to provide a safe and comfortable home. This means a clean space, fresh water, and proper food. Regular exercise is also important, especially for dogs. Take them for walks or play with them daily. Don't forget about regular vet visits! Pets need check-ups and vaccinations to stay healthy. Also, spend time bonding with your pet. Play, cuddle, and train them to build a strong relationship. Finally, be patient. Pets can be challenging at times, but with love and care, they can become your best friends. Remember, a happy pet means a happy home!
+                </div>`,
+                question: "Question 13. What does the writer think of raising a pet?",
+                options: ["It brings joy.", "It's expensive.", "It is tiring.", "It is so easy."],
+                correctVal: "It brings joy.",
+                rationale: "Ngay từ câu mở đầu, tác giả khẳng định việc nuôi thú cưng là 'a fun and rewarding experience' (trải nghiệm thú vị và bổ ích), điều này có nghĩa nuôi thú cưng đem lại niềm vui ('It brings joy').",
+                hint: "Dựa vào những tính từ tích cực ở ngay dòng đầu tiên để kết luận thái độ của người viết."
+            },
+            {
+                id: 14, section: "sec-reading", sectionName: "Đọc hiểu - Trách nhiệm nuôi thú cưng (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Raising a Pet</b><br>
+                    Raising a pet can be a fun and rewarding experience! However, it comes with responsibilities. First, choose the right pet for your lifestyle. Dogs and cats need a lot of attention, while fish or hamsters might be easier to care for. Once you have your pet, make sure to provide a safe and comfortable home. This means a clean space, fresh water, and proper food. Regular exercise is also important, especially for dogs. Take them for walks or play with them daily. Don't forget about regular vet visits! Pets need check-ups and vaccinations to stay healthy. Also, spend time bonding with your pet. Play, cuddle, and train them to build a strong relationship. Finally, be patient. Pets can be challenging at times, but with love and care, they can become your best friends. Remember, a happy pet means a happy home!
+                </div>`,
+                question: "Question 14. According to the text, which of the following is NOT an example of a safe and comfortable home for a pet?",
+                options: ["The cage is big.", "The cage is clean.", "The water is fresh.", "The food is good enough."],
+                correctVal: "The cage is big.",
+                rationale: "Bài đọc ghi nhận điều kiện cho ngôi nhà thoải mái gồm: 'a clean space, fresh water, and proper food'. Chi tiết lồng rộng ('The cage is big') hoàn toàn không xuất hiện trong bài.",
+                hint: "Đọc kỹ phần mô tả ngôi nhà an toàn và tiện lợi 'safe and comfortable home' để loại trừ thông tin không có."
+            },
+            {
+                id: 15, section: "sec-reading", sectionName: "Đọc hiểu - Trách nhiệm nuôi thú cưng (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Raising a Pet</b><br>
+                    Raising a pet can be a fun and rewarding experience! However, it comes with responsibilities. First, choose the right pet for your lifestyle. Dogs and cats need a lot of attention, while fish or hamsters might be easier to care for. Once you have your pet, make sure to provide a safe and comfortable home. This means a clean space, fresh water, and proper food. Regular exercise is also important, especially for dogs. Take them for walks or play with them daily. Don't forget about regular vet visits! Pets need check-ups and vaccinations to stay healthy. Also, spend time bonding with your pet. Play, cuddle, and train them to build a strong relationship. Finally, be patient. Pets can be challenging at times, but with love and care, they can become your best friends. Remember, a happy pet means a happy home!
+                </div>`,
+                question: "Question 15. According to the writer, how can you get closer to your pets?",
+                options: ["Play with them", "Take them to a doctor regularly", "Feed them only once a week", "Leave them alone for long periods"],
+                correctVal: "Play with them",
+                rationale: "Trong văn bản chỉ dẫn cách gắn kết tình cảm với thú cưng: 'bonding with your pet. Play, cuddle, and train them...' (Chơi đùa cùng chúng giúp gắn kết tình cảm).",
+                hint: "Hành động nào giúp con người phát triển cảm xúc gần gũi và yêu quý chú chó, chú mèo nhà mình?"
+            },
+            {
+                id: 16, section: "sec-reading", sectionName: "Đọc hiểu - Trách nhiệm nuôi thú cưng (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Raising a Pet</b><br>
+                    Raising a pet can be a fun and rewarding experience! However, it comes with responsibilities. First, choose the right pet for your lifestyle. Dogs and cats need a lot of attention, while fish or hamsters might be easier to care for. Once you have your pet, make sure to provide a safe and comfortable home. This means a clean space, fresh water, and proper food. Regular exercise is also important, especially for dogs. Take them for walks or play with them daily. Don't forget about regular vet visits! Pets need check-ups and vaccinations to stay healthy. Also, spend time bonding with your pet. Play, cuddle, and train <b>them</b> to build a strong relationship. Finally, be patient. Pets can be challenging at times, but with love and care, they can become your best friends. Remember, a happy pet means a happy home!
+                </div>`,
+                question: "Question 16. What does the word 'them' in the text refer to?",
+                options: ["pets", "visits", "vaccinations", "check-ups"],
+                correctVal: "pets",
+                rationale: "Đại từ 'them' trong câu 'Play, cuddle, and train them...' đại diện cho những chú thú cưng ('pets') được nhắc đến xuyên suốt bài học.",
+                hint: "Con người chơi đùa, ôm ấp và huấn luyện đối tượng nào trong gia đình?"
+            },
+            {
+                id: 17, section: "sec-reading", sectionName: "Đọc hiểu - Trách nhiệm nuôi thú cưng (Reading Comprehension)", type: "passage_choice",
+                passage: `<div class="passage-box p-4 rounded-xl text-xs md:text-sm leading-relaxed text-slate-700 shadow-inner max-h-56 overflow-y-auto">
+                    <b>Raising a Pet</b><br>
+                    Raising a pet can be a fun and rewarding experience! However, it comes with responsibilities. First, choose the right pet for your lifestyle. Dogs and cats need a lot of attention, while fish or hamsters might be easier to care for. Once you have your pet, make sure to provide a safe and comfortable home. This means a clean space, fresh water, and proper food. Regular exercise is also important, especially for dogs. Take them for walks or play with them daily. Don't forget about regular vet visits! Pets need check-ups and vaccinations to stay healthy. Also, spend time bonding with your pet. Play, cuddle, and train them to build a strong relationship. Finally, be patient. Pets can be challenging at times, but with love and care, they can become your best friends. Remember, a happy pet means a happy home!
+                </div>`,
+                question: "Question 17. What does the writer want to say in the last paragraph?",
+                options: ["With love and patience, your pet can bring joy to your home.", "We should be angry with our pets because they are disobedient.", "We should have a lot of pets.", "Neglecting your pets will make them love you more."],
+                correctVal: "With love and patience, your pet can bring joy to your home.",
+                rationale: "Đoạn cuối viết: 'Pets can be challenging at times, but with love and care, they can become your best friends. Remember, a happy pet means a happy home!' Điều này chứng minh với sự kiên nhẫn và tình thương, thú cưng sẽ làm tổ ấm tràn ngập niềm vui.",
+                hint: "Thông điệp yêu thương tốt lành được tác giả gửi gắm ở câu kết bài."
+            },
+
+            // Sentence Transform (18)
+            {
+                id: 18, section: "sec-passive", sectionName: "Chuyển đổi câu Bị động (Passive Voice)", type: "choice",
+                question: "Choose the sentence that is closest in meaning to the original sentence:\n\n\"Does the show attract many young people?\"",
+                options: [
+                    "Are many young people attracted by the show?",
+                    "Is many young people attracted by the show?",
+                    "Do many young people attracted by the show?",
+                    "Are many young people attract by the show?"
+                ],
+                correctVal: "Are many young people attracted by the show?",
+                rationale: "Câu gốc ở chủ động thì Hiện tại đơn. Khi chuyển sang bị động: 'Am/Is/Are + S + V3/ed + by + O?'. Danh từ số nhiều 'many young people' yêu cầu tobe số nhiều 'Are' và động từ chia V3 'attracted'.",
+                hint: "Chuyển câu hỏi chủ động thì hiện tại đơn sang thể bị động tương ứng với chủ ngữ mới ở dạng số nhiều."
+            }
+        ];
+
+        let quizData = [];
+        let userAnswers = [];
+        let scoreChartInstance = null;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function prepareQuiz() {
+            quizData = rawQuestions.map(q => {
+                const shuffledOptions = shuffleArray([...q.options]);
+                const newCorrectIndex = shuffledOptions.indexOf(q.correctVal);
+                return { ...q, options: shuffledOptions, correct: newCorrectIndex };
+            });
+            userAnswers = new Array(quizData.length).fill(null);
+        }
+
+        function initQuiz() {
+            prepareQuiz();
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = "";
+            let currentSection = "";
+
+            quizData.forEach((q, index) => {
+                if (q.section !== currentSection) {
+                    currentSection = q.section;
+                    const sectionHeader = document.createElement('div');
+                    sectionHeader.id = q.section;
+                    sectionHeader.className = "pt-6 lg:pt-8 mb-4 border-b-2 border-indigo-100";
+                    sectionHeader.innerHTML = `<h2 class="text-sm md:text-base font-extrabold text-slate-800 pb-2 flex items-center gap-2">
+                        <span class="w-2.5 h-5 bg-indigo-600 rounded-full inline-block"></span>${q.sectionName}
+                    </h2>`;
+                    container.appendChild(sectionHeader);
+                }
+
+                const card = document.createElement('div');
+                card.className = "question-card bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-all";
+
+                let passageHtml = "";
+                if (q.passage) {
+                    passageHtml = `
+                        <div class="mb-4">
+                            ${q.passage}
+                        </div>
+                    `;
+                }
+
+                const interactionHtml = `
+                    <div id="options-${index}" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                        ${q.options.map((opt, i) => `
+                            <button onclick="selectOption(${index}, ${i})" class="option-btn text-left p-3.5 rounded-xl border-2 border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/40 transition-all flex items-center group active:scale-[0.99] w-full">
+                                <span class="w-7 h-7 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-xs mr-3 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors shrink-0">${String.fromCharCode(65 + i)}</span>
+                                <span class="text-slate-700 text-xs md:text-sm font-medium flex-1">${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="bg-indigo-600 text-white text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full">Câu ${q.id}</span>
+                        <button onclick="showHint(${index})" class="flex items-center gap-1 text-[11px] text-amber-600 font-bold hover:text-amber-700 active:scale-95 transition-all">
+                            <span>💡 Mẹo giải nhanh</span>
+                        </button>
+                    </div>
+                    ${passageHtml}
+                    <div class="text-xs md:text-sm font-semibold mb-5 text-slate-850 leading-relaxed whitespace-pre-line">${q.question}</div>
+                    
+                    ${interactionHtml}
+                    
+                    <div id="hint-${index}" class="hidden mt-4 p-4 bg-amber-50 text-amber-950 text-xs rounded-xl border border-amber-100 italic leading-relaxed">
+                        <strong>Gợi ý:</strong> ${q.hint}
+                    </div>
+                    
+                    <div id="feedback-${index}" class="hidden mt-4 p-4 rounded-xl border transition-all">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span id="icon-${index}" class="text-base"></span>
+                            <p id="result-text-${index}" class="font-bold text-xs md:text-sm"></p>
+                        </div>
+                        <div class="h-px bg-current opacity-10 mb-2"></div>
+                        <p class="text-xs md:text-sm leading-relaxed font-medium opacity-95">${q.rationale}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Extra Sections: Q19 Picture description & Q20 Essay writing
+            injectCreativeSections();
+
+            initCharts();
+        }
+
+        function selectOption(qIdx, oIdx) {
+            if (userAnswers[qIdx] !== null) return;
+
+            userAnswers[qIdx] = oIdx;
+            const correct = quizData[qIdx].correct;
+            const feedback = document.getElementById(`feedback-${qIdx}`);
+            const resultText = document.getElementById(`result-text-${qIdx}`);
+            const icon = document.getElementById(`icon-${qIdx}`);
+            const optionsDiv = document.getElementById(`options-${qIdx}`);
+            const buttons = optionsDiv.getElementsByTagName('button');
+
+            feedback.classList.remove('hidden');
+            
+            if (oIdx === correct) {
+                feedback.className = "mt-4 p-4 rounded-xl bg-emerald-50 text-emerald-800 border-emerald-200 border text-xs md:text-sm";
+                resultText.innerText = "Chính xác!";
+                icon.innerText = "✅";
+                buttons[oIdx].className = "option-btn text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 flex items-center shadow-sm w-full";
+                buttons[oIdx].querySelector('span').className = "w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+            } else {
+                feedback.className = "mt-4 p-4 rounded-xl bg-rose-50 text-rose-800 border-rose-200 border text-xs md:text-sm";
+                resultText.innerText = "Chưa chính xác";
+                icon.innerText = "❌";
+                buttons[oIdx].className = "option-btn text-left p-3.5 rounded-xl border-2 border-rose-500 bg-rose-50 flex items-center shadow-sm w-full";
+                buttons[oIdx].querySelector('span').className = "w-7 h-7 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+                
+                // Highlight correct
+                buttons[correct].className = "option-btn text-left p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50/50 flex items-center w-full transition-all";
+                buttons[correct].querySelector('span').className = "w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mr-3 shrink-0";
+            }
+
+            for (let b = 0; b < buttons.length; b++) {
+                if (b !== oIdx && b !== correct) {
+                    buttons[b].classList.add('opacity-40');
+                }
+            }
+
+            updateProgress();
+            updateCharts();
+        }
+
+        function injectCreativeSections() {
+            const container = document.getElementById('quiz-container');
+            
+            // 1. Q19 Picture Description Section
+            const pHeader = document.createElement('div');
+            pHeader.id = "sec-picture";
+            pHeader.className = "pt-6 lg:pt-8 mb-4 border-b-2 border-indigo-100";
+            pHeader.innerHTML = `<h2 class="text-sm md:text-base font-extrabold text-slate-800 pb-2 flex items-center gap-2">
+                <span class="w-2.5 h-5 bg-indigo-600 rounded-full inline-block"></span>Tự luận miêu tả tranh (Picture Description)
+            </h2>`;
+            container.appendChild(pHeader);
+
+            const pCard = document.createElement('div');
+            pCard.className = "question-card bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200/80 space-y-4";
+            pCard.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span class="bg-indigo-600 text-white text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full">Câu 19</span>
+                    <span class="text-xs text-indigo-600 font-bold">~ 80 từ</span>
+                </div>
+                
+                <!-- SVG Vector of Playground Scene -->
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-center max-w-lg mx-auto shadow-inner space-y-2">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Hình vẽ minh họa sân tập thể thao trường học</p>
+                    <svg viewBox="0 0 400 240" class="w-full h-48 mx-auto bg-sky-50 rounded-lg">
+                        <!-- Basketball Hoop & Backboard -->
+                        <rect x="180" y="20" width="40" height="30" fill="#ffffff" stroke="#334155" stroke-width="2"/>
+                        <rect x="190" y="30" width="20" height="15" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+                        <path d="M 195,45 Q 200,60 205,45 Z" fill="none" stroke="#ef4444" stroke-dasharray="2,2" stroke-width="1.5"/> <!-- net -->
+                        <line x1="200" y1="50" x2="200" y2="180" stroke="#475569" stroke-width="4"/> <!-- pole -->
+                        <rect x="190" y="180" width="20" height="15" fill="#475569"/> <!-- base -->
+                        
+                        <!-- Ground / Floor -->
+                        <rect x="0" y="180" width="400" height="60" fill="#e2e8f0"/>
+                        <line x1="0" y1="180" x2="400" y2="180" stroke="#cbd5e1" stroke-width="2"/>
+                        
+                        <!-- Kids playing basketball (Left side) -->
+                        <g transform="translate(100, 110)">
+                            <!-- Kids -->
+                            <circle cx="20" cy="20" r="10" fill="#fbcfe8" stroke="#334155" stroke-width="1.5"/> <!-- head -->
+                            <line x1="20" y1="30" x2="20" y2="70" stroke="#334155" stroke-width="2"/> <!-- body -->
+                            <line x1="20" y1="40" x2="5" y2="55" stroke="#334155" stroke-width="2"/> <!-- arms -->
+                            <line x1="20" y1="40" x2="35" y2="50" stroke="#334155" stroke-width="2"/> 
+                            <line x1="20" y1="70" x2="10" y2="90" stroke="#334155" stroke-width="2"/> <!-- legs -->
+                            <line x1="20" y1="70" x2="30" y2="90" stroke="#334155" stroke-width="2"/>
+                        </g>
+                        <!-- Spinning basketball in mid-air -->
+                        <circle cx="160" cy="110" r="8" fill="#f97316" stroke="#475569" stroke-width="1"/>
+                        <path d="M 154,110 Q 160,102 166,110 Z" fill="none" stroke="#475569"/>
+                        
+                        <!-- Kids skipping rope (Right side) -->
+                        <g transform="translate(240, 100)">
+                            <!-- Helper left -->
+                            <circle cx="20" cy="20" r="10" fill="#fed7aa" stroke="#334155" stroke-width="1.5"/>
+                            <line x1="20" y1="30" x2="20" y2="80" stroke="#334155" stroke-width="2"/>
+                            <line x1="20" y1="40" x2="35" y2="50" stroke="#334155" stroke-width="2"/>
+                            <line x1="20" y1="80" x2="10" y2="100" stroke="#334155" stroke-width="2"/>
+                            <line x1="20" y1="80" x2="30" y2="100" stroke="#334155" stroke-width="2"/>
+                        </g>
+                        
+                        <!-- Rope swinging -->
+                        <path d="M 275,145 Q 310,210 345,145" fill="none" stroke="#334155" stroke-width="1.5"/>
+                        
+                        <g transform="translate(310, 85)">
+                            <!-- Girl jumping -->
+                            <circle cx="20" cy="20" r="10" fill="#fbcfe8" stroke="#334155" stroke-width="1.5"/>
+                            <!-- Ponytails -->
+                            <path d="M 10,20 Q 5,10 10,12" fill="none" stroke="#334155" stroke-width="2"/>
+                            <path d="M 30,20 Q 35,10 30,12" fill="none" stroke="#334155" stroke-width="2"/>
+                            <line x1="20" y1="30" x2="20" y2="70" stroke="#334155" stroke-width="2"/>
+                            <!-- jumping legs (bent) -->
+                            <line x1="20" y1="70" x2="12" y2="85" stroke="#334155" stroke-width="2"/>
+                            <line x1="12" y1="85" x2="20" y2="90" stroke="#334155" stroke-width="2"/>
+                            <line x1="20" y1="70" x2="28" y2="85" stroke="#334155" stroke-width="2"/>
+                            <line x1="28" y1="85" x2="24" y2="90" stroke="#334155" stroke-width="2"/>
+                        </g>
+                        
+                        <g transform="translate(340, 100)">
+                            <!-- Helper right -->
+                            <circle cx="20" cy="20" r="10" fill="#fed7aa" stroke="#334155" stroke-width="1.5"/>
+                            <line x1="20" y1="30" x2="20" y2="80" stroke="#334155" stroke-width="2"/>
+                            <line x1="20" y1="40" x2="5" y2="50" stroke="#334155" stroke-width="2"/>
+                            <line x1="20" y1="80" x2="10" y2="100" stroke="#334155" stroke-width="2"/>
+                            <line x1="20" y1="80" x2="30" y2="100" stroke="#334155" stroke-width="2"/>
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="text-xs md:text-sm font-semibold text-slate-850 leading-relaxed">
+                    Study the following picture. Write a paragraph of about 80 words to describe the picture.<br><br>
+                    <strong>Gợi ý miêu tả các chi tiết:</strong><br>
+                    • Bối cảnh: Sân thể thao đa năng hoặc sân trường học.<br>
+                    • Các hoạt động đang diễn ra: Hai bạn nam đang chơi bóng rổ, một nhóm khác đang tham gia trò chơi nhảy dây vui nhộn, hai bạn khác đang chạy đuổi bắt.
+                </div>
+                
+                <div class="space-y-2">
+                    <textarea id="essay-p19" oninput="countEssayWords('p19', 80)" rows="5" placeholder="Gõ đoạn văn miêu tả tranh bằng tiếng Anh của con..." class="w-full p-4 border-2 border-slate-200 rounded-2xl text-xs md:text-sm focus:border-indigo-500 focus:outline-none transition-all"></textarea>
+                    <div class="flex justify-between items-center text-xs text-slate-400 font-semibold px-1">
+                        <span id="p19-word-count">0 từ (Yêu cầu: ~ 80 từ)</span>
+                        <button onclick="revealSampleP19()" class="text-indigo-600 hover:text-indigo-700">Xem dàn ý & bài mẫu gợi ý</button>
+                    </div>
+                </div>
+
+                <div id="p-sample-box" class="hidden p-4 bg-indigo-50/50 border border-indigo-150 rounded-2xl text-xs md:text-sm text-slate-700 leading-relaxed space-y-3">
+                    <p class="font-bold text-indigo-850">🌟 Bài viết gợi ý tham khảo (81 từ):</p>
+                    <p class="italic font-medium">"This picture shows a lively playground scene in a school yard. There are several students in school uniforms participating in different sports activities. On the left, two boys are playing basketball. One of them is bouncing the ball, and they both look very energetic. On the right, a girl is jumping rope happily while two other students are holding the rope for her. The atmosphere is cheerful and everyone seems to have a wonderful time playing together."</p>
+                    <div class="h-px bg-indigo-200 my-2"></div>
+                    <p class="text-[11px] text-slate-500 font-medium"><b>Mẹo làm bài:</b> Để miêu tả tranh sinh động, hãy bắt đầu bằng việc mô tả bối cảnh chung (The picture shows / takes place in...), tiếp tục dùng thì <b>Hiện tại tiếp diễn</b> (are participating, are playing, is jumping) để kể về hành động của từng nhóm nhân vật và kết thúc bằng bầu không khí (cheerful, lively).</p>
+                </div>
+            `;
+            container.appendChild(pCard);
+
+            // 2. Q20 Essay Section (What makes a good friend)
+            const eHeader = document.createElement('div');
+            eHeader.id = "sec-essay";
+            pHeader.className = "pt-6 lg:pt-8 mb-4 border-b-2 border-indigo-100";
+            eHeader.innerHTML = `<h2 class="text-sm md:text-base font-extrabold text-slate-800 pb-2 flex items-center gap-2">
+                <span class="w-2.5 h-5 bg-indigo-600 rounded-full inline-block"></span>Tự luận viết đoạn văn nghị luận (Essay Writing)
+            </h2>`;
+            container.appendChild(eHeader);
+
+            const eCard = document.createElement('div');
+            eCard.className = "question-card bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200/80 space-y-4";
+            eCard.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span class="bg-indigo-600 text-white text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full">Câu 20</span>
+                    <span class="text-xs text-indigo-600 font-bold">~ 100 từ</span>
+                </div>
+                <div class="text-xs md:text-sm font-semibold text-slate-850 leading-relaxed font-sans">
+                    Write a paragraph of about 100 words about what makes a good friend.<br><br>
+                    <strong>Gợi ý các khía cạnh cần làm nổi bật:</strong><br>
+                    • Sự đáng tin cậy (Trustworthiness): Giữ kín những bí mật và chia sẻ cảm xúc chân thật.<br>
+                    • Sự tốt bụng và hỗ trợ (Kindness & Support): Luôn ở bên động viên khi bạn gặp khó khăn.<br>
+                    • Lắng nghe tích cực (Being a good listener): Thấu hiểu góc nhìn mà không phán xét.
+                </div>
+                
+                <div class="space-y-2">
+                    <textarea id="essay-p20" oninput="countEssayWords('p20', 100)" rows="6" placeholder="Gõ đoạn văn nghị luận bằng tiếng Anh của con tại đây..." class="w-full p-4 border-2 border-slate-200 rounded-2xl text-xs md:text-sm focus:border-indigo-500 focus:outline-none transition-all"></textarea>
+                    <div class="flex justify-between items-center text-xs text-slate-400 font-semibold px-1">
+                        <span id="essay-word-count-20">0 từ (Yêu cầu: ~ 100 từ)</span>
+                        <button onclick="revealSampleEssay20()" class="text-indigo-600 hover:text-indigo-700">Xem bài mẫu gợi ý</button>
+                    </div>
+                </div>
+
+                <div id="essay-sample-box-20" class="hidden mt-5 p-4 bg-indigo-50/50 border border-indigo-150 rounded-2xl text-xs md:text-sm text-slate-700 leading-relaxed space-y-3">
+                    <p class="font-bold text-indigo-800">🌟 Bài viết gợi ý tham khảo (Bạn tốt):</p>
+                    <p class="italic font-medium">"A good friend plays an extremely important role in our life. Firstly, a good friend must be trustworthy. They are someone who will listen to your secrets and protect them. Secondly, a good friend is kind and supportive, always encouraging you when you face difficulties. Additionally, they should be a good listener who understands your feelings without judgment. Ultimately, a true friend stands by your side through ups and downs, making your life much more joyful and meaningful."</p>
+                    <div class="h-px bg-indigo-200 my-2"></div>
+                    <p class="text-[11px] text-slate-500 font-medium"><b>Mẹo làm bài:</b> Để đoạn văn đạt điểm tuyệt đối, hãy sắp xếp các ý theo trình tự logic rõ ràng bằng cách dùng các từ liên kết (Firstly, Secondly, Additionally, Ultimately) và có một câu chủ đề ấn tượng (A good friend plays an important role...).</p>
+                </div>
+            `;
+            container.appendChild(eCard);
+        }
+
+        function countEssayWords(id, target) {
+            const txt = document.getElementById(`essay-${id}`).value.trim();
+            const words = txt === "" ? 0 : txt.split(/\s+/).length;
+            const countLabel = document.getElementById(id === 'p19' ? 'p19-word-count' : 'essay-word-count-20');
+            
+            if (words >= (target - 15) && words <= (target + 15)) {
+                countLabel.innerHTML = `<span class="text-emerald-600 font-bold">✨ ${words} từ (Đạt tiêu chuẩn lượng từ)</span>`;
+            } else {
+                countLabel.innerHTML = `<span class="text-amber-500">${words} từ (Yêu cầu: ~ ${target} từ)</span>`;
+            }
+        }
+
+        function revealSampleP19() {
+            document.getElementById('p-sample-box').classList.toggle('hidden');
+        }
+
+        function revealSampleEssay20() {
+            document.getElementById('essay-sample-box-20').classList.toggle('hidden');
+        }
+
+        function showHint(index) {
+            const hintBox = document.getElementById(`hint-${index}`);
+            hintBox.classList.toggle('hidden');
+        }
+
+        function updateProgress() {
+            const total = quizData.length;
+            const answered = userAnswers.filter(a => a !== null).length;
+            const progress = Math.round((answered / total) * 100);
+            
+            // Desktop
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('progress-percent').innerText = `${progress}%`;
+            document.getElementById('progress-text').innerText = answered === 0 ? "Chưa làm câu nào" : `Đã hoàn thành ${answered}/${total} câu`;
+            
+            // Mobile
+            document.getElementById('mobile-progress-bar').style.width = `${progress}%`;
+
+            const score = userAnswers.reduce((acc, curr, idx) => {
+                if (curr === null) return acc;
+                return curr === quizData[idx].correct ? acc + 1 : acc;
+            }, 0);
+            
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('mobile-score-badge').innerText = `Đúng: ${score}/${total}`;
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                const offset = window.innerWidth < 1024 ? 120 : 20;
+                const elementPosition = el.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function initCharts() {
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+            if (scoreChartInstance) {
+                scoreChartInstance.destroy();
+            }
+            scoreChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Đúng', 'Sai', 'Chưa làm'],
+                    datasets: [{
+                        data: [0, 0, 18],
+                        backgroundColor: ['#4F46E5', '#EF4444', '#E2E8F0'],
+                        borderWidth: 0,
+                        hoverOffset: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '72%',
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                boxWidth: 10,
+                                usePointStyle: true,
+                                font: { size: 11, weight: 'bold' }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCharts() {
+            if (!scoreChartInstance) return;
+            const total = quizData.length;
+            
+            const correct = userAnswers.reduce((acc, curr, idx) => {
+                if (curr === null) return acc;
+                return curr === quizData[idx].correct ? acc + 1 : acc;
+            }, 0);
+
+            const answered = userAnswers.filter(a => a !== null).length;
+            const incorrect = answered - correct;
+            const remaining = total - answered;
+
+            scoreChartInstance.data.datasets[0].data = [correct, incorrect, remaining];
+            scoreChartInstance.update();
+        }
+
+        window.onload = function() {
+            initQuiz();
+        };
+    </script>
+</body>
+</html>
+```
