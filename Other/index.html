@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Roblox Quiz Center – Luyện Thi Lớp 6</title>
+<link href="https://fonts.googleapis.com/css2?family=Hoppin:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── ROBLOX STYLE ROOT ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg-main:    #191B20;
+  --bg-side:    #111216;
+  --surface:    #23252B;
+  --surface-l:  #2F313A;
+  --border:     #393B44;
+  --rbx-blue:   #00A2FF;
+  --rbx-blue-h: #33B5FF;
+  --rbx-green:  #00E676;
+  --rbx-red:    #FF3D00;
+  --text:       #FFFFFF;
+  --text-dim:   #BDC3C7;
+  --text-mute:  #7F8C8D;
+  --r:          8px;
+  --r-sm:       4px;
+  --shadow:     0 4px 0px #000000;
+  --transition: all 0.1s ease;
+}
+
+body {
+  background: var(--bg-main);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── LAYOUT CẤU TRÚC SIDEBAR ── */
+#app { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  background: var(--bg-side);
+  border-right: 2px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 12px;
+  flex-shrink: 0;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-main);
+  position: relative;
+}
+
+.screen { display: none; flex: 1; flex-direction: column; padding: 24px; }
+.screen.active { display: flex; }
+
+/* ── ROBLOX BRANDING ── */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+  padding-left: 8px;
+}
+.brand-logo {
+  width: 32px;
+  height: 32px;
+  background: var(--text);
+  transform: rotate(-10deg);
+  border-radius: 6px;
+  display: inline-block;
+  position: relative;
+}
+.brand-logo::after {
+  content: '';
+  position: absolute;
+  width: 12px; height: 12px;
+  background: var(--bg-side);
+  top: 10px; left: 10px;
+}
+.brand-title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+/* ── NAV MENU SIDEBAR ── */
+.nav-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  padding-left: 8px;
+}
+.nav-menu { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; }
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  padding: 12px;
+  border-radius: var(--r);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: left;
+  transition: var(--transition);
+}
+.nav-item:hover { background: var(--surface); color: var(--text); }
+.nav-item.active { background: var(--rbx-blue); color: var(--text); }
+.nav-icon { font-size: 18px; }
+
+/* ── HOME / TOME GRID (ROBLOX GAMES GRID) ── */
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tome-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+.tome-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: var(--transition);
+  box-shadow: 0 4px 0px rgba(0,0,0,0.2);
+}
+.tome-btn:hover {
+  transform: translateY(-2px);
+  background: var(--surface-l);
+  box-shadow: 0 6px 0px rgba(0,0,0,0.3);
+}
+.tome-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0px rgba(0,0,0,0.1);
+}
+.tome-icon { font-size: 28px; margin-bottom: 12px; }
+.tome-name { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.tome-school { font-size: 13px; color: var(--text-dim); margin-bottom: 12px; }
+.tome-count { font-size: 12px; color: var(--text-mute); font-weight: 500; margin-top: auto; }
+.new-badge {
+  position: absolute; top: 12px; right: 12px;
+  font-size: 10px; font-weight: 700;
+  background: var(--rbx-green); color: #000;
+  border-radius: 4px; padding: 2px 6px;
+}
+
+/* ── QUIZ SCREEN ROBLOX BOX ── */
+.quiz-inner { max-width: 800px; width: 100%; margin: 0 auto; }
+.quiz-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+.back-btn {
+  background: var(--surface); border: 1px solid var(--border); color: var(--text);
+  border-radius: var(--r-sm); padding: 8px 16px; cursor: pointer; font-weight: 600;
+  box-shadow: 0 2px 0 #000; transition: var(--transition);
+}
+.back-btn:active { transform: translateY(2px); box-shadow: none; }
+.quiz-title-text { font-size: 18px; font-weight: 700; color: var(--rbx-blue); }
+
+.prog-row { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.progress-track { flex: 1; height: 12px; background: var(--surface); border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+.progress-fill { height: 100%; background: var(--rbx-blue); width: 0%; transition: width 0.2s ease; }
+.q-counter { font-size: 14px; font-weight: 700; color: var(--text-dim); }
+
+.section-badge { display: inline-block; background: var(--surface-l); font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 4px; margin-bottom: 16px; border: 1px solid var(--border); }
+
+.passage-box { background: var(--bg-side); border: 2px solid var(--border); border-radius: var(--r); padding: 16px; margin-bottom: 20px; color: var(--text-dim); max-height: 200px; overflow-y: auto; white-space: pre-wrap; }
+.q-text { font-size: 18px; font-weight: 700; background: var(--surface); border: 2px solid var(--border); border-radius: var(--r); padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow); }
+
+/* Choices */
+.choices { display: flex; flex-direction: column; gap: 10px; }
+.choice-btn {
+  display: flex; align-items: center; gap: 14px; width: 100%; background: var(--surface); border: 2px solid var(--border); border-radius: var(--r); padding: 14px 20px; cursor: pointer; font-size: 16px; font-weight: 600; color: var(--text); text-align: left; transition: var(--transition); box-shadow: var(--shadow);
+}
+.choice-btn:hover:not(:disabled) { background: var(--surface-l); }
+.choice-btn:active:not(:disabled) { transform: translateY(4px); box-shadow: none; }
+.choice-label { width: 28px; height: 28px; background: var(--bg-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--rbx-blue); flex-shrink: 0; }
+.choice-btn.correct { border-color: var(--rbx-green); background: rgba(0,230,118,0.1); }
+.choice-btn.correct .choice-label { background: var(--rbx-green); color: #000; }
+.choice-btn.wrong { border-color: var(--rbx-red); background: rgba(255,61,0,0.1); }
+.choice-btn.wrong .choice-label { background: var(--rbx-red); color: #fff; }
+
+.feedback-msg { margin-top: 16px; padding: 14px; border-radius: var(--r); font-weight: 700; display: none; border: 2px solid transparent; }
+.feedback-msg.show { display: block; }
+.feedback-msg.correct { background: rgba(0,230,118,0.1); color: var(--rbx-green); border-color: var(--rbx-green); }
+.feedback-msg.wrong { background: rgba(255,61,0,0.1); color: var(--rbx-red); border-color: var(--rbx-red); }
+
+.nav-row { display: flex; justify-content: flex-end; margin-top: 16px; }
+.next-btn { background: var(--rbx-green); border: none; border-radius: var(--r); padding: 12px 32px; color: #000; font-size: 16px; font-weight: 700; cursor: pointer; display: none; box-shadow: 0 4px 0 #00A152; }
+.next-btn.show { display: block; }
+.next-btn:active { transform: translateY(4px); box-shadow: none; }
+
+/* ── RESULT SCREEN ── */
+#result { align-items: center; justify-content: center; text-align: center; }
+.result-inner { max-width: 480px; width: 100%; background: var(--surface); border: 2px solid var(--border); border-radius: var(--r); padding: 32px; box-shadow: var(--shadow); }
+.result-orb { font-size: 64px; margin-bottom: 12px; display: block; }
+.result-exam-name { font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--text-dim); }
+.stars-row { font-size: 28px; margin-bottom: 16px; color: #FFD600; }
+.result-score { font-size: 48px; font-weight: 800; color: var(--rbx-blue); margin-bottom: 4px; }
+.result-pct { font-size: 16px; color: var(--text-mute); margin-bottom: 24px; font-weight: 600; }
+.rank-badge { display: inline-block; padding: 8px 20px; border-radius: 6px; font-weight: 700; font-size: 15px; margin-bottom: 24px; background: var(--surface-l); border: 1px solid var(--border); }
+.result-actions { display: flex; gap: 12px; justify-content: center; }
+.result-btn { padding: 12px 24px; border-radius: var(--r); font-size: 15px; font-weight: 700; cursor: pointer; border: none; transition: var(--transition); }
+.btn-retry { background: var(--rbx-blue); color: #fff; box-shadow: 0 4px 0 #007BBF; }
+.btn-retry:active { transform: translateY(4px); box-shadow: none; }
+.btn-home { background: var(--surface-l); color: var(--text); border: 2px solid var(--border); box-shadow: 0 4px 0 rgba(0,0,0,0.2); }
+.btn-home:active { transform: translateY(4px); box-shadow: none; }
+
+/* ── RESPONSIVE MOBILE TWEAKS ── */
+@media (max-width: 768px) {
+  #app { flex-direction: column; }
+  .sidebar { width: 100%; border-right: none; border-bottom: 2px solid var(--border); padding: 14px; }
+  .brand { margin-bottom: 12px; }
+  .nav-menu { flex-direction: row; overflow-x: auto; padding-bottom: 4px; }
+  .nav-item { padding: 8px 14px; white-space: nowrap; }
+  .screen { padding: 16px; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo"></div>
+      <div class="brand-title">QUIZ CENTER</div>
+    </div>
+    <div class="nav-title">Môn Học Lớp 6</div>
+    <nav class="nav-menu">
+      <button class="nav-item active" id="menu-eng" onclick="switchCategory('eng')">
+        <span class="nav-icon">🇬🇧</span>
+        <span>Môn Tiếng Anh</span>
+      </button>
+      <button class="nav-item" id="menu-math" onclick="switchCategory('math')">
+        <span class="nav-icon">📐</span>
+        <span>Môn Toán Học</span>
+      </button>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+
+    <div id="home" class="screen active">
+      <h2 class="section-title" id="home-category-title">🎮 Danh Sách Bài Tập Tiếng Anh</h2>
+      <div class="tome-grid" id="exam-list-grid">
+        </div>
+    </div>
+
+    <div id="quiz" class="screen">
+      <div class="quiz-inner">
+        <div class="quiz-header">
+          <button class="back-btn" onclick="goHome()">← Rời khỏi</button>
+          <div class="quiz-title-text" id="quiz-title"></div>
+        </div>
+        <div class="prog-row">
+          <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+          <div class="q-counter" id="q-counter"></div>
+        </div>
+        <div class="section-badge" id="section-badge"></div>
+        <div id="passage-wrap" style="display:none">
+          <div class="passage-box" id="passage-box"></div>
+        </div>
+        <div class="q-text" id="q-text"></div>
+        <div class="choices" id="choices"></div>
+        <div class="feedback-msg" id="feedback"></div>
+        <div class="nav-row"><button class="next-btn" id="next-btn" onclick="nextQ()">Tiếp tục ›</button></div>
+      </div>
+    </div>
+
+    <div id="result" class="screen">
+      <div class="result-inner">
+        <span class="result-orb" id="r-orb">🏆</span>
+        <div class="result-exam-name" id="r-name"></div>
+        <div class="stars-row" id="r-stars"></div>
+        <div class="result-score" id="r-score"></div>
+        <div class="result-pct" id="r-pct"></div>
+        <div class="rank-badge" id="r-rank"></div>
+        <div class="result-actions">
+          <button class="result-btn btn-retry" onclick="retryExam()">🔄 Chơi lại</button>
+          <button class="result-btn btn-home"  onclick="goHome()">🏠 Sảnh chính</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   DỮ LIỆU ĐOẠN VĂN ĐỌC HIỂU (BẢO LƯU GIÁ TRỊ GỐC)
+══════════════════════════════════════════════════════ */
+const P_JANE = `Hi Sammy,\n\nI'm here in the United States and having a great time! We arrived ___ Wednesday and visited the Lincoln Memorial and Georgetown. Georgetown is a historic area in Washington, D.C. The food here is great. I ate a hot dog. It's a ___ street food in America. I really liked it. Tomorrow, we're going to the White House with a tour guide and taking a boat trip along the Potomac River. We're going to the National Air and Space Museum on our last day in Washington, D.C. On Friday, we will go to the airport to get a ___ to New York City. I'm looking forward to going on the Staten Island Ferry to see the Statue of Liberty and going to Yankee Stadium. I wish you were here.\n\nJane`;
+const P_PETS = `The importance of pets\n\nWhen they were asked, six million people in Britain said they own a pet cat. That's strange, as only four million cats are known to be living in Britain! Perhaps some cats have more than one owner. What's clear, however, is that cats are popular with people in Britain.\n\nDoctors have known for some time that a link exists between animals and human health. In a special report, they express the importance of pets to people in Britain. They say that pet owners are less likely to have a heart attack than people who do not own a pet. Although the favourite pets in Britain are cats and dogs, doctors think that all pets are good for people's health, even pet goldfish! What is the reason for this? Doctors believe that people need to have someone or something to care for and take care of. Then they don't think about themselves so much. They forget their own problems and thus feel better.`;
+const P_EXAM = `Tests and exams are part of our school life. They play ___ important role in students' learning and education. Preparing ___ exams is a skill and not every student knows how to do it. Many students think that the ___ way is to learn everything by heart, but this isn't always the case. Knowledge is something more than remembering facts – it also involves understanding the information you learn. ___ you study for an exam, try to understand everything. Also, ___ attention to details. Another mistake that students make is listening to music and chatting on Facebook while they're learning. This does not help concentration!`;
+const P_GLOBAL = `Being a global citizen doesn't mean you need to travel around the world. It means you understand and care about ___ is happening in other countries, and you try to make a ___ where you live. Global citizens respect diversity, promote peace, and take action to solve global issues like poverty, pollution, or education. One way to become a global citizen is by learning a foreign language. This helps you ___ with people from different cultures and understand their way of life. Watching international news or joining student exchange programs are also great ways to stay informed and open-minded.`;
+const P_ENGLISH = `Why We Should Learn English\n\nEnglish is one of the most widely spoken languages in the world. It is the official language in many countries and is used as a global language for business, education, and travel. Learning English can help people communicate with others from different countries and cultures. English also gives people more opportunities. Many top universities and companies require good English skills. Students who are fluent in English can read international books, watch movies, and study materials that are not available in their native language. To improve English, learners should practice regularly, listen to English songs or podcasts, and try to speak with native speakers whenever possible.`;
+
+/* ══════════════════════════════════════════════════════
+   RAW SYSTEM QUIZZES (GẮN ID ĐỂ PHÂN MÔN TRỰC QUAN)
+══════════════════════════════════════════════════════ */
+const EXAM_REGISTRY = [
+  // ── MÔN TIẾNG ANH (0 -> 4)
+  { id: 0, cat: "eng", type: "local", name: "Đề ENG 01", school: "Nguyễn Gia Thiều", info: "25 câu · 30 phút", icon: "📜", rawIndex: 0 },
+  { id: 1, cat: "eng", type: "local", name: "Đề ENG 02", school: "Chu Văn An", info: "30 câu · 45 phút", icon: "📜", rawIndex: 1 },
+  { id: 2, cat: "eng", type: "local", name: "Đề ENG 03", school: "Nguyễn Gia Thiều", info: "25 câu · 30 phút", icon: "📜", rawIndex: 2 },
+  { id: 3, cat: "eng", type: "local", name: "Đề ENG 04", school: "Chu Văn An 23-24", info: "35 câu · 45 phút", icon: "🔥", rawIndex: 3 },
+  { id: 4, cat: "eng", type: "local", name: "Đề ENG 05", school: "NGT 24-25", info: "25 câu · 30 phút", icon: "💎", rawIndex: 4 },
+  
+  // ── CÁC ĐỀ TIẾNG ANH LIÊN KẾT NGOÀI
+  { id: 5, cat: "eng", type: "link", name: "Đề tiếng Anh 06", school: "Thanh Xuân 02", info: "30 câu · 40 phút", icon: "🔗", url: "https://ala168.github.io/qlhv/Other/engv5.html" },
+  { id: 6, cat: "eng", type: "link", name: "Đề tiếng Anh 07", school: "Nguyễn Gia Thiều", info: "30 câu · 40 phút", icon: "🔗", url: "https://ala168.github.io/qlhv/Other/engv6.html" },
+  { id: 7, cat: "eng", type: "link", name: "Đề tiếng Anh 08", school: "Nguyễn Tất Thành", info: "30 câu · 40 phút", icon: "🔗", url: "https://ala168.github.io/qlhv/Other/engv7.html" },
+  { id: 8, cat: "eng", type: "link", name: "Đề tiếng Anh 09", school: "Nguyễn Gia Thiều", info: "30 câu · 40 phút", icon: "🔗", url: "https://ala168.github.io/qlhv/Other/engv9.html" },
+  { id: 9, cat: "eng", type: "link", name: "Đề tiếng Anh 10", school: "Nguyễn Tất Thành 2023", info: "30 câu · 40 phút", icon: "🔗", url: "https://ala168.github.io/qlhv/Other/engv10.html" },
+  { id: 10, cat: "eng", type: "link", name: "Đề tiếng Anh 11", school: "Nguyễn Tất Thành 2022", info: "30 câu · 40 phút", icon: "🔗", url: "https://ala168.github.io/qlhv/Other/engv11.html" },
+  { id: 11, cat: "eng", type: "link", name: "Đề tiếng Anh 12", school: "Cầu Giấy 2024", info: "40 câu · 40 phút", icon: "🔗", url: "https://ala168.github.io/qlhv/Other/engv12.html" },
+  { id: 12, cat: "eng", type: "link", name: "Đề tiếng Anh 13", school: "Lương Thế Vinh số 1", info: "40 câu · 45 phút", icon: "🔗", url: "https://ala168.github.io/qlhv/Other/engv13.html" },
+  { id: 13, cat: "eng", type: "link", name: "Đề tiếng Anh 14", school: "Lương Thế Vinh số 2", info: "40 câu · 45 phút", icon: "🔗", url: "https://ala168.github.io/qlhv/Other/engv14.html" },
+  { id: 14, cat: "eng", type: "link", name: "Đề tiếng Anh 15", school: "Lương Thế Vinh số 3", info: "40 câu · 45 phút", icon: "🔗", url: "https://ala168.github.io/qlhv/Other/engv15.html" },
+  { id: 15, cat: "eng", type: "link", name: "Đề tiếng Anh 16", school: "THCS Ngoại Ngữ số 1", info: "20 câu · 45 phút", icon: "⭐", url: "https://ala168.github.io/qlhv/Other/engv16.html", isNew: true },
+
+  // ── MÔN TOÁN HỌC LIÊN KẾT NGOÀI
+  { id: 16, cat: "math", type: "link", name: "Đề Toán 01", school: "NGT 24-25", info: "05 câu · 45 phút", icon: "🏛️", url: "https://ala168.github.io/qlhv/Other/math1.html" },
+  { id: 17, cat: "math", type: "link", name: "Đề Toán 02", school: "NGT 24-25", info: "20 câu · 45 phút", icon: "🏛️", url: "https://ala168.github.io/qlhv/Other/math2.html" },
+  { id: 18, cat: "math", type: "link", name: "Đề Toán 03", school: "NGT", info: "27 câu · 40 phút", icon: "🏛️", url: "https://ala168.github.io/qlhv/Other/math3.html" }
+];
+
+const RAW = [
+  /* ── ĐỀ 01 ── */
+  [
+    {s:"PHONETICS",q:"Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others:\nstayed / enjoyed / stopped / joined",c:["stayed","enjoyed","stopped","joined"],a:2},
+    {s:"PHONETICS",q:"Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others:\nlike / ink / night / kite",c:["like","ink","night","kite"],a:1},
+    {s:"USE OF LANGUAGE",q:"My brother's birthday is ___ December 20th, 2016.",c:["in","on","at","from"],a:1},
+    {s:"USE OF LANGUAGE",q:"The opposite meaning of 'modern' is ___.",c:["young","ancient","new","far"],a:1},
+    {s:"USE OF LANGUAGE",q:"The word 'flat' is closest meaning to ___.",c:["street","road","apartment","market"],a:2},
+    {s:"USE OF LANGUAGE",q:"We ___ a lot of fun on the trip to Ha Long last summer.",c:["having","has","had","have"],a:2},
+    {s:"USE OF LANGUAGE",q:"Which of these countries ALL belong to Europe?",c:["Russia, Germany, Italy, England, Mexico","Italy, England, France, Germany, Holland","France, America, Italy, Malaysia, Germany","Austria, France, England, Singapore, Russia"],a:1},
+    {s:"USE OF LANGUAGE",q:"The birds in the garden are singing ___.",c:["beauty","beautifully","beautiful","beautify"],a:1},
+    {s:"USE OF LANGUAGE",q:"Peter: \"You've passed the exam. Congratulations!\"\nMark: \"___\"",c:["You're welcome.","Thank you!","That's a good idea.","Not at all."],a:1},
+    {s:"USE OF LANGUAGE",q:"My sister would like to be a nurse because she'd like to ___ patients.",c:["look after","look for","look up","look through"],a:0},
+    {s:"READING – Thư của Jane",q:"We arrived (11) ___ Wednesday...",c:["on","in","at","to"],a:0,p:P_JANE},
+    {s:"READING – Thư của Jane",q:"It's a (12) ___ street food in America.",c:["tradition","traditions","traditional","traditionally"],a:2,p:P_JANE},
+    {s:"READING – Thư của Jane",q:"We will go to the airport to get a (13) ___ to New York City.",c:["flight","ferry","car","bus"],a:0,p:P_JANE},
+    {s:"READING – The importance of pets",q:"The number of people in Britain owning a pet cat is ___.",c:["six million","four million","six thousand","four thousand"],a:0,p:P_PETS},
+    {s:"READING – The importance of pets",q:"Why are pets good for people's health?",c:["Pets take care of their owners.","People with pets take better care of themselves.","People with pets do not think about themselves or their own problems so much.","Pet owners think only of their pets and the pets' problems."],a:2,p:P_PETS},
+    {s:"READING – The importance of pets",q:"What does \"they\" refer to in \"they express the importance of pets\"?",c:["animal","pets","human health","doctors"],a:3,p:P_PETS},
+    {s:"READING – The importance of pets",q:"Which statement is NOT TRUE?",c:["Cats are so popular with people in Britain.","There are fewer cats than cat owners in Britain.","There is a link that exists between animals and human health.","Pet owners are more likely to do not own a pet."],a:3,p:P_PETS},
+    {s:"WRITING",q:"How far / it / your house / nearest post office?",c:["How far it is from your house to nearest post office?","How far is it from your house to the nearest post office?","How far it from your house to the nearest post office?","How far is it between your house and the nearest post office?"],a:1},
+    {s:"WRITING",q:"stadium / in front / pharmacy.",c:["The stadium is in front the pharmacy.","The stadium are in front to the pharmacy.","The stadium are in front of the pharmacy.","The stadium is in front of the pharmacy."],a:3},
+    {s:"WRITING",q:"Sắp xếp:\noften / to / how / English / do / club / you / speaking / the / go / ?",c:["How often do you go to the speaking English club?","How do you often go to the English speaking club?","How often do you go to the English speaking club?","How often do you go to the club English speaking?"],a:2},
+    {s:"WRITING",q:"Sắp xếp:\nyou / If / watch / much / too / TV / , / will / get / you / sore eyes / .",c:["If you will watch TV too much, you get sore eyes.","If you watch TV, you will get sore eyes too much.","If you watch TV too much, you will get sore eyes.","If you will get sore eyes, you watch TV too much."],a:2},
+    {s:"WRITING",q:"We don't have any milk left in the bottle. → Câu gần nghĩa nhất:",c:["There is any milk in the bottle.","There isn't some milk in the bottle.","There are some milk in the bottle.","There is no milk in the bottle."],a:3},
+    {s:"WRITING",q:"Anna: 6 stickers · Alice: 9 stickers · Jane: 8 stickers. Câu nào ĐÚNG?",c:["Alice got the most stickers.","Anna and Alice had more stickers than Jane and Alice.","Anna and Alice had fewer stickers than Jane and Alice.","Alice and Jane had fewer stickers than Jane and Anna."],a:0},
+    {s:"BONUS",q:"'Innovative' is closest in meaning to ___.",c:["traditional","creative","boring","fixed"],a:1},
+    {s:"BONUS",q:"Which is a renewable source of energy?",c:["Coal","Solar energy","Oil","Gas"],a:1},
+  ],
+  /* ── ĐỀ 02 ── */
+  [
+    {s:"PHONETICS",q:"Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others: learned / moved / turned / brushed",c:["learned","moved","turned","brushed"],a:3},
+    {s:"PHONETICS",q:"Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others: idea / intelligent / inside / flight",c:["idea","intelligent","inside","flight"],a:1},
+    {s:"PHONETICS",q:"Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others: hole / honest / happiness / however",c:["hole","honest","happiness","however"],a:1},
+    {s:"PHONETICS",q:"Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others: chemist / christmas / armchair / stomach",c:["chemist","christmas","armchair","stomach"],a:2},
+    {s:"USE OF LANGUAGE",q:"My sister was born ___ July 3rd, 2005.",c:["in","on","at","from"],a:1},
+    {s:"USE OF LANGUAGE",q:"The opposite meaning of 'different' is ___.",c:["similar","difficult","important","interesting"],a:0},
+    {s:"USE OF LANGUAGE",q:"The word 'biscuit' is closest meaning to ___.",c:["cupcake","donut","jelly","cookie"],a:3},
+    {s:"USE OF LANGUAGE",q:"My dad ___ us to the book fair last Sunday.",c:["taked","took","taking","takes"],a:1},
+    {s:"USE OF LANGUAGE",q:"Which countries ALL belong to Southeast Asia?",c:["Vietnam, Thailand, India, Cambodia, Singapore","Laos, Thailand, Cambodia, Vietnam, Malaysia","Thailand, China, Laos, Malaysia, Indonesia","Cambodia, Singapore, Malaysia, Australia, Korea"],a:1},
+    {s:"USE OF LANGUAGE",q:"Nam is working ___ for his entrance exam.",c:["hard","hardly","good","clever"],a:0},
+    {s:"USE OF LANGUAGE",q:"Peter: \"Would you like to go for a picnic next Sunday?\"\nMark: \"___\"",c:["I'd love to.","You're welcome.","I'm sorry, you can't.","No, it isn't."],a:0},
+    {s:"USE OF LANGUAGE",q:"Linda: \"Congratulate you on winning the first prize!\"\nMatt: \"___\"",c:["What a pity!","What can I do for you?","You're right.","Thank you so much."],a:3},
+    {s:"USE OF LANGUAGE",q:"How about ___ to Phu Quoc Island next week?",c:["go","going","went","to go"],a:1},
+    {s:"USE OF LANGUAGE",q:"Do you prefer watching TV to ___ to music?",c:["listen","listening","listens","listened"],a:1},
+    {s:"USE OF LANGUAGE",q:"My classmates usually ___ school activities.",c:["take part in","take care of","look after","look up"],a:0},
+    {s:"USE OF LANGUAGE",q:"Train ticket: HCM City → Ha Noi · August 18th · 16.20. Câu nào ĐÚNG?",c:["The train to HCM City leaves at 4.20 p.m.","The train to Ha Noi leaves at 16.20.","The train to HCM City leaves on August 8th.","The train to HCM City leaves on July 18th."],a:1},
+    {s:"USE OF LANGUAGE",q:"___ are non-renewable sources of energy.",c:["Solar energy – hydro power – wind power","Wind power – coal – natural gas","Solar energy – coal – wind power","Natural gas – coal – crude oil"],a:3},
+    {s:"READING – Tests & Exams",q:"They play (18) ___ important role in students' learning.",c:["a","an","the","∅"],a:1,p:P_EXAM},
+    {s:"READING – Tests & Exams",q:"Preparing (19) ___ exams is a skill.",c:["for","of","with","on"],a:0,p:P_EXAM},
+    {s:"READING – Tests & Exams",q:"Many students think the (20) ___ way is to learn everything by heart.",c:["easy","easier","easiest","most easy"],a:2,p:P_EXAM},
+    {s:"READING – Tests & Exams",q:"(21) ___ you study for an exam, try to understand everything.",c:["But","When","So","However"],a:1,p:P_EXAM},
+    {s:"READING – Tests & Exams",q:"Also, (22) ___ attention to details.",c:["get","make","receive","pay"],a:3,p:P_EXAM},
+    {s:"READING – The importance of pets",q:"The number of people in Britain owning a pet cat is ___.",c:["six million","four million","six thousand","four thousand"],a:0,p:P_PETS},
+    {s:"READING – The importance of pets",q:"Why are pets good for people's health?",c:["Pets take care of their owners.","People with pets take better care of themselves.","People with pets do not think about themselves or their own problems so much.","Pet owners think only of their pets."],a:2,p:P_PETS},
+    {s:"READING – The importance of pets",q:"What does \"they\" refer to in \"they express the importance of pets\"?",c:["animal","pets","human health","doctors"],a:3,p:P_PETS},
+    {s:"READING – The importance of pets",q:"What is the opposite word of 'good'?",c:["wonderful","beautiful","bad","ugly"],a:2,p:P_PETS},
+    {s:"READING – The importance of pets",q:"Which statement is NOT TRUE?",c:["Cats are so popular with people in Britain.","There are fewer cats than cat owners in Britain.","There is a link that exists between animals and human health.","Pet owners are more likely to have a heart attack than people who do not own a pet."],a:3,p:P_PETS},
+    {s:"WRITING",q:"How far / it / your house / school?",c:["How far it is from your house to school?","How far is it from your house to your school?","How far it from your house to your school?","How far from your house to your school is it?"],a:1},
+    {s:"WRITING",q:"cinema / next / bus stop.",c:["The cinema are next to the bus stop.","The cinema are next the bus stop.","The cinema is next the bus stop.","The cinema is next to the bus stop."],a:3},
+    {s:"WRITING",q:"Sắp xếp:\nare / rush / hour / There / traffic / often / jams / during / the / .",c:["There are often rush hour during the traffic jams.","There are often traffic jams during the rush hour.","Traffic jams often there are during the rush hour.","During the rush hour often traffic jams there are."],a:1},
+  ],
+  /* ── ĐỀ 03 ── */
+  [
+    {s:"PHONETICS",q:"Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others: walked / laughed / played / watched",c:["walked","laughed","played","watched"],a:2},
+    {s:"PHONETICS",q:"Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others: chemistry / children / check / church",c:["chemistry","children","check","church"],a:0},
+    {s:"USE OF LANGUAGE",q:"She has lived in this city ___ she was a child.",c:["for","since","during","from"],a:1},
+    {s:"USE OF LANGUAGE",q:"The opposite of 'polluted' is ___.",c:["noisy","modern","fresh","dirty"],a:2},
+    {s:"USE OF LANGUAGE",q:"'Innovative' is closest in meaning to ___.",c:["traditional","creative","boring","fixed"],a:1},
+    {s:"USE OF LANGUAGE",q:"By the time we got to the station, the train ___.",c:["had left","left","leaves","has left"],a:0},
+    {s:"USE OF LANGUAGE",q:"You ___ talk during the exam, it's forbidden.",c:["should","shouldn't","must","mustn't"],a:3},
+    {s:"USE OF LANGUAGE",q:"The children ran ___ out of the classroom.",c:["excitement","excite","excited","excitedly"],a:3},
+    {s:"USE OF LANGUAGE",q:"What does the no-littering sign say?",c:["You don't need to litter in this place.","Littering is not good for the environment.","Waste is not available in this place.","You mustn't throw trash on the ground."],a:3},
+    {s:"USE OF LANGUAGE",q:"Nam: \"Thank you so much for helping me!\"\nLan: \"___\"",c:["Don't mention it.","That's right.","No, thanks.","Good idea."],a:0},
+    {s:"USE OF LANGUAGE",q:"The doctor advised him to ___ smoking.",c:["give away","take off","give up","put on"],a:2},
+    {s:"USE OF LANGUAGE",q:"___ is a renewable source of energy.",c:["Coal","Solar energy","Oil","Gas"],a:1},
+    {s:"READING – Global Citizen",q:"...you understand and care about (13) ___ is happening in other countries...",c:["which","what","where","who"],a:1,p:P_GLOBAL},
+    {s:"READING – Global Citizen",q:"...you try to make a (14) ___ where you live.",c:["difference","progress","solution","reason"],a:0,p:P_GLOBAL},
+    {s:"READING – Global Citizen",q:"This helps you (15) ___ with people from different cultures.",c:["talk","speak","connect","share"],a:2,p:P_GLOBAL},
+    {s:"READING – Why We Should Learn English",q:"What is the main idea of the passage?",c:["English is the oldest language in the world.","English helps people find better jobs.","English is useful and important to learn.","English is only spoken in English-speaking countries."],a:2,p:P_ENGLISH},
+    {s:"READING – Why We Should Learn English",q:"How can people improve their English?",c:["By watching cartoons in their own language","By practicing and talking with native speakers","By learning many other languages","By reading only local newspapers"],a:1,p:P_ENGLISH},
+    {s:"READING – Why We Should Learn English",q:"The word \"opportunities\" means:",c:["exams","problems","chances","jobs only"],a:2,p:P_ENGLISH},
+    {s:"READING – Why We Should Learn English",q:"Which is NOT mentioned as a benefit of learning English?",c:["Traveling to new places","Entering good universities","Communicating with foreigners","Watching international movies"],a:0,p:P_ENGLISH},
+    {s:"WRITING",q:"how long / it / take / you / walk / school / every day / ?",c:["How long does it take you to walk school every day?","How long does it take for you to walk to school every day?","How long does it take you to walk to school every day?","How long do it take you to walk to school every day?"],a:2},
+    {s:"WRITING",q:"the airport / opposite / hotel / located / is.",c:["The airport is located opposite the hotel.","The hotel is located opposite the airport.","Opposite the hotel located is the airport.","The airport located opposite is the hotel."],a:0},
+    {s:"WRITING",q:"Sắp xếp:\ntired / too / I / go / am / cinema / the / to / to / tonight / .",c:["I am too tired to go to the cinema tonight.","Too I am tired to go the cinema to tonight.","I too tired am to go to the cinema tonight.","I am to tired to go the cinema tonight to."],a:0},
+    {s:"WRITING",q:"Sắp xếp:\nbroken / is / If / your / laptop / , / you / fix / it / should / soon / .",c:["If your laptop is broken, you should fix it soon.","You should fix soon your laptop if it is broken.","If is your laptop broken, should you fix it soon.","If your laptop broken is, you should soon fix it."],a:0},
+    {s:"WRITING",q:"They have no books to read at home. → Câu gần nghĩa:",c:["There isn't any books to read at home.","They don't have some books at home.","There are no books for them to read at home.","They doesn't have books at home to read."],a:2},
+    {s:"WRITING",q:"Anna: 6 stickers · Alice: 9 stickers · Jane: 8 stickers. Câu nào ĐÚNG?",c:["Alice got the most stickers.","Anna and Alice had more stickers than Jane and Alice.","Anna and Alice had fewer stickers than Jane and Alice.","Alice and Jane had fewer stickers than Jane and Anna."],a:0},
+  ],
+  /* ── ĐỀ 04 – CVA 23-24 ── */
+  [
+    {s:"PHONETICS",q:"Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others: learned / moved / turned / brushed",c:["learned","moved","turned","brushed"],a:3},
+    {s:"PHONETICS",q:"Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others: idea / intelligent / inside / flight",c:["idea","intelligent","inside","flight"],a:1},
+    {s:"PHONETICS",q:"Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others: hole / honest / happiness / however",c:["hole","honest","happiness","however"],a:1},
+    {s:"PHONETICS",q:"Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others: chemist / christmas / armchair / stomach",c:["chemist","christmas","armchair","stomach"],a:2},
+    {s:"USE OF LANGUAGE",q:"My sister was born ___ July 3rd, 2005.",c:["in","on","at","from"],a:1},
+    {s:"USE OF LANGUAGE",q:"The opposite meaning of 'different' is ___.",c:["similar","difficult","important","interesting"],a:0},
+    {s:"USE OF LANGUAGE",q:"The word 'biscuit' is closest meaning to ___.",c:["cupcake","donut","jelly","cookie"],a:3},
+    {s:"USE OF LANGUAGE",q:"My dad ___ us to the book fair last Sunday.",c:["taked","took","taking","takes"],a:1},
+    {s:"USE OF LANGUAGE",q:"Which countries ALL belong to Southeast Asia?",c:["Vietnam, Thailand, India, Cambodia, Singapore","Laos, Thailand, Cambodia, Vietnam, Malaysia","Thailand, China, Laos, Malaysia, Indonesia","Cambodia, Singapore, Malaysia, Australia, Korea"],a:1},
+    {s:"USE OF LANGUAGE",q:"Nam is working ___ for his entrance exam.",c:["hard","hardly","good","clever"],a:0},
+    {s:"USE OF LANGUAGE",q:"Peter: \"Would you like to go for a picnic next Sunday?\"\nMark: \"___\"",c:["I'd love to.","You're welcome.","I'm sorry, you can't.","No, it isn't."],a:0},
+    {s:"USE OF LANGUAGE",q:"Linda: \"Congratulate you on winning the first prize!\"\nMatt: \"___\"",c:["What a pity!","What can I do for you?","You're right.","Thank you so much."],a:3},
+    {s:"USE OF LANGUAGE",q:"How about ___ to Phu Quoc Island next week?",c:["go","going","went","to go"],a:1},
+    {s:"USE OF LANGUAGE",q:"Do you prefer watching TV to ___ to music?",c:["listen","listening","listens","listened"],a:1},
+    {s:"USE OF LANGUAGE",q:"My classmates usually ___ school activities.",c:["take part in","take care of","look after","look up"],a:0},
+    {s:"USE OF LANGUAGE",q:"Train ticket: HCM City → Ha Noi · August 18th · 16.20. Câu nào ĐÚNG?",c:["The train to HCM City leaves at 4.20 p.m.","The train to Ha Noi leaves at 16.20.","The train to HCM City leaves on August 8th.","The train to HCM City leaves on July 18th."],a:1},
+    {s:"USE OF LANGUAGE",q:"___ are non-renewable sources of energy.",c:["Solar energy – hydro power – wind power","Wind power – coal – natural gas","Solar energy – coal – wind power","Natural gas – coal – crude oil"],a:3},
+    {s:"READING – Tests & Exams",q:"They play (18) ___ important role in students' learning.",c:["a","an","the","∅"],a:1,p:P_EXAM},
+    {s:"READING – Tests & Exams",q:"Preparing (19) ___ exams is a skill.",c:["for","of","with","on"],a:0,p:P_EXAM},
+    {s:"READING – Tests & Exams",q:"Many students think the (20) ___ way is to learn everything by heart.",c:["easy","easier","easiest","most easy"],a:2,p:P_EXAM},
+    {s:"READING – Tests & Exams",q:"(21) ___ you study for an exam, try to understand everything.",c:["But","When","So","Horizontal"],a:1,p:P_EXAM},
+    {s:"READING – Tests & Exams",q:"Also, (22) ___ attention to details.",c:["get","make","receive","pay"],a:3,p:P_EXAM},
+    {s:"READING – The importance of pets",q:"The number of people in Britain owning a pet cat is ___.",c:["six million","four million","six thousand","four thousand"],a:0,p:P_PETS},
+    {s:"READING – The importance of pets",q:"Why are pets good for people's health?",c:["Pets take care of their owners.","People with pets take better care of themselves.","People with pets do not think about themselves or their own problems so much.","Pet owners think only of their pets and the pets' problems."],a:2,p:P_PETS},
+    {s:"READING – The importance of pets",q:"What does \"they\" refer to in \"they express the importance of pets\"?",c:["animal","pets","human health","doctors"],a:3,p:P_PETS},
+    {s:"READING – The importance of pets",q:"What is the opposite word of 'good'?",c:["wonderful","beautiful","bad","ugly"],a:2,p:P_PETS},
+    {s:"READING – The importance of pets",q:"Which statement is NOT TRUE?",c:["Cats are so popular with people in Britain.","There are fewer cats than cat owners in Britain.","There is a link that exists between animals and human health.","Pet owners are more likely to have a heart attack than people who do not own a pet."],a:3,p:P_PETS},
+    {s:"WRITING",q:"How far / it / your house / school?",c:["How far it is from your house to school?","How far is it from your house to your school?","How far it from your house to your school?","How far from your house to your school is it?"],a:1},
+    {s:"WRITING",q:"cinema / next / bus stop.",c:["The cinema are next to the bus stop.","The cinema are next the bus stop.","The cinema is next the bus stop.","The cinema is next to the bus stop."],a:3},
+    {s:"WRITING",q:"Sắp xếp:\nare / rush / hour / There / traffic / often / jams / during / the / .",c:["There are often rush hour during the traffic jams.","There are often traffic jams during the rush hour.","Traffic jams often there are during the rush hour.","During the rush hour often traffic jams there are."],a:1},
+    {s:"WRITING",q:"Sắp xếp:\nyou / don't / If / eat / much / too / food / fast / won't / put on / you / weight / .",c:["If you don't eat fast food, you won't put on too much weight.","If you won't eat fast food too much, you don't put on weight.","If you don't eat too much fast food, you won't put on weight.","If you don't put on weight, you won't eat too much fast food."],a:2},
+    {s:"WRITING",q:"We don't have any rice left in the jar. → Câu gần nghĩa:",c:["There is any rice in the jar.","There isn't some rice in the jar.","There are some rice in the jar.","There is no rice in the jar."],a:3},
+    {s:"WRITING",q:"Lan is more careful than Mai. → Câu gần nghĩa:",c:["Mai is more careless than Lan.","Mai is as careless as Lan.","Mai is much careless than Lan.","Mai is so careless as Lan."],a:0},
+    {s:"WRITING",q:"How heavy is she? → Câu gần nghĩa:",c:["What is her weigh?","How much is she weigh?","What is her weight?","How much does she weight?"],a:2},
+    {s:"WRITING",q:"Mary: 5 stickers · Alex: 8 stickers · Jim: 7 stickers. Câu nào ĐÚNG?",c:["Jim got the most stickers.","Mary and Alex had more stickers than Jim and Alex.","Mary and Alex had fewer stickers than Jim and Alex.","Alex and Jim had fewer stickers than Jim and Mary."],a:2},
+  ],
+  /* ── ĐỀ 05 ── */
+  [
+    {s:"PHONETICS",q:"Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others: walked / laughed / played / watched",c:["walked","laughed","played","watched"],a:2},
+    {s:"PHONETICS",q:"Circle the letter A, B, C, or D to indicate the word that has the underlined part pronounced differently from that of the others: chemistry / children / check / church",c:["chemistry","children","check","church"],a:0},
+    {s:"USE OF LANGUAGE",q:"She has lived in this city ___ she was a child.",c:["for","since","during","from"],a:1},
+    {s:"USE OF LANGUAGE",q:"The opposite of 'polluted' is ___.",c:["noisy","modern","fresh","dirty"],a:2},
+    {s:"USE OF LANGUAGE",q:"'Innovative' is closest in meaning to ___.",c:["traditional","creative","boring","fixed"],a:1},
+    {s:"USE OF LANGUAGE",q:"By the time we got to the station, the train ___.",c:["had left","left","leaves","has left"],a:0},
+    {s:"USE OF LANGUAGE",q:"You ___ talk during the exam, it's forbidden.",c:["should","shouldn't","must","mustn't"],a:3},
+    {s:"USE OF LANGUAGE",q:"The children ran ___ out of the classroom.",c:["excitement","excite","excited","excitedly"],a:3},
+    {s:"USE OF LANGUAGE",q:"What does the no-littering sign say?",c:["You don't need to litter in this place.","Littering is not good for the environment.","Waste is not available in this place.","You mustn't throw trash on the ground."],a:3},
+    {s:"USE OF LANGUAGE",q:"Nam: \"Thank you so much for helping me!\"\nLan: \"___\"",c:["Don't mention it.","That's right.","No, thanks.","Good idea."],a:0},
+    {s:"USE OF LANGUAGE",q:"The doctor advised him to ___ smoking.",c:["give away","take off","give up","put on"],a:2},
+    {s:"USE OF LANGUAGE",q:"___ is a renewable source of energy.",c:["Coal","Solar energy","Oil","Gas"],a:1},
+    {s:"READING – Global Citizen",q:"...you understand and care about (13) ___ is happening in other countries...",c:["which","what","where","who"],a:1,p:P_GLOBAL},
+    {s:"READING – Global Citizen",q:"...you try to make a (14) ___ where you live.",c:["difference","progress","solution","reason"],a:0,p:P_GLOBAL},
+    {s:"READING – Global Citizen",q:"This helps you (15) ___ with people from different cultures.",c:["talk","speak","connect","share"],a:2,p:P_GLOBAL},
+    {s:"READING – Why We Should Learn English",q:"What is the main idea of the passage?",c:["English is the oldest language in the world.","English helps people find better jobs.","English is useful and important to learn.","English is only spoken in English-speaking countries."],a:2,p:P_ENGLISH},
+    {s:"READING – Why We Should Learn English",q:"How can people improve their English?",c:["By watching cartoons in their own language","By practicing and talking with native speakers","By learning many other languages","By reading only local newspapers"],a:1,p:P_ENGLISH},
+    {s:"READING – Why We Should Learn English",q:"The word \"opportunities\" means:",c:["exams","problems","chances","jobs only"],a:2,p:P_ENGLISH},
+    {s:"READING – Why We Should Learn English",q:"Which is NOT mentioned as a benefit of learning English?",c:["Traveling to new places","Entering good universities","Communicating with foreigners","Watching international movies"],a:0,p:P_ENGLISH},
+    {s:"WRITING",q:"how long / it / take / you / walk / school / every day / ?",c:["How long does it take you to walk school every day?","How long does it take for you to walk to school every day?","How long does it take you to walk to school every day?","How long do it take you to walk to school every day?"],a:2},
+    {s:"WRITING",q:"the airport / opposite / hotel / located / is.",c:["The airport is located opposite the hotel.","The hotel is located opposite the airport.","Opposite the hotel located is the airport.","The airport located opposite is the hotel."],a:0},
+    {s:"WRITING",q:"Sắp xếp:\ntired / too / I / go / am / cinema / the / to / to / tonight / .",c:["I am too tired to go to the cinema tonight.","Too I am tired to go the cinema to tonight.","I too tired am to go to the cinema tonight.","I am to tired to go the cinema tonight to."],a:0},
+    {s:"WRITING",q:"Sắp xếp:\nbroken / is / If / your / laptop / , / you / fix / it / should / soon / .",c:["If your laptop is broken, you should fix it soon.","You should fix soon your laptop if it is broken.","If is your laptop broken, should you fix it soon.","If your laptop broken is, you should soon fix it."],a:0},
+    {s:"WRITING",q:"They have no books to read at home. → Câu gần nghĩa:",c:["There isn't any books to read at home.","They don't have some books at home.","There are no books for them to read at home.","They doesn't have books at home to read."],a:2},
+    {s:"WRITING",q:"Ben scored 90, Susan got 85, Tom had 95. Câu nào ĐÚNG?",c:["Tom had the highest score in the test.","Ben scored lower than both Susan and Tom.","Susan got more points than Tom.","Ben and Susan had the same score."],a:0},
+  ]
+];
+
+/* ── STATE SYSTEM ── */
+let currentCategory = 'eng';
+let curExam = 0, questions = [], curQ = 0, score = 0, answered = false;
+
+function $id(id) { return document.getElementById(id); }
+
+/* Fisher-Yates shuffle trộn câu trả lời */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildExam(rawIdx) {
+  return RAW[rawIdx].map(q => {
+    const pairs = q.c.map((txt, i) => ({ txt, orig: i }));
+    const sh    = shuffle(pairs);
+    return { s: q.s, q: q.q, c: sh.map(p => p.txt), a: sh.findIndex(p => p.orig === q.a), p: q.p || null };
+  });
+}
+
+/* KHI CLICK CHUYỂN MÔN (SIDEBAR) */
+function switchCategory(cat) {
+  currentCategory = cat;
+  document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+  if(cat === 'eng') {
+    $id('menu-eng').classList.add('active');
+    $id('home-category-title').innerHTML = "🇬🇧 Danh Sách Bài Tập Tiếng Anh";
+  } else {
+    $id('menu-math').classList.add('active');
+    $id('home-category-title').innerHTML = "📐 Danh Sách Bài Tập Toán Học";
+  }
+  renderExamList();
+  goHome();
+}
+
+/* RENDER DANH SÁCH BÀI TẬP THEO MÔN ĐANG CHỌN */
+function renderExamList() {
+  const grid = $id('exam-list-grid');
+  grid.innerHTML = '';
+  
+  const filtered = EXAM_REGISTRY.filter(item => item.cat === currentCategory);
+  
+  filtered.forEach(item => {
+    const btn = document.createElement('button');
+    btn.className = 'tome-btn';
+    
+    let clickAction = '';
+    if (item.type === 'link') {
+      clickAction = `window.open('${item.url}', '_blank')`;
+    } else {
+      clickAction = `startExam(${item.id}, ${item.rawIndex})`;
+    }
+    btn.setAttribute('onclick', clickAction);
+
+    let html = '';
+    if (item.isNew) {
+      html += `<span class="new-badge">Mới</span>`;
+    }
+    html += `
+      <span class="tome-icon">${item.icon}</span>
+      <div class="tome-name">${item.name}</div>
+      <div class="tome-school">${item.school}</div>
+      <div class="tome-count">${item.info}</div>
+    `;
+    btn.innerHTML = html;
+    grid.appendChild(btn);
+  });
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  $id(id).classList.add('active');
+}
+
+/* BẮT ĐẦU LÀM BÀI TRONG HỆ THỐNG */
+function startExam(id, rawIdx) {
+  curExam = id;
+  const config = EXAM_REGISTRY.find(x => x.id === id);
+  questions = buildExam(rawIdx);
+  curQ = 0; score = 0;
+  $id('quiz-title').textContent = config.name + " – " + config.school;
+  showScreen('quiz');
+  renderQ();
+}
+
+function renderQ() {
+  const q = questions[curQ], total = questions.length;
+
+  $id('progress-fill').style.width = ((curQ / total) * 100) + '%';
+  $id('q-counter').textContent = (curQ + 1) + ' / ' + total;
+  $id('section-badge').textContent = q.s;
+
+  const pw = $id('passage-wrap'), pb = $id('passage-box');
+  if (q.p) { pw.style.display = 'block'; pb.textContent = q.p; pb.scrollTop = 0; }
+  else      { pw.style.display = 'none'; }
+
+  $id('q-text').textContent = q.q;
+
+  const el = $id('choices'); el.innerHTML = '';
+  ['A','B','C','D'].forEach((L, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `<span class="choice-label">${L}</span><span class="choice-text">${q.c[i]}</span>`;
+    btn.onclick = () => pick(i);
+    el.appendChild(btn);
+  });
+
+  $id('feedback').className = 'feedback-msg';
+  $id('next-btn').className  = 'next-btn';
+  answered = false;
+}
+
+function pick(idx) {
+  if (answered) return;
+  answered = true;
+  const q    = questions[curQ];
+  const btns = document.querySelectorAll('.choice-btn');
+  btns.forEach(b => b.disabled = true);
+  const fb = $id('feedback');
+  
+  if (idx === q.a) {
+    btns[idx].classList.add('correct');
+    score++;
+    fb.textContent = '🟢 CHÍNH XÁC! Bạn nhận được +1 điểm thưởng.';
+    fb.className = 'feedback-msg correct show';
+  } else {
+    btns[idx].classList.add('wrong');
+    btns[q.a].classList.add('correct');
+    fb.textContent = '🔴 CHƯA ĐÚNG. Đáp án chính xác là ' + ['A','B','C','D'][q.a] + '.';
+    fb.className = 'feedback-msg wrong show';
+  }
+  $id('next-btn').className = 'next-btn show';
+}
+
+function nextQ() {
+  curQ++;
+  if (curQ >= questions.length) showResult(); else renderQ();
+}
+
+function showResult() {
+  const total = questions.length, pct = Math.round((score / total) * 100);
+  const config = EXAM_REGISTRY.find(x => x.id === curExam);
+  showScreen('result');
+  $id('r-name').textContent  = config.name;
+  $id('r-score').textContent = score + ' / ' + total;
+  $id('r-pct').textContent   = 'TỶ LỆ HOÀN THÀNH: ' + pct + '%';
+
+  const stars = pct >= 90 ? 5 : pct >= 75 ? 4 : pct >= 60 ? 3 : pct >= 40 ? 2 : 1;
+  $id('r-stars').innerHTML = Array.from({length:5}, (_,i) => i < stars ? '⭐' : '☆').join('');
+
+  let orb, rank;
+  if      (pct >= 90) { orb='🏆'; rank='BẬC THẦY ROBLOX'; }
+  else if (pct >= 75) { orb='🥇'; rank='CAO THỦ'; }
+  else if (pct >= 60) { orb='🥈'; rank='CHUYÊN NGHIỆP'; }
+  else if (pct >= 40) { orb='🥉'; rank='THÀNH VIÊN'; }
+  else                { orb='☠️'; rank='TẬP SỰ MỚI'; }
+
+  $id('r-orb').textContent = orb;
+  $id('r-rank').textContent = '⚔️ ' + rank + ' ⚔️';
+}
+
+function retryExam() { 
+  const config = EXAM_REGISTRY.find(x => x.id === curExam);
+  startExam(curExam, config.rawIndex); 
+}
+function goHome() { showScreen('home'); }
+
+// Khởi chạy mặc định nạp dữ liệu tiếng Anh ban đầu
+window.onload = function() {
+  renderExamList();
+};
+</script>
+</body>
+</html>
