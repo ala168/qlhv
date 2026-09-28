@@ -641,7 +641,7 @@ public class HVMain extends JFrame {
             boolean isSaoKeCaNhan = true;
 
             Row row4 = sheet.getRow(3);
-            Cell cellF1 = row4.getCell(16);
+            Cell cellF1 = row4.getCell(7); //check account number of doanh nghiep
             String tmpAccountNo = getCellValue(cellF1, evaluator).trim();
 
             if (!tmpAccountNo.isEmpty() && tmpAccountNo.toUpperCase().contains("ACCOUNT NO"))
@@ -672,6 +672,7 @@ public class HVMain extends JFrame {
                 //getCellValue(row.getCell(5),evaluator).trim(); // cột F
 				//getCellValue(row.getCell(6),evaluator).trim(); // cột G
 				//getCellValue(row.getCell(7),evaluator).trim(); // cột H
+                //cot I
                 //getCellValue(row.getCell(9),evaluator).trim(); // cột J
                 //getCellValue(row.getCell(10),evaluator).trim(); // cột K
                 //getCellValue(row.getCell(11),evaluator).trim(); // cột L
@@ -687,19 +688,19 @@ public class HVMain extends JFrame {
                 if (STT.toUpperCase().contains("STT")) isStartRow = true;
                 if (!isStartRow) continue;
 
-                col = isSaoKeCaNhan ? 4 : 6;
+                col = isSaoKeCaNhan ? 4 : 2;
                 String date = getCellValue(row.getCell(col), evaluator).trim();
 
-                col = isSaoKeCaNhan ? 10 : 8;
+                col = isSaoKeCaNhan ? 10 : 4;
                 String creditStr = getCellValue(row.getCell(col), evaluator).trim();
 
-                col = isSaoKeCaNhan ? 11 : 12;
+                col = isSaoKeCaNhan ? 11 : 7;
                 String remark = getCellValue(row.getCell(col), evaluator).trim();
 
-                col = isSaoKeCaNhan ? 6 : 17;
+                col = isSaoKeCaNhan ? 6 : 8;
                 String transactionNo = getCellValue(row.getCell(col), evaluator).trim();
 
-                col = isSaoKeCaNhan ? 9 : 7;
+                col = isSaoKeCaNhan ? 9 : 3;
                 String debitStr = getCellValue(row.getCell(col), evaluator).trim();
                 
                 if (date.isEmpty() || transactionNo.isEmpty() || creditStr.isEmpty() || remark.isEmpty())

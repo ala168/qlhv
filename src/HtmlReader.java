@@ -23,7 +23,7 @@ public class HtmlReader {
     public static String htmlContent;
     public static boolean readOK;    
     
-    public static boolean enable;
+    public static boolean enable=true;
     
     public static String id;
     public static String email;
@@ -82,12 +82,12 @@ public class HtmlReader {
             
             if (parseValues(htmlContent)) {
             	readOK= true;
-            	enable = id.equals("1");
+            	enable = true;//id.equals("1");
             	
-            	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-                int curDate = Integer.valueOf(sdf.format(new Date()));
+            	//SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                //int curDate = Integer.valueOf(sdf.format(new Date()));
                 
-                if (curDate > expiryDate) enable = false;            	
+                //if (curDate > expiryDate) enable = false;            	
             } else {
             	readOK = false;
             	enable = true;

@@ -1,0 +1,18 @@
+2026-06-23 08:52:13,403 DEBUG - Starting WinSW in service mode
+2026-06-23 08:52:13,554 INFO  - Starting java -jar ".\wording2.jar"
+2026-06-23 08:52:13,586 INFO  - Started process 12816
+2026-06-23 08:52:13,606 DEBUG - Forwarding logs of the process System.Diagnostics.Process (java) to WinSW.SizeBasedRollingLogAppender
+2026-06-23 14:36:53,185 INFO  - Stopping WordingBackgroundService
+2026-06-23 14:36:53,187 DEBUG - ProcessKill 12816
+2026-06-23 14:36:53,191 DEBUG - Stopping process 12816...
+2026-06-23 14:36:53,277 DEBUG - Process 12816 canceled with code 130.
+2026-06-23 14:36:53,281 INFO  - Finished WordingBackgroundService
+2026-06-23 14:37:07,403 DEBUG - Starting WinSW in service mode
+2026-06-23 14:37:07,550 INFO  - Starting java -jar ".\wording2.1.jar"
+2026-06-23 14:37:07,580 INFO  - Started process 36700
+2026-06-23 14:37:07,599 DEBUG - Forwarding logs of the process System.Diagnostics.Process (java) to WinSW.SizeBasedRollingLogAppender
+2026-06-24 08:38:24,872 INFO  - Stopping WordingBackgroundService
+2026-06-24 08:38:24,880 DEBUG - ProcessKill 36700
+2026-06-24 08:38:24,886 DEBUG - Stopping process 36700...
+2026-06-24 08:38:25,179 DEBUG - Process 36700 canceled with code 130.
+2026-06-24 08:38:25,255 INFO  - Finished WordingBackgroundService
