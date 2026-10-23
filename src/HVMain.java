@@ -1342,7 +1342,7 @@ public class HVMain extends JFrame {
                 }
             });
 
-            pstmt = conn.prepareStatement("SELECT id, thang, tenhv, mahv, loptt, monToan, monVan, monAnh, monLy, monHoa, sotk, tentk, tennh, dongia, tongsongay FROM tonghopthang");
+            pstmt = conn.prepareStatement("SELECT id, thang, tenhv, mahv, loptt, monToan, monVan, monAnh, monLy, monHoa, monSinh, monSu, sotk, tentk, tennh, dongia, tongsongay FROM tonghopthang");
             rs = pstmt.executeQuery();
 
             final java.util.concurrent.atomic.AtomicInteger processedRecords = new java.util.concurrent.atomic.AtomicInteger(0);
@@ -1360,6 +1360,8 @@ public class HVMain extends JFrame {
                 String monAnh = rs.getString("monAnh");
                 String monLy = rs.getString("monLy");
                 String monHoa = rs.getString("monHoa");
+                String monSinh = rs.getString("monSinh");
+                String monSu = rs.getString("monSu");
                 String sTongSoNgay = rs.getString("tongsongay");
 
                 double dongia = rs.getDouble("dongia");
@@ -1396,6 +1398,9 @@ public class HVMain extends JFrame {
                 vars.put("eng", monAnh != null ? monAnh : "");
                 vars.put("phy", monLy != null ? monLy : "");
                 vars.put("chem", monHoa != null ? monHoa : "");
+                vars.put("sinh", monSinh != null ? monSinh : "");
+                vars.put("su", monSu != null ? monSu : "");
+                
                 vars.put("price", formatCurrency(String.valueOf(dongia)));
                 vars.put("total", sTongSoNgay != null ? sTongSoNgay : "");
                 vars.put("amt", formatCurrency(String.valueOf(tongtien)));
@@ -1727,6 +1732,8 @@ public class HVMain extends JFrame {
                monhoc.equals("Ngữ Văn") ||
                monhoc.equals("Tiếng Anh") ||
                monhoc.equals("Lý") ||
+               monhoc.equals("Sinh") ||
+               monhoc.equals("Sử") ||
                monhoc.equals("Hóa");
     }
     
@@ -1802,7 +1809,7 @@ public class HVMain extends JFrame {
                     String monhoc = sheet.getRow(4).getCell(2).toString().trim();
 
                     if (!isValidMonHoc(monhoc)) {
-                    	logMessage("Yêu cầu nhập tên môn học là: Toán, Ngữ Văn, Tiếng Anh, Lý, Hóa");
+                    	logMessage("Yêu cầu nhập tên môn học là: Toán, Ngữ Văn, Tiếng Anh, Lý, Hóa, Sinh, Sử");
                     	logMessage("Hãy sửa lại file " + file.getName() + " và thực hiện lại " + btnImportDataButton.getText());
                     	return;
                     }
@@ -2006,7 +2013,7 @@ public class HVMain extends JFrame {
             });
 
             // 2. Lấy dữ liệu
-            String sql = "SELECT id, thang, tenhv, mahv, loptt, monToan, monVan, monAnh, " +
+            String sql = "SELECT id, thang, tenhv, mahv, loptt, monToan, monVan, monAnh,monSinh,monSu, " +
                          "monLy, monHoa, dongia, tongsongay, dongia*tongsongay as tongtien, "
                          + "tranAmt,phitm, dongia*tongsongay-IFNULL(CAST(tranAmt AS REAL), 0.0) as chenhlech,listTkThu,listtranNo," +
                          "sotk, tentk, tennh FROM tonghopthang";
@@ -2019,7 +2026,7 @@ public class HVMain extends JFrame {
             // Header
             String[] headers = {
                 "ID", "Tháng", "Tên HV", "Mã HV", "Lớp TT",
-                "Môn Toán", "Môn Văn", "Môn Anh", "Môn Lý", "Môn Hóa",
+                "Môn Toán", "Môn Văn", "Môn Anh", "Môn Lý", "Môn Hóa","Môn Sinh","Môn Sử",
                 "Đơn giá", "Tổng số lượt", " Tổng số tiền ",
                 "Số thu được","CT","TH","TM","Phí TM","Đóng dư tiền",
                 "Số TK", "Tên TK", "Tên NH"
@@ -2064,11 +2071,12 @@ public class HVMain extends JFrame {
                 row.createCell(7).setCellValue(rs.getDouble("monAnh"));
                 row.createCell(8).setCellValue(rs.getDouble("monLy"));
                 row.createCell(9).setCellValue(rs.getDouble("monHoa"));
-                row.createCell(10).setCellValue(rs.getDouble("dongia"));
-                row.createCell(11).setCellValue(rs.getDouble("tongsongay"));
-                row.createCell(12).setCellValue(rs.getDouble("tongtien"));
-                
-                row.createCell(13).setCellValue(rs.getDouble("tranAmt"));
+                row.createCell(10).setCellValue(rs.getDouble("monSinh"));
+                row.createCell(11).setCellValue(rs.getDouble("monSu"));
+                row.createCell(12).setCellValue(rs.getDouble("dongia"));
+                row.createCell(13).setCellValue(rs.getDouble("tongsongay"));
+                row.createCell(14).setCellValue(rs.getDouble("tongtien"));
+                row.createCell(15).setCellValue(rs.getDouble("tranAmt"));
                 
                 String tkThu = rs.getString("listTkThu");
                 if (tkThu == null || tkThu.isEmpty()) tkThu="";
@@ -2091,14 +2099,14 @@ public class HVMain extends JFrame {
                     }
                 }
                 
-                row.createCell(14).setCellValue(CT);//CT
-                row.createCell(15).setCellValue(TH);//TH
-                row.createCell(16).setCellValue(TM);//TM
-                row.createCell(17).setCellValue(rs.getDouble("phitm"));//PhiTM
-                row.createCell(18).setCellValue(rs.getDouble("chenhlech"));
-                row.createCell(19).setCellValue(rs.getString("sotk"));
-                row.createCell(20).setCellValue(rs.getString("tentk"));
-                row.createCell(21).setCellValue(rs.getString("tennh"));
+                row.createCell(16).setCellValue(CT);//CT
+                row.createCell(17).setCellValue(TH);//TH
+                row.createCell(18).setCellValue(TM);//TM
+                row.createCell(19).setCellValue(rs.getDouble("phitm"));//PhiTM
+                row.createCell(20).setCellValue(rs.getDouble("chenhlech"));
+                row.createCell(21).setCellValue(rs.getString("sotk"));
+                row.createCell(22).setCellValue(rs.getString("tentk"));
+                row.createCell(23).setCellValue(rs.getString("tennh"));
 
                 
                 if (rs.getDouble("chenhlech")==rs.getDouble("tongtien")){
@@ -2780,6 +2788,8 @@ public class HVMain extends JFrame {
                     "monAnh REAL," +
                     "monLy REAL," +
                     "monHoa REAL," +
+                    "monSinh REAL," +
+                    "monSu REAL," +
                     "sotk TEXT," +
                     "tentk TEXT," +
                     "tennh TEXT," +
@@ -2793,7 +2803,7 @@ public class HVMain extends JFrame {
 
             // Insert dữ liệu tổng hợp, thêm t.lophv vào select và group by
             String sql = "INSERT INTO tonghopthang " +
-                    "(thang, tenhv, mahv, loptt, monToan, monVan, monAnh, monLy, monHoa, " +
+                    "(thang, tenhv, mahv, loptt, monToan, monVan, monAnh, monLy, monHoa,monSinh, monSu, " +
                     "sotk, tentk, tennh, dongia, tongsongay) " +
                     "SELECT t.thang, t.tenhv, t.mahv, t.loptt, " + 
                     "SUM(CASE WHEN t.monhoc='Toán' THEN t.songay ELSE 0 END) AS monToan, " +
@@ -2801,13 +2811,18 @@ public class HVMain extends JFrame {
                     "SUM(CASE WHEN t.monhoc='Tiếng Anh' THEN t.songay ELSE 0 END) AS monAnh, " +
                     "SUM(CASE WHEN t.monhoc='Lý' THEN t.songay ELSE 0 END) AS monLy, " +
                     "SUM(CASE WHEN t.monhoc='Hóa' THEN t.songay ELSE 0 END) AS monHoa, " +
+                    "SUM(CASE WHEN t.monhoc='Sinh' THEN t.songay ELSE 0 END) AS monSinh, " +
+                    "SUM(CASE WHEN t.monhoc='Sử' THEN t.songay ELSE 0 END) AS monSu, " +
                     "n.sotk, n.tentk, n.tennh, " +
                     "100000 AS dongia, " +
                     "(SUM(CASE WHEN t.monhoc='Toán' THEN t.songay ELSE 0 END) + " +
                     " SUM(CASE WHEN t.monhoc='Ngữ Văn' THEN t.songay ELSE 0 END) + " +
                     " SUM(CASE WHEN t.monhoc='Tiếng Anh' THEN t.songay ELSE 0 END) + " +
                     " SUM(CASE WHEN t.monhoc='Lý' THEN t.songay ELSE 0 END) + " +
-                    " SUM(CASE WHEN t.monhoc='Hóa' THEN t.songay ELSE 0 END)) AS tongsongay " +
+                    " SUM(CASE WHEN t.monhoc='Hóa' THEN t.songay ELSE 0 END)" +
+                    " SUM(CASE WHEN t.monhoc='Sinh' THEN t.songay ELSE 0 END)" +
+                    " SUM(CASE WHEN t.monhoc='Sử' THEN t.songay ELSE 0 END)" +
+                    ") AS tongsongay " +
                     "FROM tonghop t " +
                     "LEFT JOIN nganhang n ON t.loptt = n.loptt " +
                     "GROUP BY t.thang, t.mahv, t.tenhv, t.loptt, n.sotk, n.tentk, n.tennh";
