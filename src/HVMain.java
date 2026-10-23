@@ -2819,8 +2819,8 @@ public class HVMain extends JFrame {
                     " SUM(CASE WHEN t.monhoc='Ngữ Văn' THEN t.songay ELSE 0 END) + " +
                     " SUM(CASE WHEN t.monhoc='Tiếng Anh' THEN t.songay ELSE 0 END) + " +
                     " SUM(CASE WHEN t.monhoc='Lý' THEN t.songay ELSE 0 END) + " +
-                    " SUM(CASE WHEN t.monhoc='Hóa' THEN t.songay ELSE 0 END)" +
-                    " SUM(CASE WHEN t.monhoc='Sinh' THEN t.songay ELSE 0 END)" +
+                    " SUM(CASE WHEN t.monhoc='Hóa' THEN t.songay ELSE 0 END) + " +
+                    " SUM(CASE WHEN t.monhoc='Sinh' THEN t.songay ELSE 0 END) + " +
                     " SUM(CASE WHEN t.monhoc='Sử' THEN t.songay ELSE 0 END)" +
                     ") AS tongsongay " +
                     "FROM tonghop t " +
