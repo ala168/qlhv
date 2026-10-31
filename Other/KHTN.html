@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KHTN 6 – Đấu trường</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0b2a3a;--card:#11475a;--red:#e2231a;--green:#00b06f;--blue:#0a84ff;--yel:#ffc21a;--pur:#8a3ffc;--org:#ff7a1a;--ans:#2a6a80;--dk:#06161f;--mut:#a9d3e0;--tx:#fff}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);background-image:radial-gradient(rgba(255,255,255,.07) 2px,transparent 2px);background-size:28px 28px;color:var(--tx);font-family:Fredoka,'Segoe UI',Arial,sans-serif;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+#app{max-width:560px;margin:0 auto;padding:14px}
+.top{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:12px}
+.chip{background:var(--dk);border:3px solid #000;border-radius:10px;padding:4px 9px;font-weight:600;font-size:14px;max-width:46vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chips{display:flex;gap:8px;justify-content:center;margin-bottom:8px}
+.logo{background:var(--green);border:4px solid #000;box-shadow:0 6px 0 #000;border-radius:12px;text-align:center;font-weight:700;font-size:24px;padding:12px;text-transform:uppercase;margin-bottom:16px}
+.sec{border:3px solid #000;border-radius:10px;text-align:center;font-weight:700;padding:6px;margin:14px 0 8px}
+.card{background:var(--card);border:4px solid #000;border-radius:14px;box-shadow:0 6px 0 #000;padding:14px;margin-bottom:14px}
+.btn{display:block;width:100%;background:var(--blue);color:#fff;font:inherit;font-weight:700;font-size:16px;border:3px solid #000;border-bottom-width:7px;border-radius:12px;padding:10px;margin:8px 0;cursor:pointer;text-align:left}
+.btn:active{transform:translateY(4px);border-bottom-width:3px}
+.btn small{display:block;font-weight:400;font-size:12px;opacity:.9}
+.btn:disabled{cursor:default}
+.ctr{text-align:center}
+.ans{background:var(--ans)}
+.ok{background:var(--green)!important}.bad{background:var(--red)!important}
+.bar{background:var(--dk);border:3px solid #000;border-radius:10px;height:16px;margin-bottom:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--yel);transition:width .3s}
+.exp{background:var(--dk);border-left:6px solid var(--yel);border-radius:8px;padding:10px;margin-top:10px;font-size:15px;line-height:1.45}
+.sm{color:var(--mut);font-size:13px;margin-bottom:4px}
+h3{margin:4px 0 10px;font-size:18px;line-height:1.35}
+.row{display:flex;gap:8px;background:#1a6a85;border-radius:8px;padding:6px 10px;margin:4px 0}
+.row b:nth-child(2){flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.me{background:var(--yel);color:#222}
+.tfr{background:var(--dk);border-radius:10px;padding:8px;margin:8px 0}
+.tfb{display:flex;gap:8px}.tfb .btn{text-align:center;margin:6px 0}
+.dim{opacity:.4}
+.big{font-size:56px;text-align:center}
+.warn{color:var(--yel);font-weight:600;text-align:center;min-height:20px}
+.ico{font-size:22px}
+</style></head><body><div id="app"></div>
+<script>
+const MC=[
+{q:"Lĩnh vực nào sau đây không thuộc Khoa học tự nhiên?",o:["Vật lí học","Hóa học","Sinh học","Lịch sử học"],a:3,e:"Lịch sử học thuộc khoa học xã hội."},
+{q:"Trong các trường hợp dưới đây, trường hợp nào gồm các vật thể tự nhiên?",o:["Cây cam, quả nho, bánh ngọt.","Con mèo, xe máy, con người.","Con sư tử, đồi núi, mủ cao su.","Bánh mì, nước ngọt, cây cối."],a:2,e:"Vật thể tự nhiên có sẵn trong tự nhiên."},
+{q:"Kính lúp được sử dụng để",o:["quan sát các vật rất nhỏ mà mắt thường khó nhìn rõ.","đo chiều dài của vật.","đo nhiệt độ của vật.","quan sát các vật ở rất xa."],a:0},
+{q:"Tấm kính dùng làm kính lúp",o:["có phần rìa dày hơn phần giữa.","có phần rìa mỏng hơn phần giữa.","lồi hoặc lõm.","có hai mặt phẳng."],a:1,e:"Kính lúp là kính lồi: phần rìa mỏng hơn phần giữa."},
+{q:"Giới hạn đo của thước là:",o:["độ dài giữa hai vạch chia liên tiếp trên thước.","độ dài nhỏ nhất ghi trên thước.","độ dài lớn nhất ghi trên thước","độ dài giữa hai vạch chia bất kì trên thước"],a:2},
+{q:"Dụng cụ thường được sử dụng để đo khối lượng là:",o:["thước.","nhiệt kế.","cân.","đồng hồ."],a:2},
+{q:"Đơn vị cơ bản đo thời gian trong hệ thống đo lường hợp pháp ở nước ta là:",o:["Giờ.","Ngày.","Phút.","Giây."],a:3},
+{q:"Biển báo hình tròn có gạch chéo đè lên hình vòi nước và cốc nước có ý nghĩa gì?",o:["Cấm uống nước.","Cấm lửa.","Chất độc sinh học.","Chất ăn mòn."],a:0},
+{q:"Dãy nào sau đây chỉ gồm các tính chất vật lí của chất?",o:["Màu sắc, mùi, thể, nhiệt độ nóng chảy.","Khả năng cháy, màu sắc, mùi.","Khả năng bị phân hủy, tính tan, màu sắc.","Khả năng cháy, khả năng phản ứng với oxygen."],a:0,e:"Khả năng cháy, bị phân hủy, phản ứng là tính chất hóa học."},
+{q:"Oxygen không có tính chất nào sau đây?",o:["Tan nhiều trong nước.","Không màu, không mùi, không vị","Oxygen là chất khí.","Nặng hơn không khí."],a:0,e:"Oxygen ít tan trong nước."},
+{q:"Trong các trường hợp dưới đây, chất tạo nên vật thể là:",o:["nhôm, muối ăn, đường mía.","con dao, đôi đũa, muối ăn.","đường mía, muối ăn, con dao.","con dao, đôi đũa, cái thìa nhôm."],a:0,e:"Con dao, đôi đũa, cái thìa là vật thể."},
+{q:"Tốc độ bay hơi của chất lỏng không phụ thuộc vào yếu tố nào sau đây?",o:["Nhiệt độ.","Thể tích của chất lỏng","Diện tích mặt thoáng của chất lỏng.","Gió."],a:1},
+{q:"Cách sử dụng kính lúp nào sau đây là đúng?",o:["Đặt kính ở khoảng 20 cm, mắt nhìn vào mặt kính.","Đặt kính cách xa mắt, mắt nhìn vào mặt kính.","Đặt kính trong khoảng mắt không phải điều tiết, mắt nhìn vào mặt kính.","Đặt kính ở khoảng sao cho nhìn thấy vật rõ nét, mắt nhìn vào mặt kính."],a:3},
+{q:"Lớp 6A lên xe lúc 6 giờ 30 phút và đến nơi lúc 9 giờ 10 phút. Thời gian đi là bao nhiêu?",o:["2 giờ 40 phút.","3 giờ 20 phút.","2 giờ 20 phút.","3 giờ 40 phút."],a:0,e:"9h10 − 6h30 = 2h40."},
+{q:"Đơn vị nào là đơn vị đo độ dài hợp pháp của nước ta?",o:["Đềximét (dm)","Centimét (cm)","Mét (m)","Kilômét (km)"],a:2},
+{q:"Biển báo hình tam giác viền đen có biểu tượng nguy hiểm sinh học có ý nghĩa gì?",o:["Cấm uống nước.","Chất ăn mòn.","Chất độc sinh học.","Cấm lửa."],a:2},
+{q:"Nhiệt độ nước là 27°C. Theo nhiệt giai Fahrenheit là bao nhiêu °F?",o:["47°F.","15°F.","48,6°F.","80,6°F."],a:3,e:"27 × 1,8 + 32 = 80,6°F."},
+{q:"Bạn Lan ngửi thấy mùi thơm tỏa ra từ bông hoa hồng. Điều này thể hiện tính chất nào của thể khí?",o:["Dễ dàng nén được.","Không có hình dáng xác định.","Không chảy được.","Có thể lan toả trong không gian theo mọi hướng."],a:3},
+{q:"Hoạt động nào sau đây của con người không phải là hoạt động nghiên cứu khoa học?",o:["Sản xuất phân bón hóa học.","Làm thí nghiệm điều chế chất mới","Theo dõi nuôi cấy mô cây trồng trong phòng thí nghiệm.","Lấy mẫu đất để phân loại đất trồng."],a:0,e:"Sản xuất là hoạt động sản xuất, không phải nghiên cứu."},
+{q:"Nguyên tắc hoạt động của nhiệt kế thủy ngân là dựa trên hiện tượng nào?",o:["Dãn nở vì nhiệt của chất khí.","Dãn nở vì nhiệt của chất rắn.","Dãn nở vì nhiệt của chất lỏng.","Dãn nở vì nhiệt của các chất."],a:2}
+];
+const TF=[
+{t:"Câu 11 – Dụng cụ và an toàn:",s:[["Để quan sát rõ các tế bào biểu bì hành, học sinh có thể dùng kính lúp thay cho kính hiển vi quang học.",0,"Tế bào rất nhỏ, cần kính hiển vi."],["Khi làm đổ hóa chất, học sinh cần báo ngay cho giáo viên và xử lí theo hướng dẫn, không tự ý xử lí.",1],["Thước là dụng cụ thường được sử dụng để đo chiều dài của vật.",1],["Nhiệt kế là dụng cụ dùng để đo khối lượng của một vật.",0,"Nhiệt kế đo nhiệt độ."]]},
+{t:"Câu 12 – Phép đo:",s:[["Để đo chiều dài bàn học, nên chọn thước có giới hạn đo lớn hơn chiều dài ước lượng của bàn.",1],["Khi dùng cân đồng hồ, cần chỉnh kim cân về vạch số 0 trước khi cân.",1],["Khi đo nhiệt độ cơ thể, cần chọn nhiệt kế có GHĐ và ĐCNN phù hợp.",1],["Một học sinh làm bài từ 8 giờ 20 phút đến 9 giờ 05 phút, bạn đó cho rằng thời gian làm bài là 35 phút.",0,"9h05 − 8h20 = 45 phút."]]},
+{t:"Câu 13 – Khoa học tự nhiên và thực hành:",s:[["Khoa học tự nhiên nghiên cứu các sự vật, hiện tượng và quy luật của thế giới tự nhiên.",1],["Trong phòng thực hành, học sinh được phép tự ý nếm hoặc ngửi trực tiếp hóa chất.",0,"Không được nếm hay ngửi trực tiếp hóa chất."],["Kính lúp giúp quan sát rõ hơn những vật nhỏ mà mắt thường khó thấy chi tiết.",1],["Khi dùng kính hiển vi, có thể dùng tay chạm trực tiếp vào mặt kính vật kính để lau bụi.",0,"Phải dùng giấy chuyên dụng, không chạm tay."]]}
+];
+const ES=[
+["Câu 14. Chuyển thể của chất\na) Viên nước đá nóng chảy thành nước rồi bay hơi thành hơi nước. Có bao nhiêu quá trình chuyển thể?\nb) Có bao nhiêu hiện tượng là sự bay hơi: (1) nước hoa để hở vơi dần; (2) nước đá tan; (3) quần áo ướt phơi khô; (4) hơi nước thành giọt nước trên nắp nồi; (5) vũng nước sau mưa cạn dần?\nc) Nước từ 25°C đun tới 100°C thì nhiệt độ tăng bao nhiêu °C?\nd) Nước làm lạnh từ lỏng thành rắn, rồi đun nóng thành lỏng và tiếp tục thành khí. Có bao nhiêu lần chuyển thể?","a) 2 quá trình (nóng chảy, bay hơi).\nb) 3 hiện tượng: (1), (3), (5).\nc) 100 − 25 = 75°C.\nd) 3 lần (đông đặc, nóng chảy, bay hơi)."],
+["Câu 15. Oxygen và không khí\na) Không khí gồm 21% oxygen, 78% nitrogen. Tổng tỉ lệ của hai khí là bao nhiêu %?\nb) Trong 3 hiện tượng: hô hấp, nến cháy, nước đá tan, có bao nhiêu hiện tượng cần oxygen?\nc) Nitrogen nhiều hơn oxygen khoảng bao nhiêu %?\nd) Phòng kín 40 m³ không khí, oxygen chiếm 21%. Thể tích oxygen là bao nhiêu m³?","a) 21% + 78% = 99%.\nb) 2 hiện tượng (hô hấp, nến cháy).\nc) 78% − 21% = 57%.\nd) 40 × 21% = 8,4 m³."],
+["Câu 16. Đổi đơn vị\na) 2,5 m = ... cm\nb) 1,2 kg = ... g\nc) 2 giờ 15 phút = ... phút\nd) 95°F = ... °C","a) 2,5 m = 250 cm.\nb) 1,2 kg = 1200 g.\nc) 2 giờ 15 phút = 135 phút.\nd) (95 − 32) : 1,8 = 35°C."],
+["Câu 17. Trước cổng trường giờ tan học có nhiều xe máy, ô tô nổ máy lâu làm không khí nhiều khói, bụi. Nêu hai tác hại và đề xuất hai biện pháp góp phần giữ không khí trong lành.","Tác hại: (1) gây các bệnh về đường hô hấp, mắt, da; (2) làm giảm tầm nhìn, ô nhiễm môi trường.\nBiện pháp: (1) tắt máy khi dừng đỗ chờ đón; (2) đi xe đạp, xe buýt hoặc đi bộ, trồng thêm cây xanh."],
+["Câu 18. Nêu 4 việc không được làm khi học trong phòng thực hành.","- Không ăn uống, nô đùa, chạy nhảy trong phòng.\n- Không tự ý làm thí nghiệm khi chưa có hướng dẫn.\n- Không nếm, ngửi trực tiếp hóa chất.\n- Không tự ý mang hóa chất, dụng cụ ra khỏi phòng."],
+["Câu 19. Dùng bình chia độ xác định thể tích viên sỏi không thấm nước. Ban đầu nước trong bình là 35 ml. Sau khi thả chìm sỏi, mực nước là 52 ml. Tính thể tích viên sỏi.","V = 52 − 35 = 17 ml (17 cm³)."],
+["Câu 20. Mỗi giờ người lớn hít vào khoảng 500 lít không khí.\na) Một ngày đêm hít vào bao nhiêu lít không khí?\nb) Cơ thể giữ lại 1/3 lượng oxygen trong không khí. Một ngày đêm mỗi người cần trung bình bao nhiêu lít oxygen?","a) 500 × 24 = 12 000 lít.\nb) Oxygen hít vào: 12 000 × 21% = 2520 lít; giữ lại 1/3: 2520 : 3 = 840 lít."]
+];
+const RK=[[0,"Tân binh"],[100,"Lính mới"],[300,"Chiến binh"],[600,"Cao thủ"],[1000,"Huyền thoại"]];
+const AD=["Swift","Cosmic","Pixel","Shadow","Turbo","Neon","Mighty","Lucky","Frost","Sky"],NO=["Ninja","Dragon","Blocky","Robot","Wizard","Panda","Knight","Falcon","Slime","Cat"];
+const SEC=15,LIVES=3,BUY=5,ADD=5;
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+let AC;
+function tone(f,t,d,ty,v){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();const o=AC.createOscillator(),g=AC.createGain();o.type=ty;o.frequency.value=f;o.connect(g);g.connect(AC.destination);const s=AC.currentTime+t;g.gain.setValueAtTime(v,s);g.gain.exponentialRampToValueAtTime(0.001,s+d);o.start(s);o.stop(s+d)}catch(e){}}
+function snd(ok){if(ok){tone(1319,0,.25,'sine',.3);tone(1760,.16,.45,'sine',.3)}else{tone(220,0,.25,'sawtooth',.18);tone(150,.2,.45,'sawtooth',.18)}}
+const mk=()=>rnd(AD)+rnd(NO)+(1000+Math.floor(Math.random()*9000));
+const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let xp=0,coins=0,name=(()=>{try{return localStorage.getItem('khtn_name')}catch(e){}})()||mk(),W=new Set(),G,T,E,RP;
+const bots=Array.from({length:7},()=>({n:mk(),x:Math.floor(Math.random()*650)}));
+const rk=()=>{let r=0;RK.forEach((v,i)=>{if(xp>=v[0])r=i});return r};
+const rkTxt=()=>{const r=rk();return r<RK.length-1?`Còn ${RK[r+1][0]-xp} XP để lên ${RK[r+1][1]}`:"Bạn đã đạt rank cao nhất 👑"};
+function sv(n){n=(n||'').replace(/[<>&"'`]/g,'').trim().slice(0,20);if(!n)return;name=n;try{localStorage.setItem('khtn_name',n)}catch(e){}sync();menu()}
+function hdr(){return `<div class="top" id="hd"><span class="chip" style="cursor:pointer" onclick="clearInterval(G&&G.tm);menu()">🏠 Menu</span><span class="chip">👤 ${name}</span><span class="chip">🎖 ${RK[rk()][1]}</span><span class="chip">⭐ ${xp} XP</span><span class="chip">🪙 ${coins}</span></div>`}
+function ref(){const e=document.getElementById('hd');if(e)e.outerHTML=hdr()}
+function draw(h){document.getElementById('app').innerHTML=hdr()+h;scrollTo(0,0)}
+function add(x,c){xp+=x;coins+=c;ref();sync()}
+const esc=s=>String(s).replace(/[<>&"'`]/g,'');
+let DB=null,UID=null,PL=[],LD=0,ST=null;
+const DB_URL="https://databasex-d5d8d-default-rtdb.asia-southeast1.firebasedatabase.app";
+const LIVE=!DB_URL.includes("YOUR-PROJECT");
+try{UID=localStorage.getItem('khtn_uid')}catch(e){}
+if(!UID){UID='p'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);try{localStorage.setItem('khtn_uid',UID)}catch(e){}}
+function sync(){if(!LIVE||!LD)return;clearTimeout(ST);ST=setTimeout(()=>{fetch(DB_URL+'/board/'+UID+'.json',{method:'PUT',body:JSON.stringify({name:name,xp:xp,coins:coins,t:Date.now()})}).catch(()=>{})},500)}
+function board(){const oth=DB?PL.filter(p=>p.id!==UID).map(p=>({n:esc(p.name||'Ẩn danh'),x:p.xp||0})):bots.map(b=>({n:b.n,x:b.x}));const l=[...oth,{n:esc(name),x:xp,me:1}].sort((a,b)=>b.x-a.x).slice(0,20);return '<div id="lb">'+l.map((p,i)=>`<div class="row${p.me?' me':''}"><b>#${i+1}</b><b>${p.n}</b><b>${p.x} XP</b></div>`).join('')+`<div class="sm ctr" style="margin-top:6px">${DB?'🌐 Người chơi thật, cập nhật trực tiếp':'Người chơi ảo (chưa kết nối dữ liệu chung)'}</div></div>`}
+async function poll(){try{const r=await fetch(DB_URL+'/board.json');if(!r.ok)throw 0;const o=(await r.json())||{};PL=Object.keys(o).map(k=>Object.assign({id:k},o[k]));DB=true;if(!LD){LD=1;const m=o[UID];if(m){xp=Math.max(xp,m.xp||0);coins=Math.max(coins,m.coins||0);let h=0;try{h=localStorage.getItem('khtn_name')}catch(e){}if(!h&&m.name)name=m.name}ref();if(document.querySelector('.logo'))menu();sync()}const e=document.getElementById('lb');if(e)e.outerHTML=board()}catch(e){}}
+if(LIVE){poll();setInterval(poll,5000)}
+function menu(){
+ draw(`<div class="logo">🧪 KHTN 6 – ĐẤU TRƯỜNG 🔬</div>
+ <div class="ctr" style="margin-bottom:10px">Xin chào, <b>${name}</b></div><div class="tfb" style="margin-bottom:10px;align-items:center"><input id="ni" maxlength="20" placeholder="Nhập tên của bạn" onkeydown="if(event.key==='Enter')sv(this.value)" style="flex:1;min-width:0;background:var(--dk);color:#fff;border:3px solid #000;border-radius:10px;padding:8px;font:inherit"><span class="chip" style="cursor:pointer" onclick="sv(document.getElementById('ni').value)">💾 Lưu</span><span class="chip" style="cursor:pointer" onclick="sv(mk())">🎲</span></div>
+ <div class="card ctr"><div class="ico">🎖 ${RK[rk()][1]}</div><div class="sm">${rkTxt()}</div></div>
+ <div class="sec" style="background:var(--blue)">PHẦN I – TRẮC NGHIỆM</div>
+ <button class="btn" style="background:var(--green)" onclick="playMC(MC.map((_,i)=>i),0,()=>playMC(MC.map((_,i)=>i),0,RP))">📚 Ý 1 – Luyện tập cổ điển<small>20 câu, không giới hạn thời gian</small></button>
+ <button class="btn" style="background:var(--org)" onclick="fast()">⚡ Ý 1 – Đua tốc độ<small>${SEC}s mỗi câu, ${LIVES} mạng, mua thêm giờ bằng xu</small></button>
+ <button class="btn" style="background:var(--red)" onclick="wrong()">🔁 Ôn câu đã sai<small>Đang có ${W.size} câu</small></button>
+ <button class="btn" onclick="playTF()">✅ Ý 2 – Đúng/Sai<small>3 tình huống, mỗi tình huống 4 ý</small></button>
+ <div class="sec" style="background:var(--pur)">PHẦN II – TỰ LUẬN</div>
+ <button class="btn" style="background:var(--pur)" onclick="playES()">📝 Tự luận (lật thẻ)<small>Trả lời ngắn, đổi đơn vị, bài toán, giải thích</small></button>
+ <button class="btn" style="background:var(--yel);color:#222" onclick="draw('<div class=card><h3>🏅 Bảng xếp hạng</h3>'+board()+'</div>')">🏅 Bảng xếp hạng</button>`)}
+const fast=()=>playMC(MC.map((_,i)=>i),1,fast);
+function wrong(){if(!W.size){alert("Chưa có câu sai nào. Hãy chơi thêm nhé!");return}playMC([...W].sort((a,b)=>a-b),0,wrong)}
+function playMC(l,f,rp){RP=rp;G={l,i:0,ok:0,gain:0,lives:LIVES,st:0,f,t:SEC,tm:null,done:0};qMC()}
+function qMC(){
+ clearInterval(G.tm);const q=MC[G.l[G.i]];G.p=[0,1,2,3];G.done=0;G.t=SEC;
+ let h=`<div class="bar"><i style="width:${G.i/G.l.length*100}%"></i></div>`;
+ if(G.f)h+=`<div class="chips"><span class="chip" id="tm">⏱ ${G.t}s</span><span class="chip">${'❤️'.repeat(G.lives)}</span><span class="chip">🔥 ${G.st}</span></div>`;
+ h+=`<div class="card"><div class="sm">Câu ${G.i+1}/${G.l.length}</div><h3>${q.q}</h3>`+G.p.map((o,k)=>`<button class="btn ans" onclick="pk(${k})">${'ABCD'[k]}. ${q.o[o]}</button>`).join('')+`</div>`;
+ if(G.f)h+=`<button class="btn" id="bt" style="background:var(--yel);color:#222" onclick="buy()">⏱ +${ADD} giây · ${BUY} 🪙</button><div class="warn" id="ms"></div>`;
+ h+=`<div id="ex"></div>`;draw(h);
+ if(G.f)G.tm=setInterval(()=>{G.t--;const e=document.getElementById('tm');if(e)e.textContent='⏱ '+G.t+'s';if(G.t<=0)pk(-1)},1000)}
+function buy(){if(G.done)return;const m=document.getElementById('ms');if(coins>=BUY){coins-=BUY;G.t+=ADD;ref();document.getElementById('tm').textContent='⏱ '+G.t+'s';m.textContent=`+${ADD} giây!`}else m.textContent="Không đủ xu 🪙"}
+function pk(k){
+ if(G.done)return;G.done=1;clearInterval(G.tm);const qi=G.l[G.i],q=MC[qi],ci=G.p.indexOf(q.a),ok=k===ci;
+ document.querySelectorAll('.ans').forEach((b,i)=>{b.disabled=true;if(i===ci)b.classList.add('ok');else if(i===k)b.classList.add('bad')});
+ const bt=document.getElementById('bt');if(bt)bt.disabled=true;
+ snd(ok);if(ok){G.ok++;G.st++;const c=G.st>=3?3:2;G.gain+=10;add(10,c);W.delete(qi)}else{G.st=0;W.add(qi);if(G.f)G.lives--}
+ const dead=G.f&&G.lives<=0,last=G.i+1>=G.l.length;
+ document.getElementById('ex').innerHTML=`<div class="exp"><b>${ok?'✅ Chính xác! +10 XP':(k<0?'⏰ Hết giờ!':'❌ Chưa đúng')}</b><br>Đáp án đúng: ${'ABCD'[ci]}. ${q.o[q.a]}${q.e?'<br>💡 '+q.e:''}</div><button class="btn" onclick="nx()">${dead||last?'🏁 Xem kết quả':'Câu tiếp ▶'}</button>`}
+function nx(){if(G.f&&G.lives<=0)return fin("Đua tốc độ",G.ok,G.l.length,G.gain,1);G.i++;G.i>=G.l.length?fin(G.f?"Đua tốc độ":"Trắc nghiệm",G.ok,G.l.length,G.gain):qMC()}
+function fin(title,ok,tot,gain,dead){
+ const p=tot?ok/tot*100:0,ic=dead?'💀':p>=80?'🏆':p>=50?'👍':'💪';
+ draw(`<div class="card ctr"><div class="big">${ic}</div><h3>${dead?'HẾT MẠNG!':title}</h3><div>Đúng <b>${ok}/${tot}</b> (${Math.round(p)}%)</div><div>XP kiếm được: <b>+${gain}</b></div><div class="sm" style="margin-top:6px">🎖 ${RK[rk()][1]} · ${rkTxt()}</div></div><div class="card"><h3>🏅 Bảng xếp hạng</h3>${board()}</div><button class="btn" style="background:var(--green)" onclick="RP()">🔄 Chơi lại</button><button class="btn" onclick="menu()">🏠 Về menu</button>`)}
+function playTF(){RP=playTF;T={i:0,ok:0,gain:0,tot:0};qTF()}
+function qTF(){
+ const s=TF[T.i];T.a=[null,null,null,null];T.chk=0;
+ draw(`<div class="sm">Tình huống ${T.i+1}/${TF.length}</div><div class="card"><h3>${s.t}</h3>`+s.s.map((x,j)=>`<div class="tfr"><div>${'abcd'[j]}) ${x[0]}</div><div class="tfb"><button class="btn" id="t${j}1" style="background:var(--green)" onclick="sa(${j},1)">Đúng</button><button class="btn" id="t${j}0" style="background:var(--red)" onclick="sa(${j},0)">Sai</button></div><div id="r${j}"></div></div>`).join('')+`</div><div class="warn" id="ms"></div><button class="btn" id="ck" style="background:var(--yel);color:#222" onclick="ckTF()">Chấm điểm</button>`)}
+function sa(j,v){if(T.chk)return;T.a[j]=v;document.getElementById('t'+j+v).classList.remove('dim');document.getElementById('t'+j+(1-v)).classList.add('dim')}
+function ckTF(){
+ const s=TF[T.i];
+ if(T.chk){T.i++;return T.i>=TF.length?fin("Đúng – Sai",T.ok,T.tot,T.gain):qTF()}
+ if(T.a.includes(null)){document.getElementById('ms').textContent="Hãy chọn đủ 4 ý a, b, c, d!";return}
+ T.chk=1;let g=0;
+ s.s.forEach((x,j)=>{const ok=T.a[j]===x[1];T.tot++;if(ok){g++;T.ok++}
+  document.getElementById('r'+j).innerHTML=`<div class="exp">${ok?'✅':'❌'} Đáp án: <b>${x[1]?'Đúng':'Sai'}</b>${x[2]?'<br>💡 '+x[2]:''}</div>`});
+ T.gain+=g*5;add(g*5,g);snd(g>=3);
+ document.getElementById('ms').textContent=`Được ${g}/4 ý: +${g*5} XP`;
+ document.getElementById('ck').textContent=T.i+1>=TF.length?'🏁 Xem kết quả':'Tình huống tiếp ▶'}
+function playES(){RP=playES;E={i:0,ok:0,gain:0};qES()}
+function qES(){
+ draw(`<div class="bar"><i style="width:${E.i/ES.length*100}%"></i></div><div class="card"><div class="sm">Câu ${E.i+1}/${ES.length}</div><h3 style="font-weight:400">${ES[E.i][0].replace(/\n/g,'<br>')}</h3></div><div id="ex"><button class="btn" style="background:var(--pur)" onclick="flip()">👀 Lật xem đáp án mẫu</button></div>`)}
+function flip(){document.getElementById('ex').innerHTML=`<div class="exp">${ES[E.i][1].replace(/\n/g,'<br>')}</div><button class="btn" style="background:var(--green)" onclick="jd(1)">✔ Mình làm đúng</button><button class="btn" style="background:var(--red)" onclick="jd(0)">✖ Cần ôn lại</button>`}
+function jd(v){snd(v);if(v){E.ok++;E.gain+=15;add(15,2)}E.i++;E.i>=ES.length?fin("Tự luận",E.ok,ES.length,E.gain):qES()}
+menu();
+</script></body></html>
