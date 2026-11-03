@@ -38,7 +38,7 @@ const ON=DB_URL.indexOf("YOUR-PROJECT")<0;
 let UID=ld("eng6_uid");if(!UID){UID="u"+Date.now().toString(36)+Math.random().toString(36).slice(2,8);sto("eng6_uid",UID)}
 let LB=[],stm=null,ST="chưa kết nối",PO=false;
 function sync(){if(!ON)return;clearTimeout(stm);stm=setTimeout(async()=>{try{const r=await fetch(DB_URL+"/board_eng6/"+UID+".json",{method:"PUT",body:JSON.stringify({name:S.name,xp:S.xp,coins:S.co,t:Date.now()})});if(r.ok)ST="ghi dữ liệu thành công";else ST="lỗi ghi "+r.status+" – kiểm tra Rules trên Firebase"}catch(e){ST="lỗi mạng khi ghi – "+e.message}},500)}
-async function poll(){if(!ON)return;try{const r=await fetch(DB_URL+"/board_eng6.json");if(!r.ok){PO=false;ST="lỗi đọc "+r.status+" – kiểm tra Rules trên Firebase";return}const d=await r.json()||{};LB=Object.keys(d).map(k=>({id:k,n:sv(d[k].name),x:+d[k].xp||0}));PO=true}catch(e){PO=false;ST="lỗi mạng khi đọc – "+e.message}}
+async function poll(){if(!ON)return;try{const r=await fetch(DB_URL+"/board_eng6.json");if(!r.ok){PO=false;ST="lỗi đọc "+r.status+" – kiểm tra Rules trên Firebase";return}const d=await r.json()||{};LB=Object.keys(d).map(k=>({id:k,n:sv(d[k].name),x:+d[k].xp||0,t:+d[k].t||0}));PO=true}catch(e){PO=false;ST="lỗi mạng khi đọc – "+e.message}}
 async function lb(){await poll();ui(bd()+'<button class="btn g" onclick="mn()">🏠 Về menu</button>')}
 async function restore(){if(!ON)return;try{const d=await (await fetch(DB_URL+"/board_eng6/"+UID+".json")).json();if(d){S.xp=Math.max(S.xp,+d.xp||0);S.co=Math.max(S.co,+d.coins||0);sto("eng6_xp",S.xp);sto("eng6_co",S.co)}}catch(e){}}
 /* sound */
@@ -55,11 +55,14 @@ function rc(){const n=R.find(r=>r[0]>S.xp);return `<div class="card">🎖 <b>${r
 function bd(){const real=ON&&PO;
 const L=(real?LB.filter(r=>r.id!=UID).map(r=>({n:r.n,x:r.x})):BT.map(b=>({n:b.n,x:b.x}))).concat([{n:S.name,x:S.xp,me:1}]).sort((a,b)=>b.x-a.x).slice(0,20);
 return `<div class="card"><b>🏅 Bảng xếp hạng</b>${L.map((r,i)=>`<div class="rw${r.me?" me":""}"><span>#${i+1} ${esc(r.n)}</span><b>${r.x} XP</b></div>`).join("")}<small>${real?"Người chơi thật"+(L.length<2?" – chưa có ai khác.":".")+" ":"Đang hiển thị người chơi ảo. "}${ON?"Trạng thái: "+ST+".":"Chưa cấu hình DB_URL."}</small></div>`}
+function bo(){const real=ON&&PO,now=Date.now();
+const L=(real?LB.filter(r=>r.id!=UID&&now-r.t<=60000).map(r=>({n:r.n,x:r.x})):BT.map(b=>({n:b.n,x:b.x}))).concat([{n:S.name,x:S.xp,me:1}]).sort((a,b)=>b.x-a.x).slice(0,20);
+return `<div class="card"><b>🟢 Bảng xếp hạng – người chơi đang online</b>${L.map((r,i)=>`<div class="rw${r.me?" me":""}"><span>#${i+1} 🟢 ${esc(r.n)}</span><b>${r.x} XP</b></div>`).join("")}<small>${real?L.length+" người đang online (hoạt động trong 60 giây gần nhất). ":"Đang hiển thị người chơi ảo. "}${ON?"Trạng thái: "+ST+".":"Chưa cấu hình DB_URL."}</small></div>`}
 function sn(n){S.name=sv(n)||rn();sto("eng6_name",S.name);sync();mn()}
 function mn(){ui(`<div class="logo">ENGLISH 6 – ĐẤU TRƯỜNG</div>
 <div class="card"><div class="row2"><input id="nm" maxlength="20" value="${esc(S.name)}" onkeydown="if(event.key=='Enter')sn(this.value)"><button class="chip" onclick="sn($('#nm').value)">💾</button><button class="chip" onclick="sn(rn())">🎲</button></div></div>${rc()}
 <div class="sec b">PHẦN I – TRẮC NGHIỆM</div>
-<button class="btn" onclick="gp()">Luyện tập cổ điển<small>Chọn nhóm câu hoặc cả 60 câu</small></button>
+<button class="btn" onclick="gp()">Luyện tập cổ điển<small>7 nhóm câu hoặc cả 60 câu</small></button>
 <button class="btn r" onclick="fast()">Đua tốc độ<small>Câu 1–40 · 15 giây · 3 mạng</small></button>
 <button class="btn o" onclick="wg()">Ôn câu đã sai<small>${S.wr.length} câu trong danh sách</small></button>
 <button class="btn g" onclick="rd()">Đọc (Reading)<small>4 bài đọc · câu 41–60</small></button>
@@ -71,7 +74,7 @@ function mn(){ui(`<div class="logo">ENGLISH 6 – ĐẤU TRƯỜNG</div>
 <button class="btn r" onclick="thi()">⚔️ Thi đấu<small>60 câu tổng hợp · xáo trộn · sai 5 câu mất hết điểm</small></button>
 <button class="btn" onclick="lb()">🏅 Bảng xếp hạng</button>`)}
 const rg=(a,b)=>Array.from({length:b-a},(_,i)=>a+i);
-function gp(){const g=[["Phát âm",0,5],["Trọng âm",5,10],["Từ vựng – Ngữ pháp",10,32],["Giao tiếp",32,35],["Biển báo – Thông báo",35,40],["Tất cả 60 câu",0,60]];ui(`<div class="card"><b>Chọn nhóm câu</b></div>`+g.map(x=>`<button class="btn" onclick="pg(${x[1]},${x[2]},'${x[0]}')">${x[0]}<small>${x[2]-x[1]} câu</small></button>`).join(""))}
+function gp(){const g=[["Phát âm",0,5],["Trọng âm",5,10],["Từ vựng – Ngữ pháp",10,32],["Giao tiếp",32,35],["Biển báo – Thông báo",35,40],["Điền từ vào đoạn văn",40,50],["Đọc hiểu",50,60],["Tất cả 60 câu",0,60]];ui(`<div class="card"><b>Chọn nhóm câu</b></div>`+g.map(x=>`<button class="btn" onclick="pg(${x[1]},${x[2]},'${x[0]}')">${x[0]}<small>Câu ${x[1]+1}–${x[2]} · ${x[2]-x[1]} câu</small></button>`).join(""))}
 function rd(){const g=[["My school",40,45],["My favourite room",45,50],["My friend Sarah",50,55],["Leo’s new start",55,60],["Cả 4 bài",40,60]];ui(`<div class="card"><b>Chọn bài đọc</b></div>`+g.map(x=>`<button class="btn g" onclick="pg(${x[1]},${x[2]},'Đọc: ${x[0]}')">${x[0]}<small>${x[2]-x[1]} câu</small></button>`).join(""))}
 const pg=(a,b,t)=>play(rg(a,b),"c",t,()=>pg(a,b,t));
 const fast=()=>play(rg(0,40).sort(()=>Math.random()-.5),"r","Đua tốc độ",fast);
@@ -110,7 +113,7 @@ $("#ms").innerHTML=`<div class="exp">${ok?"✅ Chính xác!":c<0?"⏰ Hết gi�
 function nx(){G.i++;(G.m=="r"&&G.lv<=0)||G.pen?fin(1):qz()}
 function fin(dead){const tot=G.m=="r"||G.pen?G.i:G.l.length;res(dead?(G.pen?"💥":"💀"):null,dead?(G.pen?"SAI 5 CÂU – MẤT HẾT ĐIỂM!":"HẾT MẠNG!"):G.ti,G.ok,tot,G.rp,dead)}
 function res(ic,t,ok,tot,rp,dead){const p=tot?Math.round(ok/tot*100):0;RP=rp;ic=ic||(p>=80?"🏆":p>=50?"👍":"💪");
-ui(`<div class="card" style="text-align:center"><div style="font-size:56px">${ic}</div><h2>${t}</h2><p>${ok}/${tot} đúng · ${p}%</p><p>⭐ +${S.xp-G.x0} XP trong lượt này</p></div>${rc()}${bd()}<button class="btn" onclick="RP()">🔄 Chơi lại</button><button class="btn g" onclick="mn()">🏠 Về menu</button>`)}
+ui(`<div class="card" style="text-align:center"><div style="font-size:56px">${ic}</div><h2>${t}</h2><p>${ok}/${tot} đúng · ${p}%</p><p>⭐ +${S.xp-G.x0} XP trong lượt này</p></div>${rc()}${G.m=="c"?`<div id="lbw">${bo()}</div>`:bd()}<button class="btn" onclick="RP()">🔄 Chơi lại</button><button class="btn g" onclick="mn()">🏠 Về menu</button>`);if(G.m=="c"){sync();poll().then(()=>{const e=$("#lbw");if(e)e.innerHTML=bo()})}}
 /* tự luận */
 function es(t,ti){G={l:ES.filter(e=>e[0]==t),i:0,ok:0,x0:S.xp,ti};ec(t)}
 function ec(t){if(G.i>=G.l.length)return res(null,G.ti,G.ok,G.l.length,()=>es(t,G.ti));const e=G.l[G.i];
@@ -201,5 +204,5 @@ const ES=[
 ["S","Nói 45–60 giây – Topic 1: My school\n1. Trường em thế nào, ở đâu? 2. Môn/nơi em thích nhất, vì sao? 3. Em thường làm gì ở trường? 4. Em thích điều gì nhất?","Intro: Today I’m going to talk about my school.\nMain: My school is big and new, and it is near my home. My favourite subject is English because it is interesting. I usually play football with my classmates at break time.\nConclusion: I like my school because the teachers are friendly. That’s all. Thank you for listening."],
 ["S","Nói 45–60 giây – Topic 2: My home\n1. Em ở loại nhà nào? Phòng yêu thích? 2. Trong phòng có đồ gì, ở đâu? 3. Em thường làm gì ở đó? 4. Vì sao em thích phòng này?","Intro: Today I’m going to talk about my favourite room.\nMain: I live in a flat, and my favourite room is my bedroom. The bed is next to the window, and the desk is between the bed and the wardrobe. I usually read and study there.\nConclusion: I like it because it is quiet and tidy. That’s all. Thank you for listening."],
 ["S","Nói 45–60 giây – Topic 3: My friends\n1. Bạn thân của em là ai? 2. Bạn trông thế nào? 3. Tính cách ra sao? Cho MỘT ví dụ. 4. Hai bạn thường làm gì? Vì sao em thích bạn?","Intro: Today I’m going to talk about my best friend, Linh.\nMain: She is tall and has long black hair. She is kind and funny. For example, she helps me with my homework. We often play badminton together.\nConclusion: I like her because she is a good friend. That’s all. Thank you for listening."]];
-restore().then(()=>{poll();mn();sync()});setInterval(poll,5000);
+restore().then(()=>{poll();mn();sync()});setInterval(poll,5000);setInterval(sync,20000);
 </script></body></html>
