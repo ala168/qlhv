@@ -34,7 +34,7 @@ const R=[[0,"Tân binh"],[100,"Lính mới"],[300,"Chiến binh"],[600,"Cao th�
 let G={},RP=null,AC=null;
 /* ===== KẾT NỐI FIREBASE: dán địa chỉ Realtime Database của bạn vào dòng dưới (không có dấu / ở cuối) ===== */
 const DB_URL="https://databasex-d5d8d-default-rtdb.asia-southeast1.firebasedatabase.app";
-const ON=DB_URL.indexOf("YOUR-PROJECT")<0;
+const ON=!DB_URL.includes("YOUR-PROJECT");
 let UID=ld("eng6_uid");if(!UID){UID="u"+Date.now().toString(36)+Math.random().toString(36).slice(2,8);sto("eng6_uid",UID)}
 let LB=[],stm=null;
 function sync(){if(!ON)return;clearTimeout(stm);stm=setTimeout(()=>{fetch(DB_URL+"/board_eng6/"+UID+".json",{method:"PUT",body:JSON.stringify({name:S.name,xp:S.xp,coins:S.co,t:Date.now()})}).catch(()=>{})},500)}
