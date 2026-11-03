@@ -1,0 +1,202 @@
+<!DOCTYPE html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>English 6 – Đấu trường</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#1f1a4a;--cd:#33297a;--an:#4a3f9a;--dk:#120e2e;--r:#e2231a;--g:#00b06f;--b:#0a84ff;--y:#ffc21a;--p:#8a3ffc;--o:#ff7a1a;--mu:#b9b3e6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:radial-gradient(rgba(255,255,255,.08) 2px,transparent 2px) 0 0/28px 28px var(--bg);color:#fff;font:500 16px Fredoka,system-ui,sans-serif}
+#app{max-width:560px;margin:0 auto;padding:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:10px}
+.chip{background:var(--dk);border:3px solid #000;border-radius:10px;padding:4px 10px;color:#fff;font:700 14px Fredoka,sans-serif;max-width:46%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+button.chip{cursor:pointer}
+.logo{background:var(--r);border:4px solid #000;box-shadow:0 6px 0 #000;border-radius:12px;padding:14px;text-align:center;font-weight:700;font-size:22px;margin:6px 0 14px}
+.sec{border:3px solid #000;border-radius:10px;text-align:center;font-weight:700;padding:6px;margin:14px 0 4px}.sec.b{background:var(--b)}.sec.p{background:var(--p)}.sec.o{background:var(--o)}
+.card{background:var(--cd);border:4px solid #000;border-radius:14px;box-shadow:0 5px 0 #000;padding:12px;margin:10px 0}
+.btn{display:block;width:100%;border:3px solid #000;border-bottom-width:7px;border-radius:12px;padding:10px;margin:8px 0;font:700 16px Fredoka,sans-serif;color:#fff;background:var(--b);cursor:pointer;text-align:center}
+.btn:active{transform:translateY(4px);border-bottom-width:3px}
+.btn small{display:block;font-weight:500;opacity:.85;font-size:13px}
+.btn.g{background:var(--g)}.btn.r{background:var(--r)}.btn.o{background:var(--o)}.btn.p{background:var(--p)}
+.btn.opt{background:var(--an);text-align:left}.btn.opt.ok{background:var(--g)}.btn.opt.no{background:var(--r)}.btn:disabled{cursor:default}
+.bar{background:var(--dk);border:3px solid #000;border-radius:8px;height:14px;overflow:hidden;margin-bottom:10px}.bar i{display:block;height:100%;background:var(--y);transition:width .3s}
+.psg{background:var(--dk);border-top:4px solid var(--y);border-radius:8px;padding:10px;margin:8px 0;max-height:36vh;overflow:auto;line-height:1.45;font-size:15px}
+.sign{background:#fff3c4;color:#222;border:3px solid #000;border-radius:8px;padding:8px;margin:8px 0;font-size:15px}
+.exp{background:var(--dk);border-left:6px solid var(--y);border-radius:8px;padding:10px;margin:8px 0;line-height:1.45}
+.bl{color:var(--y)}
+.rw{display:flex;justify-content:space-between;background:#3f3592;border-radius:8px;padding:5px 10px;margin:5px 0}.rw.me{background:var(--y);color:#222}
+.row2{display:flex;gap:6px}.row2 input{flex:1;min-width:0;background:var(--dk);color:#fff;border:3px solid #000;border-radius:10px;padding:6px 10px;font:700 16px Fredoka,sans-serif}
+small{color:var(--mu)}
+</style></head><body><div id="app"></div>
+<script>
+const $=s=>document.querySelector(s),esc=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ld=k=>{try{return localStorage.getItem(k)}catch(e){return null}},sto=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+const AD="Swift Cosmic Pixel Shadow Turbo Neon Mighty Lucky Frost Sky".split(" "),NN="Ninja Dragon Blocky Robot Wizard Panda Knight Falcon Slime Cat".split(" ");
+const p1=a=>a[Math.random()*a.length|0],rn=()=>p1(AD)+p1(NN)+(1000+Math.random()*9000|0),sv=n=>String(n||"").replace(/[<>&"'`]/g,"").trim().slice(0,20);
+const S={name:sv(ld("eng6_name"))||rn(),xp:+ld("eng6_xp")||0,co:+ld("eng6_co")||0,wr:[]},BT=Array.from({length:7},()=>({n:rn(),x:Math.random()*900|0}));
+const R=[[0,"Tân binh"],[100,"Lính mới"],[300,"Chiến binh"],[600,"Cao thủ"],[1000,"Huyền thoại"]];
+let G={},RP=null,AC=null;
+/* ===== KẾT NỐI FIREBASE: dán địa chỉ Realtime Database của bạn vào dòng dưới (không có dấu / ở cuối) ===== */
+const DB_URL="https://databasex-d5d8d-default-rtdb.asia-southeast1.firebasedatabase.app";
+const ON=DB_URL.indexOf("YOUR-PROJECT")<0;
+let UID=ld("eng6_uid");if(!UID){UID="u"+Date.now().toString(36)+Math.random().toString(36).slice(2,8);sto("eng6_uid",UID)}
+let LB=[],stm=null;
+function sync(){if(!ON)return;clearTimeout(stm);stm=setTimeout(()=>{fetch(DB_URL+"/board_eng6/"+UID+".json",{method:"PUT",body:JSON.stringify({name:S.name,xp:S.xp,coins:S.co,t:Date.now()})}).catch(()=>{})},500)}
+async function poll(){if(!ON)return;try{const d=await (await fetch(DB_URL+"/board_eng6.json")).json()||{};LB=Object.keys(d).map(k=>({id:k,n:sv(d[k].name),x:+d[k].xp||0}))}catch(e){}}
+async function restore(){if(!ON)return;try{const d=await (await fetch(DB_URL+"/board_eng6/"+UID+".json")).json();if(d){S.xp=Math.max(S.xp,+d.xp||0);S.co=Math.max(S.co,+d.coins||0);sto("eng6_xp",S.xp);sto("eng6_co",S.co)}}catch(e){}}
+/* sound */
+function tone(f,t,ty){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();AC.resume&&AC.resume();const o=AC.createOscillator(),g=AC.createGain(),s=AC.currentTime+t;o.type=ty;o.frequency.value=f;g.gain.setValueAtTime(.15,s);g.gain.exponentialRampToValueAtTime(.001,s+.25);o.connect(g);g.connect(AC.destination);o.start(s);o.stop(s+.26)}catch(e){}}
+const snd=ok=>ok?(tone(1319,0,"sine"),tone(1760,.12,"sine")):(tone(220,0,"sawtooth"),tone(150,.15,"sawtooth"));
+/* ui */
+const rk=x=>R.filter(r=>x>=r[0]).pop()[1],fm=t=>t.replace(/\[(.*?)\]/g,"<u>$1</u>");
+const hdr=()=>`<div class="chips" id="hd"><button class="chip" onclick="mn()">🏠 Menu</button><span class="chip">👤 ${esc(S.name)}</span><span class="chip">🎖 ${rk(S.xp)}</span><span class="chip">⭐ ${S.xp} XP</span><span class="chip">🪙 ${S.co}</span></div>`;
+const ui=h=>{clearInterval(G.tm);$("#app").innerHTML=hdr()+h;window.scrollTo(0,0)};
+function add(x,c){S.xp+=x;S.co+=c;sto("eng6_xp",S.xp);sto("eng6_co",S.co);const h=$("#hd");if(h)h.outerHTML=hdr();sync()}
+function rc(){const n=R.find(r=>r[0]>S.xp);return `<div class="card">🎖 <b>${rk(S.xp)}</b><br>${n?"Còn "+(n[0]-S.xp)+" XP để lên "+n[1]:"Bạn đã đạt rank cao nhất 👑"}</div>`}
+function bd(){const real=ON&&LB.length>0;
+const L=(real?LB.filter(r=>r.id!=UID).map(r=>({n:r.n,x:r.x})):BT.map(b=>({n:b.n,x:b.x}))).concat([{n:S.name,x:S.xp,me:1}]).sort((a,b)=>b.x-a.x).slice(0,20);
+return `<div class="card"><b>🏅 Bảng xếp hạng</b>${L.map((r,i)=>`<div class="rw${r.me?" me":""}"><span>#${i+1} ${esc(r.n)}</span><b>${r.x} XP</b></div>`).join("")}<small>${real?"Người chơi thật, làm mới mỗi 5 giây.":"Đang hiển thị người chơi ảo."}</small></div>`}
+function sn(n){S.name=sv(n)||rn();sto("eng6_name",S.name);sync();mn()}
+function mn(){ui(`<div class="logo">ENGLISH 6 – ĐẤU TRƯỜNG</div>
+<div class="card"><div class="row2"><input id="nm" maxlength="20" value="${esc(S.name)}" onkeydown="if(event.key=='Enter')sn(this.value)"><button class="chip" onclick="sn($('#nm').value)">💾</button><button class="chip" onclick="sn(rn())">🎲</button></div></div>${rc()}
+<div class="sec b">PHẦN I – TRẮC NGHIỆM</div>
+<button class="btn" onclick="gp()">Luyện tập cổ điển<small>Chọn nhóm câu hoặc cả 60 câu</small></button>
+<button class="btn r" onclick="fast()">Đua tốc độ<small>Câu 1–40 · 15 giây · 3 mạng</small></button>
+<button class="btn o" onclick="wg()">Ôn câu đã sai<small>${S.wr.length} câu trong danh sách</small></button>
+<button class="btn g" onclick="rd()">Đọc (Reading)<small>4 bài đọc · câu 41–60</small></button>
+<div class="sec p">PHẦN II – VIẾT & NÓI</div>
+<button class="btn p" onclick="es('W','Viết câu')">Viết câu<small>Câu 61–70 · lật thẻ</small></button>
+<button class="btn p" onclick="es('P','Viết đoạn')">Viết đoạn văn<small>3 chủ đề · lật thẻ</small></button>
+<button class="btn p" onclick="es('S','Nói')">Nói<small>3 chủ đề · lật thẻ</small></button>
+<div class="sec o">PHẦN III – THI ĐẤU</div>
+<button class="btn r" onclick="thi()">⚔️ Thi đấu<small>60 câu tổng hợp · xáo trộn · sai 5 câu mất hết điểm</small></button>
+<button class="btn" onclick="ui(bd()+'<button class=&quot;btn g&quot; onclick=&quot;mn()&quot;>🏠 Về menu</button>')">🏅 Bảng xếp hạng</button>`)}
+const rg=(a,b)=>Array.from({length:b-a},(_,i)=>a+i);
+function gp(){const g=[["Phát âm",0,5],["Trọng âm",5,10],["Từ vựng – Ngữ pháp",10,32],["Giao tiếp",32,35],["Biển báo – Thông báo",35,40],["Tất cả 60 câu",0,60]];ui(`<div class="card"><b>Chọn nhóm câu</b></div>`+g.map(x=>`<button class="btn" onclick="pg(${x[1]},${x[2]},'${x[0]}')">${x[0]}<small>${x[2]-x[1]} câu</small></button>`).join(""))}
+function rd(){const g=[["My school",40,45],["My favourite room",45,50],["My friend Sarah",50,55],["Leo’s new start",55,60],["Cả 4 bài",40,60]];ui(`<div class="card"><b>Chọn bài đọc</b></div>`+g.map(x=>`<button class="btn g" onclick="pg(${x[1]},${x[2]},'Đọc: ${x[0]}')">${x[0]}<small>${x[2]-x[1]} câu</small></button>`).join(""))}
+const pg=(a,b,t)=>play(rg(a,b),"c",t,()=>pg(a,b,t));
+const fast=()=>play(rg(0,40).sort(()=>Math.random()-.5),"r","Đua tốc độ",fast);
+function wg(){if(!S.wr.length){ui(`<div class="card">Chưa có câu sai nào. Hãy luyện tập trước! 🎉</div><button class="btn g" onclick="mn()">🏠 Về menu</button>`);return}play(S.wr.slice().sort((a,b)=>a-b),"w","Ôn câu đã sai",wg)}
+function play(l,m,t,rp){G={l,i:0,ok:0,st:0,lv:3,wc:0,cc:0,pen:0,x0:S.xp,m,ti:t,rp};qz()}
+function mk(){const U=[],sh=a=>a.sort(()=>Math.random()-.5);sh(rg(0,40)).slice(0,24).forEach(n=>U.push([n]));[40,45,50,55].forEach(a=>U.push(rg(a,a+5)));rg(0,16).forEach(i=>U.push([100+i]));return sh(U).flat()}
+const comp=()=>play(mk(),"t","Thi đấu",comp),tf=s=>Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
+function bad(n){G.st=0;if(n>=0&&n<100&&!S.wr.includes(n))S.wr.push(n);if(G.m=="r")G.lv--;if(G.m=="t"){G.wc++;if(G.wc>=5&&!G.pen){add(G.x0-S.xp,-G.cc);G.pen=1}}}
+function ce(i){const e=ES[i],T={W:30,P:300,S:120};G.t=T[e[0]];G.ei=i;const nt=G.note?`<div class="exp">${G.note}</div>`:"";G.note="";
+ui(`<div class="bar"><i style="width:${G.i/G.l.length*100}%"></i></div><div class="chips"><span class="chip">❌ ${G.wc}/5</span><span class="chip">⭐ ${S.xp-G.x0}</span><span class="chip" id="tm">⏱ ${tf(G.t)}</span></div>${nt}<div class="card">${e[1].replace(/\n/g,"<br>")}</div><div id="ms"><button class="btn o" onclick="cf()">👀 Lật xem đáp án mẫu</button></div>`);
+G.tm=setInterval(()=>{G.t--;const x=$("#tm");if(x)x.textContent="⏱ "+tf(G.t);if(G.t<=0)cr(0,1)},1000)}
+function cf(){clearInterval(G.tm);$("#ms").innerHTML=`<div class="exp">${ES[G.ei][2].replace(/\n/g,"<br>")}</div><button class="btn g" onclick="cr(1)">✔ Mình làm đúng</button><button class="btn r" onclick="cr(0)">✖ Cần ôn lại</button>`}
+function cr(v,to){clearInterval(G.tm);snd(v);if(v){G.ok++;G.cc+=2;add(15,2)}else bad(-1);const last=G.i+1>=G.l.length||G.pen;
+$("#ms").innerHTML=`<div class="exp">${to?"⏰ Hết giờ! Tính là sai.<br>":v?"✅ Đã ghi nhận.<br>":"❌ Tính là sai.<br>"}${to?"<b>Đáp án mẫu:</b><br>"+ES[G.ei][2].replace(/\n/g,"<br>"):""}${G.pen?"<br>💥 Bạn đã sai 5 câu – toàn bộ điểm của lượt thi đấu bị trừ!":""}</div><button class="btn g" onclick="nx()">${last?"🏁 Xem kết quả":"Câu tiếp ▶"}</button>`}
+function thi(){ui(`<div class="logo">⚔️ THI ĐẤU</div><div class="card"><b>Luật chơi</b><br>• 60 câu tổng hợp từ tất cả các phần: 24 trắc nghiệm đơn, 4 bài đọc (20 câu), 10 viết câu, 3 viết đoạn, 3 nói; thứ tự và đáp án A–D được xáo trộn.<br>• Mỗi câu đúng +10 XP như thường.<br>• <b>Sai 5 câu</b>: toàn bộ XP và xu kiếm được trong lượt thi đấu này bị trừ hết và lượt kết thúc.<br>• Thời gian: trắc nghiệm đơn 10 giây; mỗi bài đọc 45 giây cho cả 5 câu; viết câu 30 giây; viết đoạn 5 phút; nói 2 phút. Hết giờ tính là sai.<br>• Thẻ viết và nói tự đánh giá, làm đúng +15 XP.</div><button class="btn r" onclick="comp()">⚔️ Bắt đầu thi đấu</button><button class="btn g" onclick="mn()">🏠 Về menu</button>`)}
+const PI=n=>n<40?-1:(n-40)/5|0;
+function qz(){if(G.i>=G.l.length)return fin();const n=G.l[G.i];if(n>=100)return ce(n-100);const d=M[n],k=PI(n);
+if(G.m=="t"){if(k<0){G.rs=-1;G.t=10}else if(G.rs!=k){G.rs=k;G.t=45}else if(G.t<=0){bad(n);G.i++;G.note="⏰ Hết 45 giây – các câu còn lại của bài đọc bị tính sai.";return G.pen?fin(1):qz()}}else G.t=15;
+G.pm=G.m=="t"?[0,1,2,3].sort(()=>Math.random()-.5):[0,1,2,3];
+let h=`<div class="bar"><i style="width:${G.i/G.l.length*100}%"></i></div>`;
+if(G.m=="r")h+=`<div class="chips"><span class="chip">${"❤️".repeat(G.lv)}</span><span class="chip">🔥 ${G.st}</span><span class="chip" id="tm">⏱ 15s</span></div>`;
+if(G.m=="t"){h+=`<div class="chips"><span class="chip">❌ ${G.wc}/5</span><span class="chip">⭐ ${S.xp-G.x0}</span><span class="chip" id="tm">⏱ ${G.t}s</span></div>`+(G.note?`<div class="exp">${G.note}</div>`:"");G.note=""}
+if(k>=0)h+=`<div class="psg"><b>${P[k][0]}</b><br>${P[k][1].replace(/\n/g,"<br>").replace(/\((\d\d)\) ______/g,'<b class="bl">($1) ____</b>')}</div>`;
+if(d[4])h+=`<div class="sign">${d[4]}</div>`;
+h+=`<div class="card"><small>Câu ${n+1}</small><br>${fm(d[1])}</div>`+G.pm.map((j,i)=>`<button class="btn opt" onclick="pk(${i})">${"ABCD"[i]}. ${fm(d[2][j])}</button>`).join("");
+h+=G.m=="r"?`<button class="btn o" id="by" onclick="by()">⏱ +5 giây · 5 🪙</button>`:"";
+ui(h+`<div id="ms"></div>`);
+if(G.m=="r"||G.m=="t")G.tm=setInterval(()=>{G.t--;const e=$("#tm");if(e)e.textContent="⏱ "+G.t+"s";if(G.t<=0)pk(-1)},1000)}
+function by(){if(S.co<5){$("#ms").innerHTML=`<div class="exp">Không đủ xu để mua thêm giây.</div>`;return}add(0,-5);G.t+=5;$("#tm").textContent="⏱ "+G.t+"s"}
+function pk(c){clearInterval(G.tm);const n=G.l[G.i],d=M[n],ok=c>=0&&G.pm[c]==d[3],cp=G.pm.indexOf(d[3]);
+document.querySelectorAll(".opt").forEach((b,i)=>{b.disabled=true;if(i==cp)b.classList.add("ok");else if(i==c)b.classList.add("no")});
+const bb=$("#by");if(bb)bb.disabled=true;snd(ok);
+if(ok){G.ok++;G.st++;S.wr=S.wr.filter(x=>x!=n);const cc=G.st>=3?3:2;G.cc+=cc;add(10,cc)}else bad(n)
+const last=G.i+1>=G.l.length||G.lv<=0||G.pen;
+$("#ms").innerHTML=`<div class="exp">${ok?"✅ Chính xác!":c<0?"⏰ Hết giờ!":"❌ Chưa đúng."} Đáp án đúng: <b>${"ABCD"[cp]}. ${fm(d[2][d[3]])}</b>${G.pen?"<br>💥 Bạn đã sai 5 câu – toàn bộ điểm của lượt thi đấu bị trừ!":""}</div><button class="btn g" onclick="nx()">${last?"🏁 Xem kết quả":"Câu tiếp ▶"}</button>`}
+function nx(){G.i++;(G.m=="r"&&G.lv<=0)||G.pen?fin(1):qz()}
+function fin(dead){const tot=G.m=="r"||G.pen?G.i:G.l.length;res(dead?(G.pen?"💥":"💀"):null,dead?(G.pen?"SAI 5 CÂU – MẤT HẾT ĐIỂM!":"HẾT MẠNG!"):G.ti,G.ok,tot,G.rp,dead)}
+function res(ic,t,ok,tot,rp,dead){const p=tot?Math.round(ok/tot*100):0;RP=rp;ic=ic||(p>=80?"🏆":p>=50?"👍":"💪");
+ui(`<div class="card" style="text-align:center"><div style="font-size:56px">${ic}</div><h2>${t}</h2><p>${ok}/${tot} đúng · ${p}%</p><p>⭐ +${S.xp-G.x0} XP trong lượt này</p></div>${rc()}${bd()}<button class="btn" onclick="RP()">🔄 Chơi lại</button><button class="btn g" onclick="mn()">🏠 Về menu</button>`)}
+/* tự luận */
+function es(t,ti){G={l:ES.filter(e=>e[0]==t),i:0,ok:0,x0:S.xp,ti};ec(t)}
+function ec(t){if(G.i>=G.l.length)return res(null,G.ti,G.ok,G.l.length,()=>es(t,G.ti));const e=G.l[G.i];
+ui(`<div class="bar"><i style="width:${G.i/G.l.length*100}%"></i></div><div class="card">${e[1].replace(/\n/g,"<br>")}</div><div id="ms"><button class="btn o" onclick="fl()">👀 Lật xem đáp án mẫu</button></div>`)}
+function fl(){const e=G.l[G.i];$("#ms").innerHTML=`<div class="exp">${e[2].replace(/\n/g,"<br>")}</div><button class="btn g" onclick="ev(1)">✔ Mình làm đúng</button><button class="btn r" onclick="ev(0)">✖ Cần ôn lại</button>`}
+function ev(v){snd(v);if(v){G.ok++;add(15,2)}G.i++;ec(G.l[G.i-1][0])}
+/* dữ liệu */
+const PQ="Chọn từ có phần gạch chân phát âm khác",SQ="Chọn từ có trọng âm chính khác";
+const P=[["MY SCHOOL","My new school is in a quiet place not far (41) ______ the city centre. It has three buildings and a large yard. This year, there are more than 800 students at my school. Most students are hard-working and kind, and the teachers are helpful and friendly.\nMy school has different clubs, including English, Arts, Football and Basketball. At break time, I often (42) ______ football with my classmates in the schoolyard. I usually go home at 4 p.m., but today I am staying at school because (43) ______ English club is preparing for a speaking contest. The club has many interesting (44) ______, such as language games and speaking practice. I enjoy being a member because I can practise English and (45) ______ new friends."],
+["MY FAVOURITE ROOM","My family lives in a small townhouse near a park. My favourite room is my bedroom because I can study and relax there. My bed is next to the window, and my desk is opposite the bed. There is a lamp on the desk and a small (46) ______ above it where I keep my books. Beside the desk is a (47) ______ for my clothes.\nMy brother and I usually (48) ______ the room on Saturday mornings. Right now, however, he (49) ______ the bookshelf while I am putting my clothes away. Our bedroom is not very large, so Mum says that using wall shelves can help us (50) ______ space and keep the room tidy."],
+["MY FRIEND SARAH","This is my friend Sarah. She is of average height and has long black hair. She has a big, friendly smile that makes people feel <u>comfortable</u>. Sarah is friendly and loves talking to people. She is not shy, and she often tells funny stories that make everyone laugh.\nAt school, Sarah is a good student. She listens carefully to the teacher and is a great team player. When we work in groups, she helps everyone and makes sure our work is finished well. In her free time, Sarah <u>enjoys</u> reading adventure books, going to the park with friends and listening to music. One day, she wants to be a teacher because she would like to help children learn."],
+["LEO’S NEW START","Leo has just moved with his family to an apartment near Riverside School. His bedroom is small but <u>bright</u>. His desk is between the bed and the window, and a bookshelf is above the desk. Leo likes the room because he can study comfortably there.\nOn his first day at school, Leo met Nam, a confident and caring classmate. Nam showed him the library, the computer room and the schoolyard. <u>He</u> also introduced Leo to some students in the basketball club. Leo usually reads after school, but this week he is trying something new: he is practising basketball with Nam and the other club members.\nLeo still misses his old neighbourhood, but he says his new school already feels friendly. He thinks having a helpful classmate makes it much easier to start again in a new place."]];
+const M=[
+["PH",PQ,["sm[ar]t","guit[ar]","doll[ar]","l[ar]ge"],2],
+["PH",PQ,["l[u]nch","[u]niform","m[u]sic","st[u]dent"],0],
+["PH",PQ,["book[s]","plan[s]","table[s]","chair[s]"],0],
+["PH",PQ,["pen[s]","flat[s]","sink[s]","lamp[s]"],0],
+["PH",PQ,["[p]icture","[p]icnic","[p]eople","[b]iscuit"],3],
+["ST",SQ,["student","teacher","subject","today"],3],
+["ST",SQ,["bedroom","kitchen","between","bathroom"],2],
+["ST",SQ,["careful","friendly","creative","funny"],2],
+["ST",SQ,["homework","classroom","behind","schoolbag"],2],
+["ST",SQ,["furniture","apartment","family","garden"],1],
+["VG","Let’s ______ badminton together in the schoolyard at break time.",["play","playing","to play","to playing"],0],
+["VG","There are so many new words in the passage. Can I use a ______ to help me?",["calculator","ruler","dictionary","notice board"],2],
+["VG","Mai enjoys doing experiments and learning how things work. Her favorite subject is ______.",["Science","Music","Art","P.E."],0],
+["VG","I always ______ my homework before I watch TV.",["do","play","study","have"],0],
+["VG","What time ______ your parents ______ lunch every day?",["does / have","do / play","do / have","do / study"],2],
+["VG","Anna is a good student. She ______ her homework after school.",["always does","does always","always do","is always doing"],0],
+["VG","My cousin studies far from home. She sleeps at school from Monday to Friday and only comes home at weekends. She studies at a ______ school.",["international","garden","private","boarding"],3],
+["VG","There are many new words in the passage. Can I use a ______ to help me?",["calculator","ruler","dictionary","notebook"],2],
+["VG","Our family lives on the seventh floor of a tall building. We live in a ______.",["townhouse","country house","flat","villa"],2],
+["VG","In my living room, there is a table ______ the sofa and the TV.",["between","next to","under","in"],0],
+["VG","You can find spoons and chopsticks in the ______.",["lamp","fridge","cupboard","wardrobe"],2],
+["VG","David is ______ brother. I can see him in the family photo standing next to her.",["Linda","Linda’s","Lindas","Linda of"],1],
+["VG","I bake a cake in a ______.",["oven","fridge","lamp","chest of drawers"],0],
+["VG","Elena’s bedroom is small. There is no space for more furniture, but the wall above her desk is empty. Which suggestion is the best?",["How about putting a picture on the wall?","Let’s buy a large sofa.","How about putting another bed in the room?","Let’s buy a bigger wardrobe."],0],
+["VG","Mai wants to keep her room tidy. She needs ______ to put her dresses, jackets and school uniform.",["bookshelf","wardrobe","fridge","sofa"],1],
+["VG","The desk is between the bed and the wardrobe, and the lamp is on the desk. Which sentence is correct?",["The lamp is under the bed.","The lamp is on the desk between the bed and the wardrobe.","The wardrobe is between the bed and the desk.","The bed is on the desk."],1],
+["VG","______ they ______ about their new friends at the moment?",["Are / talk","Are / talking","Is / talking","Is / talk"],1],
+["VG","My parents and I ______ our favourite film right now.",["are watching","watch","watched","watches"],0],
+["VG","Phong often thinks of new games for his friends and makes interesting models from old boxes. He is ______.",["shy","creative","quiet","careless"],1],
+["VG","Lan’s hair is not straight or curly. It has soft bends. Her hair is ______.",["blonde","short","wavy","long"],2],
+["VG","The English club meets every Monday and Wednesday. In September, Lan attended seven of the eight meetings. Which sentence best describes her routine?",["Lan always attends the club.","Lan usually attends the club.","Lan rarely attends the club.","Lan never attends the club."],1],
+["VG","In Mai’s room, the bed is to the left of the desk, the wardrobe is to the right of the desk, the lamp is on the desk, and a picture is above the bed. Which statement must be true?",["The desk is between the bed and the wardrobe.","The picture is above the desk.","The lamp is under the desk.","The wardrobe is to the left of the bed."],0],
+["CO","Michael: “How is your first day at school?” – Eric: “______”",["By bicycle.","Five days a week.","That sounds great.","Really exciting."],3],
+["CO","You are visiting a new classmate. You want to know the type of home he lives in, not the location of a room. Which exchange is the most appropriate?",["“Where do you live?” – “In a townhouse.”","“Where is your bedroom?” – “Next to the kitchen.”","“What are you doing?” – “I am studying.”","“What is your house like?” – “I like it.”"],0],
+["CO","You meet some new students. You need to know about Hoa first, then learn about her personality. Which pair of questions is the most correct?",["Where does Hoa live? / What does she do?","What is Hoa like? / Where is she now?","What does Hoa look like? / What is she like?","What is Hoa doing? / What does she like?"],2],
+["SG","What must students do during experiments?",["Put on safety glasses.","Do the experiments","Open the windows.","Work alone."],0,"<b>SCIENCE ROOM</b><br>Students must wear safety glasses during experiments."],
+["SG","Tom is a new member. Where should he be at 3:50?",["In Room 12.","At the school gate.","Outside the library.","In the playground."],2,"<b>ENGLISH CLUB</b><br>Tuesday: 4:00–4:45 p.m. – Room 12<br>New members: Please meet Ms Lan at 3:50 outside the library."],
+["SG","Where are Dad’s keys?",["Under the sofa.","Between the sofa and the window.","Beside the door.","On the window."],1,"Dad,<br>Your keys are on the small table between the sofa and the window.<br>Mum"],
+["SG","Lan is the last person to leave. What should she NOT do?",["Close the bedroom windows.","Turn off the living-room lights.","Leave the kitchen window open.","Close the kitchen window."],3,"<b>BEFORE YOU LEAVE HOME</b><br>• Close the bedroom windows.<br>• Turn off the living-room lights.<br>• Leave the kitchen window open for the cat."],
+["SG","Minh is 12 and will be home alone at 4:30. His parents cannot return before 6:30. What should the family do?",["Call and choose another delivery day.","Ask to receive the desk before 4:00.","Wait until 6:30 and call the driver.","Leave the front door open."],0,"<b>FURNITURE DELIVERY</b><br>Your new desk will arrive on Friday between 4:00 and 6:00 p.m. An adult must be at home. If nobody can be home, please call us before 12:00 noon on Friday to choose another delivery day."],
+["CL","Chỗ trống (41)",["in","from","at","on"],1],
+["CL","Chỗ trống (42)",["do","study","play","have"],2],
+["CL","Chỗ trống (43)",["a","an","the","some"],2],
+["CL","Chỗ trống (44)",["furniture","subjects","activities","buildings"],2],
+["CL","Chỗ trống (45)",["take","make","get","have"],1],
+["CL","Chỗ trống (46)",["sofa","shelf","sink","fridge"],1],
+["CL","Chỗ trống (47)",["cooker","cupboard","wardrobe","lamp"],2],
+["CL","Chỗ trống (48)",["make","tidy","study","have"],1],
+["CL","Chỗ trống (49)",["cleans","is cleaning","clean","cleaning"],1],
+["CL","Chỗ trống (50)",["do","take","save","make"],2],
+["RD","What is the passage mainly about?",["Sarah’s favourite school subjects.","Sarah’s appearance, personality, interests and school life.","Why Sarah wants to join a sports club.","How Sarah spends all her time at school."],1],
+["RD","Which statement about Sarah is TRUE?",["She is very tall and has blonde hair.","She is shy and does not like talking to people.","She has long black hair and a friendly smile.","She does not enjoy working with other students."],2],
+["RD","Which detail best shows that Sarah is a good team player?",["She enjoys reading adventure books.","She helps everyone and makes sure the group work is finished well.","She often goes to the park with her friends.","She wants to become a teacher one day."],1],
+["RD","The word “comfortable” in the first paragraph is CLOSEST in meaning to ______.",["worried","relaxed","tired","excited"],1],
+["RD","The word “enjoys” in the second paragraph is CLOSEST in meaning to ______.",["explores","detests","dislikes","loves"],3],
+["RD","What is the passage mainly about?",["Leo’s favourite school subjects.","How Leo is getting used to his new home and school.","Why Leo does not enjoy reading anymore.","The basketball club at Riverside School."],1],
+["RD","Which statement about Leo’s bedroom is correct?",["The bookshelf is below the desk.","The desk is between the bed and the window.","The bed is between the desk and the window.","The bookshelf is next to the bed."],1],
+["RD","What did Nam do for Leo on his first day at school?",["He helped Leo arrange his bedroom.","He gave Leo some books to read.","He showed Leo around the school and introduced him to other students.","He invited Leo to move to his neighbourhood."],2],
+["RD","The word “bright” in the first paragraph is OPPOSITE in meaning to ______.",["smart and beautiful","very large and quiet","very quiet and tidy","quite dark and messy"],3],
+["RD","The word “He” in the second paragraph refers to ______.",["Leo","Nam","a basketball player","a teacher"],1]];
+const ES=[
+["W","Viết lại câu – Câu 61\nLet’s put those new chairs in the dining room. (about)\n→ …","How about putting those new chairs in the dining room?"],
+["W","Viết lại câu – Câu 62\nThis bedroom belongs to Lan.\n→ This is …","This is Lan’s bedroom."],
+["W","Viết lại câu – Câu 63\nLan has long black hair.\n→ Lan’s hair …","Lan’s hair is long and black."],
+["W","Viết lại câu – Câu 64\nMai goes to the school library every day. (always)\n→ Mai … to the school library.","Mai always goes to the school library."],
+["W","Viết lại câu – Câu 65\nThe bookshelf is above the desk, and the desk is next to the bed.\n→ The desk …","The desk is below the bookshelf and next to the bed."],
+["W","Viết câu – Câu 66\nHe / usually / do morning exercises / his father / but / today / he / sleep / late.","He usually does morning exercises with his father, but today he is sleeping late."],
+["W","Viết câu – Câu 67\nWe / usually / read / library / break time / but / today / play chess / classroom.","We usually read in the library at break time, but today we are playing chess in the classroom."],
+["W","Viết câu – Câu 68\nIn Mai’s room / lamp / on desk / desk / between / bed / wardrobe.","In Mai’s room, the lamp is on the desk, and the desk is between the bed and the wardrobe."],
+["W","Viết câu – Câu 69\nMy mother / usually / cook / dinner / at 6 p.m. / but / now / she / talk / on the phone.","My mother usually cooks dinner at 6 p.m., but now she is talking on the phone."],
+["W","Viết câu – Câu 70\nMai / have / long black hair / be / careful / and / help / a new classmate / now.","Mai has long black hair and she is careful. She is helping a new classmate now."],
+["P","Viết đoạn 50–60 từ – Topic 1: Your school\nÝ cần có: tên và vị trí trường; HAI nơi/đồ vật em thích; môn học hoặc hoạt động yêu thích và tần suất; lý do thích trường.","My school is Phan Boi Chau Secondary School, and it is in the centre of my town. I like my classroom and the library because they are big and quiet. My favourite subject is English, and I have it three times a week. I love my school because the teachers are friendly and my classmates are kind."],
+["P","Viết đoạn 50–60 từ – Topic 2: Your favourite room\nÝ cần có: phòng gì, ở đâu; ít nhất BA đồ vật và vị trí; thường làm gì; vì sao thích.","My favourite room is my bedroom, and it is on the second floor of my house. There is a bed next to the window, and a desk is opposite it. A lamp is on the desk. I usually read books and do my homework there. I like it because it is quiet and cosy."],
+["P","Viết đoạn 50–60 từ – Topic 3: Your best friend\nÝ cần có: bạn là ai, trông thế nào; HAI tính từ tính cách và MỘT ví dụ; thường làm gì cùng nhau; vì sao thích bạn.","My best friend is Linh. She is tall and has short black hair and brown eyes. She is kind and creative. For example, she often makes small gifts for her classmates. We often study and play badminton together. I like her because she always helps me when I have problems."],
+["S","Nói 45–60 giây – Topic 1: My school\n1. Trường em thế nào, ở đâu? 2. Môn/nơi em thích nhất, vì sao? 3. Em thường làm gì ở trường? 4. Em thích điều gì nhất?","Intro: Today I’m going to talk about my school.\nMain: My school is big and new, and it is near my home. My favourite subject is English because it is interesting. I usually play football with my classmates at break time.\nConclusion: I like my school because the teachers are friendly. That’s all. Thank you for listening."],
+["S","Nói 45–60 giây – Topic 2: My home\n1. Em ở loại nhà nào? Phòng yêu thích? 2. Trong phòng có đồ gì, ở đâu? 3. Em thường làm gì ở đó? 4. Vì sao em thích phòng này?","Intro: Today I’m going to talk about my favourite room.\nMain: I live in a flat, and my favourite room is my bedroom. The bed is next to the window, and the desk is between the bed and the wardrobe. I usually read and study there.\nConclusion: I like it because it is quiet and tidy. That’s all. Thank you for listening."],
+["S","Nói 45–60 giây – Topic 3: My friends\n1. Bạn thân của em là ai? 2. Bạn trông thế nào? 3. Tính cách ra sao? Cho MỘT ví dụ. 4. Hai bạn thường làm gì? Vì sao em thích bạn?","Intro: Today I’m going to talk about my best friend, Linh.\nMain: She is tall and has long black hair. She is kind and funny. For example, she helps me with my homework. We often play badminton together.\nConclusion: I like her because she is a good friend. That’s all. Thank you for listening."]];
+restore().then(()=>{poll();mn();sync()});setInterval(poll,5000);
+</script></body></html>
