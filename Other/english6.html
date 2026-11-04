@@ -39,7 +39,7 @@ let UID=ld("eng6_uid");if(!UID){UID="u"+Date.now().toString(36)+Math.random().to
 let LB=[],stm=null,ST="chưa kết nối",PO=false;
 function sync(){if(!ON)return;clearTimeout(stm);stm=setTimeout(async()=>{try{const r=await fetch(DB_URL+"/board_eng6/"+UID+".json",{method:"PUT",body:JSON.stringify({name:S.name,xp:S.xp,coins:S.co,t:Date.now()})});if(r.ok)ST="ghi dữ liệu thành công";else ST="lỗi ghi "+r.status+" – kiểm tra Rules trên Firebase"}catch(e){ST="lỗi mạng khi ghi – "+e.message}},500)}
 async function poll(){if(!ON)return;try{const r=await fetch(DB_URL+"/board_eng6.json");if(!r.ok){PO=false;ST="lỗi đọc "+r.status+" – kiểm tra Rules trên Firebase";return}const d=await r.json()||{};LB=Object.keys(d).map(k=>({id:k,n:sv(d[k].name),x:+d[k].xp||0,t:+d[k].t||0}));PO=true}catch(e){PO=false;ST="lỗi mạng khi đọc – "+e.message}}
-async function lb(){await poll();ui(bd()+'<button class="btn g" onclick="mn()">🏠 Về menu</button>')}
+async function lb(){await poll();ui('<div id="lbw">'+bo()+'</div><button class="btn g" onclick="mn()">🏠 Về menu</button>')}
 async function restore(){if(!ON)return;try{const d=await (await fetch(DB_URL+"/board_eng6/"+UID+".json")).json();if(d){S.xp=Math.max(S.xp,+d.xp||0);S.co=Math.max(S.co,+d.coins||0);sto("eng6_xp",S.xp);sto("eng6_co",S.co)}}catch(e){}}
 /* sound */
 function au(){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state=="suspended")AC.resume()}catch(e){}return AC}
@@ -56,13 +56,17 @@ function bd(){return bo()}
 function bd0(){const real=ON&&PO;
 const L=(real?LB.filter(r=>r.id!=UID).map(r=>({n:r.n,x:r.x})):BT.map(b=>({n:b.n,x:b.x}))).concat([{n:S.name,x:S.xp,me:1}]).sort((a,b)=>b.x-a.x).slice(0,20);
 return `<div class="card"><b>🏅 Bảng xếp hạng</b>${L.map((r,i)=>`<div class="rw${r.me?" me":""}"><span>#${i+1} ${esc(r.n)}</span><b>${r.x} XP</b></div>`).join("")}<small>${real?"Người chơi thật"+(L.length<2?" – chưa có ai khác.":".")+" ":"Đang hiển thị người chơi ảo. "}${ON?"Trạng thái: "+ST+".":"Chưa cấu hình DB_URL."}</small></div>`}
-function lst(){const real=ON&&PO,now=Date.now();
-return (real?LB.filter(r=>r.id!=UID&&now-r.t<=60000).map(r=>({n:r.n,x:r.x})):BT.map(b=>({n:b.n,x:b.x}))).concat([{n:S.name,x:S.xp,me:1}]).sort((a,b)=>b.x-a.x)}
-function bo(){const real=ON&&PO,L=lst().slice(0,20);
-return `<div class="card"><b>🟢 Bảng xếp hạng – người chơi đang online</b>${L.map((r,i)=>`<div class="rw${r.me?" me":""}"><span>#${i+1} 🟢 ${esc(r.n)}</span><b>${r.x} XP</b></div>`).join("")}<small>${real?L.length+" người đang online (hoạt động trong 60 giây gần nhất). ":"Đang hiển thị người chơi ảo. "}${ON?"Trạng thái: "+ST+".":"Chưa cấu hình DB_URL."}</small></div>`}
-async function savr(tt,ok,tot,gain){if(!ON)return;try{const L=lst(),pos=L.findIndex(r=>r.me)+1,t=Date.now(),o=L.length;
-await fetch(DB_URL+"/ranking_eng6/"+UID+".json",{method:"PUT",body:JSON.stringify({name:S.name,xp:S.xp,pos,online:o,t})});
-await fetch(DB_URL+"/history_eng6/"+UID+".json",{method:"POST",body:JSON.stringify({mode:String(tt).slice(0,40),ok,tot,gain,xp:S.xp,pos,online:o,t})});ST="đã lưu bảng xếp hạng"}catch(e){ST="lỗi lưu bảng xếp hạng – "+e.message}}
+let TB="on";
+function ago(t){const m=Math.max(1,Math.round((Date.now()-t)/60000));return m<60?m+" phút trước":m<1440?Math.round(m/60)+" giờ trước":Math.round(m/1440)+" ngày trước"}
+function lst(all){const real=ON&&PO,now=Date.now();
+return (real?LB.filter(r=>r.id!=UID).map(r=>({n:r.n,x:r.x,t:r.t,on:now-r.t<=60000})):BT.map(b=>({n:b.n,x:b.x,on:true}))).filter(r=>all||r.on).concat([{n:S.name,x:S.xp,me:1,on:true}]).sort((a,b)=>b.x-a.x)}
+function bo(){const real=ON&&PO,A=TB=="all",L=lst(A).slice(0,20);
+const tab=(k,l)=>`<button class="chip" style="${TB==k?"background:var(--y);color:#222":""}" onclick="tb('${k}')">${l}</button>`;
+return `<div class="card"><b>🏅 Bảng xếp hạng</b><div class="chips" style="margin:8px 0">${tab("on","🟢 Đang online")}${tab("all","🏆 Tất cả")}</div>${L.map((r,i)=>`<div class="rw${r.me?" me":""}"${r.on?"":' style="opacity:.55"'}><span>#${i+1} ${r.on?"🟢":"⚪"} ${esc(r.n)}${r.on?"":" · "+ago(r.t)}</span><b>${r.x} XP</b></div>`).join("")}<small>${real?(A?L.filter(r=>r.on).length+" đang online / "+lst(true).length+" người từng chơi (hiện tối đa 20). ":L.length+" người đang online (hoạt động trong 60 giây gần nhất). "):"Đang hiển thị người chơi ảo. "}${ON?"Trạng thái: "+ST+".":"Chưa cấu hình DB_URL."}</small></div>`}
+function tb(k){TB=k;const e=$("#lbw");if(e)e.innerHTML=bo()}
+async function savr(tt,ok,tot,gain){if(!ON)return;try{const L=lst(),pos=L.findIndex(r=>r.me)+1,pa=lst(true).findIndex(r=>r.me)+1,t=Date.now(),o=L.length;
+await fetch(DB_URL+"/ranking_eng6/"+UID+".json",{method:"PUT",body:JSON.stringify({name:S.name,xp:S.xp,pos,posAll:pa,online:o,t})});
+await fetch(DB_URL+"/history_eng6/"+UID+".json",{method:"POST",body:JSON.stringify({mode:String(tt).slice(0,40),ok,tot,gain,xp:S.xp,pos,posAll:pa,online:o,t})});ST="đã lưu bảng xếp hạng"}catch(e){ST="lỗi lưu bảng xếp hạng – "+e.message}}
 function sn(n){S.name=sv(n)||rn();sto("eng6_name",S.name);sync();mn()}
 function mn(){ui(`<div class="logo">ENGLISH 6 – ĐẤU TRƯỜNG</div>
 <div class="card"><div class="row2"><input id="nm" maxlength="20" value="${esc(S.name)}" onkeydown="if(event.key=='Enter')sn(this.value)"><button class="chip" onclick="sn($('#nm').value)">💾</button><button class="chip" onclick="sn(rn())">🎲</button></div></div>${rc()}
