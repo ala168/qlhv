@@ -56,9 +56,13 @@ function bd(){return bo()}
 function bd0(){const real=ON&&PO;
 const L=(real?LB.filter(r=>r.id!=UID).map(r=>({n:r.n,x:r.x})):BT.map(b=>({n:b.n,x:b.x}))).concat([{n:S.name,x:S.xp,me:1}]).sort((a,b)=>b.x-a.x).slice(0,20);
 return `<div class="card"><b>🏅 Bảng xếp hạng</b>${L.map((r,i)=>`<div class="rw${r.me?" me":""}"><span>#${i+1} ${esc(r.n)}</span><b>${r.x} XP</b></div>`).join("")}<small>${real?"Người chơi thật"+(L.length<2?" – chưa có ai khác.":".")+" ":"Đang hiển thị người chơi ảo. "}${ON?"Trạng thái: "+ST+".":"Chưa cấu hình DB_URL."}</small></div>`}
-function bo(){const real=ON&&PO,now=Date.now();
-const L=(real?LB.filter(r=>r.id!=UID&&now-r.t<=60000).map(r=>({n:r.n,x:r.x})):BT.map(b=>({n:b.n,x:b.x}))).concat([{n:S.name,x:S.xp,me:1}]).sort((a,b)=>b.x-a.x).slice(0,20);
+function lst(){const real=ON&&PO,now=Date.now();
+return (real?LB.filter(r=>r.id!=UID&&now-r.t<=60000).map(r=>({n:r.n,x:r.x})):BT.map(b=>({n:b.n,x:b.x}))).concat([{n:S.name,x:S.xp,me:1}]).sort((a,b)=>b.x-a.x)}
+function bo(){const real=ON&&PO,L=lst().slice(0,20);
 return `<div class="card"><b>🟢 Bảng xếp hạng – người chơi đang online</b>${L.map((r,i)=>`<div class="rw${r.me?" me":""}"><span>#${i+1} 🟢 ${esc(r.n)}</span><b>${r.x} XP</b></div>`).join("")}<small>${real?L.length+" người đang online (hoạt động trong 60 giây gần nhất). ":"Đang hiển thị người chơi ảo. "}${ON?"Trạng thái: "+ST+".":"Chưa cấu hình DB_URL."}</small></div>`}
+async function savr(tt,ok,tot,gain){if(!ON)return;try{const L=lst(),pos=L.findIndex(r=>r.me)+1,t=Date.now(),o=L.length;
+await fetch(DB_URL+"/ranking_eng6/"+UID+".json",{method:"PUT",body:JSON.stringify({name:S.name,xp:S.xp,pos,online:o,t})});
+await fetch(DB_URL+"/history_eng6/"+UID+".json",{method:"POST",body:JSON.stringify({mode:String(tt).slice(0,40),ok,tot,gain,xp:S.xp,pos,online:o,t})});ST="đã lưu bảng xếp hạng"}catch(e){ST="lỗi lưu bảng xếp hạng – "+e.message}}
 function sn(n){S.name=sv(n)||rn();sto("eng6_name",S.name);sync();mn()}
 function mn(){ui(`<div class="logo">ENGLISH 6 – ĐẤU TRƯỜNG</div>
 <div class="card"><div class="row2"><input id="nm" maxlength="20" value="${esc(S.name)}" onkeydown="if(event.key=='Enter')sn(this.value)"><button class="chip" onclick="sn($('#nm').value)">💾</button><button class="chip" onclick="sn(rn())">🎲</button></div></div>${rc()}
@@ -114,7 +118,7 @@ $("#ms").innerHTML=`<div class="exp">${ok?"✅ Chính xác!":c<0?"⏰ Hết gi�
 function nx(){G.i++;(G.m=="r"&&G.lv<=0)||G.pen?fin(1):qz()}
 function fin(dead){const tot=G.m=="r"||G.pen?G.i:G.l.length;res(dead?(G.pen?"💥":"💀"):null,dead?(G.pen?"SAI 5 CÂU – MẤT HẾT ĐIỂM!":"HẾT MẠNG!"):G.ti,G.ok,tot,G.rp,dead)}
 function res(ic,t,ok,tot,rp,dead){const p=tot?Math.round(ok/tot*100):0;RP=rp;ic=ic||(p>=80?"🏆":p>=50?"👍":"💪");
-ui(`<div class="card" style="text-align:center"><div style="font-size:56px">${ic}</div><h2>${t}</h2><p>${ok}/${tot} đúng · ${p}%</p><p>⭐ +${S.xp-G.x0} XP trong lượt này</p></div>${rc()}<div id="lbw">${bo()}</div><button class="btn" onclick="RP()">🔄 Chơi lại</button><button class="btn g" onclick="mn()">🏠 Về menu</button>`);if(true){sync();poll().then(()=>{const e=$("#lbw");if(e)e.innerHTML=bo()})}}
+ui(`<div class="card" style="text-align:center"><div style="font-size:56px">${ic}</div><h2>${t}</h2><p>${ok}/${tot} đúng · ${p}%</p><p>⭐ +${S.xp-G.x0} XP trong lượt này</p></div>${rc()}<div id="lbw">${bo()}</div><button class="btn" onclick="RP()">🔄 Chơi lại</button><button class="btn g" onclick="mn()">🏠 Về menu</button>`);if(true){sync();poll().then(()=>{const e=$("#lbw");if(e)e.innerHTML=bo();savr(t,ok,tot,S.xp-G.x0)})}}
 /* tự luận */
 function es(t,ti){G={l:ES.filter(e=>e[0]==t),i:0,ok:0,x0:S.xp,ti};ec(t)}
 function ec(t){if(G.i>=G.l.length)return res(null,G.ti,G.ok,G.l.length,()=>es(t,G.ti));const e=G.l[G.i];
